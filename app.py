@@ -595,6 +595,24 @@ def inject_css() -> None:
             line-height: 1.65;
             margin-top: 16px;
         }
+        .presentation-section-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #0f766e;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0;
+            margin: 24px 0 15px 0;
+            text-transform: uppercase;
+        }
+        .presentation-section-divider::before,
+        .presentation-section-divider::after {
+            content: "";
+            height: 1px;
+            flex: 1;
+            background: rgba(15, 118, 110, 0.24);
+        }
         .presentation-footer {
             border-top: 1px solid rgba(15, 23, 42, 0.12);
             padding-top: 11px;
@@ -1128,7 +1146,7 @@ def inject_css() -> None:
         .stApp:has(#demo-briefing-page) .block-container,
         .stApp:has(#foundation-page) .block-container {
             max-width: 100vw;
-            padding: 1.05rem 1.2rem 0.85rem 1.2rem;
+            padding: 1.25rem 1.55rem 2.3rem 1.55rem;
         }
         .stApp:has(.presentation-slide) [data-testid="stHeader"],
         .stApp:has(.presentation-slide) [data-testid="stToolbar"],
@@ -1137,8 +1155,8 @@ def inject_css() -> None:
         }
         .stApp:has(.presentation-slide) .block-container {
             max-width: 100vw;
-            padding-top: 0.45rem !important;
-            padding-bottom: 0.55rem !important;
+            padding-top: 0.65rem !important;
+            padding-bottom: 2.25rem !important;
         }
         .stApp:has(#demo-briefing-page) .block-container,
         .stApp:has(#demo-briefing-page) .block-container h1,
@@ -1194,16 +1212,16 @@ def inject_css() -> None:
         }
         .presentation-slide {
             position: relative;
-            overflow: hidden;
+            overflow: visible;
+            display: block;
             background:
                 linear-gradient(135deg, rgba(11, 23, 34, 0.98), rgba(6, 15, 24, 0.99)),
                 linear-gradient(90deg, rgba(57,197,187,0.08), transparent 42%);
             border: 1px solid rgba(57,197,187,0.30);
             border-radius: 8px;
             box-shadow: 0 22px 70px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06);
-            min-height: min(610px, calc(100vh - 190px));
-            padding: clamp(16px, 1.55vw, 24px);
-            gap: 10px;
+            min-height: 680px;
+            padding: clamp(28px, 2.6vw, 44px);
         }
         .presentation-slide::before {
             content: "";
@@ -1226,20 +1244,20 @@ def inject_css() -> None:
         }
         .presentation-slide h2 {
             color: #f8fdff !important;
-            font-size: 1.78rem;
-            line-height: 1.12;
-            margin: 0 0 7px 0;
-            max-width: 1180px;
+            font-size: 2.2rem;
+            line-height: 1.16;
+            margin: 0 0 14px 0;
+            max-width: 1240px;
         }
         .presentation-lead {
             color: #d6e7ee;
-            font-size: 0.94rem;
-            line-height: 1.48;
-            max-width: 1120px;
+            font-size: 1.04rem;
+            line-height: 1.72;
+            max-width: 1180px;
         }
         .presentation-card-grid {
-            gap: 7px;
-            margin-top: 9px;
+            gap: 14px;
+            margin-top: 18px;
         }
         .presentation-card,
         .presentation-metric-card,
@@ -1250,8 +1268,8 @@ def inject_css() -> None:
         }
         .presentation-card,
         .presentation-metric-card {
-            padding: 10px 11px;
-            min-height: 88px;
+            padding: 16px;
+            min-height: 126px;
         }
         .presentation-card b,
         .presentation-metric-card b,
@@ -1262,24 +1280,24 @@ def inject_css() -> None:
         .presentation-metric-card span,
         .architecture-node span {
             color: #c8dce6;
-            line-height: 1.34;
-            font-size: 0.78rem;
+            line-height: 1.58;
+            font-size: 0.95rem;
         }
         .presentation-metric-card strong {
             color: #f8fdff;
-            font-size: 1rem;
-            margin-bottom: 4px;
+            font-size: 1.16rem;
+            margin-bottom: 7px;
         }
         .presentation-flow {
-            gap: 7px;
-            margin-top: 9px;
+            gap: 14px;
+            margin-top: 18px;
         }
         .presentation-step {
             background: linear-gradient(180deg, rgba(14, 29, 42, 0.92), rgba(9, 20, 30, 0.94));
             border: 1px solid rgba(57,197,187,0.25);
-            border-top: 3px solid #39c5bb;
-            padding: 9px;
-            min-height: 94px;
+            border-top: 4px solid #39c5bb;
+            padding: 14px;
+            min-height: 144px;
         }
         .presentation-step b,
         .architecture-node b {
@@ -1287,17 +1305,17 @@ def inject_css() -> None:
         }
         .presentation-step span {
             color: #c8dce6;
-            font-size: 0.76rem;
-            line-height: 1.32;
+            font-size: 0.95rem;
+            line-height: 1.55;
         }
         .architecture-diagram {
-            gap: 7px;
-            margin-top: 9px;
+            gap: 14px;
+            margin-top: 18px;
         }
         .architecture-node {
-            border-top: 3px solid #39c5bb;
-            padding: 10px;
-            min-height: 94px;
+            border-top: 4px solid #39c5bb;
+            padding: 14px;
+            min-height: 142px;
         }
         .architecture-node:not(:last-child)::after {
             color: #39c5bb;
@@ -1325,15 +1343,24 @@ def inject_css() -> None:
             border: 1px solid rgba(57,197,187,0.30);
             border-left: 4px solid #39c5bb;
             color: #d9fffb;
-            padding: 9px 11px;
-            line-height: 1.38;
-            margin-top: 9px;
+            padding: 13px 15px;
+            line-height: 1.62;
+            margin-top: 16px;
+        }
+        .presentation-section-divider {
+            color: #39c5bb;
+            margin: 26px 0 16px 0;
+        }
+        .presentation-section-divider::before,
+        .presentation-section-divider::after {
+            background: linear-gradient(90deg, rgba(57,197,187,0.45), rgba(57,197,187,0.06));
         }
         .presentation-footer {
             border-top: 1px solid rgba(57,197,187,0.22);
             color: #9fb2c3;
-            font-size: 0.74rem;
-            padding-top: 7px;
+            font-size: 0.86rem;
+            padding-top: 12px;
+            margin-top: 30px;
         }
         .briefing-hero,
         .briefing-card,
@@ -1376,51 +1403,64 @@ def inject_css() -> None:
             border-top: 1px solid rgba(57,197,187,0.16);
         }
         .stApp:has(#presentation-focus-mode) .block-container {
-            padding: 0.55rem 0.9rem 0.75rem 0.9rem;
+            padding: 0.75rem 1.15rem 2rem 1.15rem;
         }
         .stApp:has(#presentation-focus-mode) .presentation-slide {
             min-height: calc(100vh - 96px);
-            padding: clamp(22px, 2.4vw, 38px);
+            padding: clamp(28px, 3vw, 54px);
         }
         .stApp:has(#presentation-focus-mode) .presentation-slide h2 {
             font-size: 2.25rem;
         }
         .foundation-flow-map {
             display: grid;
-            grid-template-columns: 1.05fr 0.7fr 1.1fr 1fr;
-            gap: 8px;
+            grid-template-columns: repeat(4, minmax(220px, 1fr));
+            gap: 14px;
             align-items: stretch;
-            margin-top: 10px;
+            margin-top: 14px;
         }
         .foundation-flow-block {
+            position: relative;
             background: linear-gradient(180deg, rgba(14, 29, 42, 0.94), rgba(9, 20, 30, 0.96));
             border: 1px solid rgba(57,197,187,0.25);
             border-radius: 8px;
-            padding: 10px;
-            min-height: 172px;
+            padding: 14px;
+            min-height: 300px;
+        }
+        .foundation-flow-block:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #39c5bb;
+            font-size: 1.3rem;
+            font-weight: 900;
+            z-index: 2;
         }
         .foundation-flow-block b {
             color: #f8fdff;
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            font-size: 1.02rem;
         }
         .foundation-flow-block span {
             display: block;
             color: #c8dce6;
-            font-size: 0.78rem;
-            line-height: 1.34;
+            font-size: 0.9rem;
+            line-height: 1.45;
         }
         .foundation-flow-items {
             display: grid;
-            gap: 6px;
+            gap: 8px;
         }
         .foundation-flow-item {
             border: 1px solid rgba(159,178,195,0.20);
             background: rgba(255,255,255,0.035);
             border-radius: 6px;
             color: #d6e7ee;
-            font-size: 0.74rem;
-            padding: 5px 6px;
+            font-size: 0.92rem;
+            padding: 8px 9px;
         }
         .foundation-flow-block.hot {
             border-color: rgba(255,176,0,0.36);
@@ -1430,34 +1470,34 @@ def inject_css() -> None:
         }
         .foundation-quality-grid {
             display: grid;
-            grid-template-columns: repeat(6, minmax(0, 1fr));
-            gap: 6px;
-            margin-top: 10px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 14px;
         }
         .foundation-quality-card {
             background: linear-gradient(180deg, rgba(14, 29, 42, 0.94), rgba(9, 20, 30, 0.96));
             border: 1px solid rgba(57,197,187,0.25);
-            border-top: 3px solid #39c5bb;
+            border-top: 4px solid #39c5bb;
             border-radius: 8px;
-            padding: 9px;
-            min-height: 108px;
+            padding: 16px;
+            min-height: 150px;
         }
         .foundation-quality-card b {
             color: #f8fdff;
             display: block;
-            font-size: 0.88rem;
-            margin-bottom: 6px;
+            font-size: 1.02rem;
+            margin-bottom: 8px;
         }
         .foundation-quality-card span {
             color: #c8dce6;
             display: block;
-            font-size: 0.74rem;
-            line-height: 1.28;
+            font-size: 0.95rem;
+            line-height: 1.55;
         }
         .foundation-quality-card em {
             color: #39c5bb;
             display: block;
-            font-size: 0.7rem;
+            font-size: 0.78rem;
             font-style: normal;
             font-weight: 800;
             margin-bottom: 5px;
@@ -1529,6 +1569,13 @@ def inject_css() -> None:
             .foundation-flow-map,
             .foundation-quality-grid {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .foundation-flow-block:not(:last-child)::after {
+                content: "↓";
+                right: 18px;
+                top: auto;
+                bottom: -22px;
+                transform: none;
             }
             .metric-value {
                 white-space: normal;
@@ -1741,25 +1788,25 @@ def foundation_flow_map_html() -> str:
         (
             "Source data",
             "業務データ",
-            ["財務・計画", "案件・調達・工程", "マスタ"],
+            ["ERP実績", "EPM予算・見込", "案件EAC", "調達・外注", "工程・納期", "マスタ"],
             "",
         ),
         (
             "Quality gates",
             "品質ゲート",
-            ["数字の照合", "版と粒度の固定", "案件への紐付け"],
+            ["照合", "版管理", "案件ID統合", "勘定分類", "時間粒度", "リネージ"],
             "hot",
         ),
         (
             "Trusted foundation",
             "FP&Aデータ基盤",
-            ["共通KPI", "差異とリスク", "根拠リンク"],
+            ["共通KPI定義", "差異要因レイヤー", "案件リスクレイヤー", "根拠リンク", "更新・監査ログ"],
             "",
         ),
         (
             "AI-driven FP&A",
             "経営説明",
-            ["根拠付きコメント", "案件アクション", "意思決定"],
+            ["根拠付きAIコメント", "案件アクション", "会議資料", "意思決定", "次回更新"],
             "ai",
         ),
     ]
@@ -1776,6 +1823,10 @@ def foundation_flow_map_html() -> str:
             """
         )
     return f'<div class="foundation-flow-map">{"".join(blocks)}</div>'
+
+
+def presentation_divider_html(label: str) -> str:
+    return f'<div class="presentation-section-divider"><span>{escape(label)}</span></div>'
 
 
 def foundation_quality_gates_html() -> str:
@@ -3328,7 +3379,17 @@ def render_data_foundation(data: dict[str, Any]) -> None:
             品質ゲートとTrusted FP&amp;A Data Foundationを通すことで、KPI、差異要因、案件リスク、AIコメント、経営判断が同じ根拠でつながります。
             </div>
             """
-            + foundation_flow_map_html(),
+            + presentation_divider_html("経営データの接続順")
+            + foundation_flow_map_html()
+            + presentation_divider_html("この図で伝えること")
+            + presentation_cards_html(
+                [
+                    ("Excel連結だけでは弱い", "集計はできても、版・粒度・根拠が揃わないとAIコメントの説明責任を持てません。"),
+                    ("品質ゲートが中核", "照合、版管理、ID統合、リネージを通すことで、コメントから元データへ戻れます。"),
+                    ("経営判断へつなげる", "KPI、差異、案件リスク、会議資料が同じ根拠でつながる状態を目指します。"),
+                ],
+                columns=3,
+            ),
             "図は概念図です。本番では既存DWH、EPM、ERP、案件管理システムの構成に合わせて接続点を設計します。",
         )
     elif slide == 3:
@@ -3341,6 +3402,7 @@ def render_data_foundation(data: dict[str, Any]) -> None:
             そして両者を結ぶマスタです。この3つがつながると、AIコメントの根拠が追えるようになります。
             </div>
             """
+            + presentation_divider_html("最初に接続する範囲")
             + presentation_cards_html(
                 [
                     ("財務の比較軸", "ERP実績とEPMの予算・見込を、同じ期間と粒度で比較できる状態にします。"),
@@ -3361,6 +3423,7 @@ def render_data_foundation(data: dict[str, Any]) -> None:
             コメント、KPI、差異要因、案件、元データの線が切れていると、説明責任を果たす材料にはなりません。
             </div>
             """
+            + presentation_divider_html("最低限の確認ポイント")
             + foundation_quality_gates_html(),
             "まずは代表KPIと重点案件に絞り、この3つの品質ゲートを月次運用に組み込みます。",
         )
@@ -3374,6 +3437,7 @@ def render_data_foundation(data: dict[str, Any]) -> None:
             どの会議で、どのKPIを、どの事業領域から説明可能にするかです。
             </div>
             """
+            + presentation_divider_html("決めること")
             + presentation_cards_html(
                 [
                     ("会議", "月次経営会議、予実会議、見込更新会議のどこから説明品質を変えるか。"),
