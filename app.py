@@ -989,170 +989,6 @@ def render_segment_story_cards() -> None:
             )
 
 
-def render_demo_briefing() -> None:
-    st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
-    render_header("デモ概要 / Demo Briefing", "What this demo shows and why it matters")
-
-    st.markdown(
-        """
-        <div class="briefing-hero">
-            <h2>AI Variance Analysis Cockpit で伝えたいこと</h2>
-            <p>
-            このデモは、重工業企業のFP&amp;Aが、予実差・見込差・案件リスクをAIで説明できるようになる将来像を見せるものです。
-            ただし中心メッセージは「AIが文章を書くこと」ではありません。
-            正しいデータを継続的に集め、KPI・差異要因・案件情報を同じ定義でつなぐデータ基盤があって初めて、
-            AIは経営判断に使えるコメントを返せる、という点です。
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">このデモの3つのメッセージ</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="briefing-grid">
-            <div class="briefing-card">
-                <b>1. 売上好調でも安心できない</b>
-                <span>
-                全社売上は上振れしていても、EAC悪化、外注費上振れ、為替、納期遅延により、
-                営業利益・利益率・キャッシュフローが悪化する構造を示します。
-                </span>
-            </div>
-            <div class="briefing-card">
-                <b>2. 案件リスクを早く見る必要がある</b>
-                <span>
-                重工業では、損益悪化の多くが案件単位のEAC、設計変更、工程遅延から発生します。
-                全社KPIから案件アクションへつなげることが重要です。
-                </span>
-            </div>
-            <div class="briefing-card">
-                <b>3. AI活用の前提はデータ基盤</b>
-                <span>
-                AIコメントの質は、ERP、EPM、案件EAC、調達、工程、マスタが正しく統合されているかで決まります。
-                LLMは最後の文章化を助ける役割です。
-                </span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">デモで使うストーリー / Fictional Storyline</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="briefing-message">
-        <b>全社ストーリー:</b>
-        RevenueはBudgetを上回る一方で、Operating Profit、Operating Profit Margin、Cash Flowは悪化。
-        Energy Systemsの高採算案件前倒しがプラスに効く一方、Marine &amp; OffshoreのEAC悪化、
-        Aerospace &amp; Defenseの外注費・為替・長納期部品、Industrial Machinery &amp; Roboticsの需要鈍化が利益を押し下げます。
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    render_segment_story_cards()
-
-    st.markdown('<div class="section-label">おすすめの説明順 / Suggested Demo Flow</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="briefing-flow">
-            <div class="briefing-step">
-                <b>1. Dashboard</b>
-                <span>全社KPIで、売上上振れと利益・CF悪化のギャップを見せます。</span>
-            </div>
-            <div class="briefing-step">
-                <b>2. Variance Analysis</b>
-                <span>差異をウォーターフォールで分解し、主要要因を特定します。</span>
-            </div>
-            <div class="briefing-step">
-                <b>3. Project Risk</b>
-                <span>MarineのCritical案件、AerospaceのHigh案件へ掘り下げます。</span>
-            </div>
-            <div class="briefing-step">
-                <b>4. AI Commentary</b>
-                <span>差異分析を経営会議向けの日本語コメントへ変換します。</span>
-            </div>
-            <div class="briefing-step">
-                <b>5. Data Foundation</b>
-                <span>このAI分析を実現するには、信頼できるFP&amp;Aデータ基盤が必要だと説明します。</span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">対象者別に刺さる論点</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <table class="briefing-table">
-            <thead>
-                <tr>
-                    <th>対象者</th>
-                    <th>関心ごと</th>
-                    <th>このデモで見せるポイント</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>経営層</td>
-                    <td>なぜ売上が伸びているのに利益とCFが悪いのか</td>
-                    <td>全社KPI、セグメント差異、Top Drivers、経営会議向けAIコメント</td>
-                </tr>
-                <tr>
-                    <td>事業部長</td>
-                    <td>どの案件・部署にアクションを打つべきか</td>
-                    <td>Critical/High案件、EAC悪化、赤字化リスク、推奨アクション</td>
-                </tr>
-                <tr>
-                    <td>FP&amp;A担当者</td>
-                    <td>毎月の差異説明をどう効率化・標準化するか</td>
-                    <td>比較タイプ、KPI定義、差異要因、AIコメント生成</td>
-                </tr>
-                <tr>
-                    <td>IT・データ部門</td>
-                    <td>どのデータをどう整備すればAI分析につながるか</td>
-                    <td>Data Foundation、品質ゲート、データドメイン、技術構成</td>
-                </tr>
-            </tbody>
-        </table>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">このデモの位置づけ</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <table class="briefing-table">
-            <thead>
-                <tr>
-                    <th>項目</th>
-                    <th>説明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>データ</td>
-                    <td>すべて架空データ。実在企業の財務データは使っていません。</td>
-                </tr>
-                <tr>
-                    <td>技術</td>
-                    <td>Python、Streamlit、pandas、numpy、Plotly、PyArrow。外部サービス接続は不要です。</td>
-                </tr>
-                <tr>
-                    <td>目的</td>
-                    <td>正確な業績予測ではなく、AI FP&amp;A差異分析の完成イメージ、業務ストーリー、データ基盤の重要性を伝えることです。</td>
-                </tr>
-                <tr>
-                    <td>次の一手</td>
-                    <td>データソース棚卸し、KPI定義、案件EAC連携、マスタ統合、Streamlit Community Cloudでの共有化。</td>
-                </tr>
-            </tbody>
-        </table>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 def render_client_pre_demo(kpis: pd.DataFrame, risk: pd.DataFrame, metadata: dict[str, Any]) -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
     render_header("デモ閲覧前 / Client Preview", "Before viewing the AI FP&A cockpit")
@@ -3077,7 +2913,6 @@ def main(app_mode: str = "internal") -> None:
     ]
     internal_pages = [
         ("Internal Demo Guide", "デモ解説用", False),
-        ("Demo Briefing", "旧デモ概要", False),
         ("Tech Architecture", "技術構成", False),
         ("Data Explorer", "データ確認", False),
     ]
@@ -3249,7 +3084,6 @@ def main(app_mode: str = "internal") -> None:
     current_label = next((label for key, label in operational_pages if key == page), None)
     if st.session_state.get("active_surface") == "client":
         demo_label_map = {
-            "Demo Briefing": "デモ概要",
             "Client Pre-Demo": "商談前ブリーフ",
             "Internal Demo Guide": "説明者向けガイド",
             "Client Post-Demo": "デモ後フォロー",
@@ -3266,7 +3100,6 @@ def main(app_mode: str = "internal") -> None:
     elif st.session_state.get("active_surface") == "internal":
         internal_label_map = {
             "Internal Demo Guide": "説明者向けガイド",
-            "Demo Briefing": "旧デモ概要",
             "Tech Architecture": "技術構成",
             "Data Explorer": "データ確認",
         }
@@ -3279,9 +3112,7 @@ def main(app_mode: str = "internal") -> None:
         surface_note = "社内・登壇者向けの台本です。公開デモでは確認用ページとして表示しています。"
     elif page in {"Dashboard", "Variance Analysis", "Project Risk", "AI Commentary"}:
         surface_note = "分析画面は、サイドバーからデモ用ガイド付き表示にも切り替えられます。"
-    if page == "Demo Briefing":
-        render_demo_briefing()
-    elif page == "Client Pre-Demo":
+    if page == "Client Pre-Demo":
         render_client_pre_demo(kpis, data["project_risk"], metadata)
     elif page == "Internal Demo Guide":
         render_internal_demo_guide()
