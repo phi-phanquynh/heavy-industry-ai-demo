@@ -14,6 +14,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
+import streamlit.components.v1 as components
 
 try:
     from yfiles_graphs_for_streamlit import (
@@ -547,7 +548,7 @@ def inject_css() -> None:
             min-height: 144px;
         }
         .architecture-node:not(:last-child)::after {
-            content: "\2192";
+            content: "\\2192";
             position: absolute;
             right: -15px;
             top: 50%;
@@ -1849,7 +1850,7 @@ def inject_css() -> None:
             position: relative;
         }
         .flow-node:not(:last-child)::after {
-            content: "\2192";
+            content: "\\2192";
             color: #39c5bb;
             font-size: 1.45rem;
             font-weight: 900;
@@ -1886,17 +1887,19 @@ def inject_css() -> None:
         }
         .foundation-core {
             align-items: center;
-            background: rgba(57,197,187,0.13);
-            border: 1px solid rgba(57,197,187,0.36);
+            background: linear-gradient(180deg, rgba(57,197,187,0.17), rgba(57,197,187,0.09));
+            border: 1px solid rgba(57,197,187,0.42);
             border-radius: 8px;
             color: #d9fffb;
             display: flex;
-            font-size: 1.05rem;
+            font-size: 1.28rem;
             font-weight: 850;
             justify-content: center;
-            min-height: 72px;
-            margin: 18px auto 0 auto;
-            max-width: 520px;
+            line-height: 1.45;
+            min-height: 88px;
+            margin: 22px auto 0 auto;
+            max-width: 860px;
+            padding: 0 28px;
             text-align: center;
         }
         .tech-architecture {
@@ -2120,7 +2123,7 @@ def inject_css() -> None:
                 transform: rotate(90deg);
             }
             .architecture-node:not(:last-child)::after {
-                content: "\2193";
+                content: "\\2193";
                 right: 16px;
                 top: auto;
                 bottom: -19px;
@@ -3126,7 +3129,7 @@ def render_proposal_data_foundation() -> None:
     render_proposal_slide(
         3,
         "FP&Aデータ基盤",
-        "説明に耐えるには、定義・版・粒度・根拠を揃える必要がある",
+        "説明に耐えるには、定義・バージョン・粒度・根拠を揃える必要がある",
         """
         データを集めるだけでは、経営会議で使える説明にはなりません。
         コメントから差異、案件、元データへ戻れるように、説明責任を支える4つの能力を揃えます。
@@ -3138,7 +3141,7 @@ def render_proposal_data_foundation() -> None:
                 <span>KPI、勘定科目、案件、セグメントの意味を揃え、会議ごとに数字の解釈が変わらない状態にする。</span>
             </div>
             <div class="proposal-panel accent-blue">
-                <b>版</b>
+                <b>バージョン</b>
                 <span>予算、前回見込、最新見込、実績の締め時点を管理し、比較軸を固定する。</span>
             </div>
             <div class="proposal-panel accent-amber">
@@ -3147,11 +3150,11 @@ def render_proposal_data_foundation() -> None:
             </div>
             <div class="proposal-panel accent-red">
                 <b>根拠</b>
-                <span>コメント、差異、案件、元データのリネージを保持し、説明内容を検証できるようにする。</span>
+                <span>コメント、差異、案件、元データまでの追跡性を保持し、説明内容を検証できるようにする。</span>
             </div>
         </div>
         <div class="foundation-core">
-            価値は「データを集めること」ではなく、説明から根拠へ戻れることです。
+            データは品質が担保されて初めて価値を持ちます。
         </div>
         """,
     )
@@ -3183,9 +3186,9 @@ def render_proposal_system_architecture() -> None:
                 <em>Integration</em>
                 <b>連携・品質管理</b>
                 <div class="tech-pill">照合 / reconciliation</div>
-                <div class="tech-pill">シナリオ版管理</div>
+                <div class="tech-pill">シナリオバージョン管理</div>
                 <div class="tech-pill">案件ID・勘定マッピング</div>
-                <div class="tech-pill">履歴・リネージ</div>
+                <div class="tech-pill">履歴・追跡性</div>
             </div>
             <div class="tech-arrow">&rarr;</div>
             <div class="tech-layer" style="--accent:#39c5bb">
@@ -3345,7 +3348,7 @@ def render_proposal_assessment() -> None:
             <div class="assessment-item">
                 <em>Agenda 5</em>
                 <b>品質課題</b>
-                <span>定義、版、粒度、ID、リネージ、承認のどこが詰まるかを見極める。</span>
+                <span>定義、バージョン、粒度、ID、元データまでの追跡性、承認のどこが詰まるかを見極める。</span>
             </div>
             <div class="assessment-item">
                 <em>Agenda 6</em>
