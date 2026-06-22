@@ -56,7 +56,7 @@ Presenter/support app:
 
 - **Client Preview**: Align expectations, fictional-data premise, and what to watch.
 - **Data Foundation**: Explain why trusted FP&A data is the prerequisite for AI variance analysis.
-- **Reference Architecture**: Explain implementation options and rollout approach for AI-enabled FP&A.
+- **Reference Architecture**: Explain implementation options and rollout approach for AI-driven FP&A.
 - **Client Follow-up**: Summarize takeaways and move into data assessment / PoC scoping.
 - **デモ解説用 / Presenter Guide**: Internal talk track, Q&A, and wording guardrails.
 - **技術構成 / Tech Architecture**: Slide-style internal page explaining how the demo is built, operated, and extended.
