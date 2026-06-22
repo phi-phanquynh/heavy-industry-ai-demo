@@ -3260,7 +3260,7 @@ def render_segment_kpi_heatmap(kpis: pd.DataFrame, risk: pd.DataFrame, selected_
     scoped = apply_period_filter(kpis, selected_period)
     segment_kpis = (
         scoped[scoped["scenario"].isin(["Budget", "Actual"])]
-        .groupby(["segment_code", "segment_en", "scenario"], observed=True)[
+        .groupby(["segment_code", "segment_en", "segment_ja", "scenario"], observed=True)[
             ["revenue_jpy_mn", "operating_profit_jpy_mn", "cash_flow_jpy_mn"]
         ]
         .sum()
@@ -3268,8 +3268,8 @@ def render_segment_kpi_heatmap(kpis: pd.DataFrame, risk: pd.DataFrame, selected_
     )
 
     rows: list[dict[str, Any]] = []
-    for (segment_code, segment_en), segment_rows in segment_kpis.groupby(
-        ["segment_code", "segment_en"],
+    for (segment_code, segment_en, segment_ja), segment_rows in segment_kpis.groupby(
+        ["segment_code", "segment_en", "segment_ja"],
         observed=True,
         sort=True,
     ):
@@ -3292,7 +3292,7 @@ def render_segment_kpi_heatmap(kpis: pd.DataFrame, risk: pd.DataFrame, selected_
 
         rows.append(
             {
-                "segment": f"{segment_code} | {segment_en}",
+                "segment": f"{segment_code} | {segment_ja}",
                 "segment_en": segment_en,
                 "revenue_delta": actual_revenue - budget_revenue,
                 "revenue_pct": pct_change(actual_revenue, budget_revenue),
@@ -3309,10 +3309,10 @@ def render_segment_kpi_heatmap(kpis: pd.DataFrame, risk: pd.DataFrame, selected_
         )
 
     heatmap = pd.DataFrame(rows).sort_values("segment_en")
-    columns = ["Revenue", "OP", "Margin", "Cash Flow", "Loss Risk"]
+    columns = ["売上", "営業利益", "利益率", "CF", "赤字リスク"]
     if heatmap.empty:
         fig = go.Figure()
-        fig.update_layout(title="Segment KPI Heatmap / Budget variance and loss-risk concentration")
+        fig.update_layout(title="セグメントKPIヒートマップ / 予算差異・赤字化リスク集中度")
         return style_fig(fig, 380)
 
     heatmap["revenue_z"] = normalize_for_heatmap(heatmap["revenue_delta"])
@@ -3344,7 +3344,7 @@ def render_segment_kpi_heatmap(kpis: pd.DataFrame, risk: pd.DataFrame, selected_
                 f"{format_heatmap_amount(row.op_delta)}<br>{row.op_pct:+.1f}%",
                 f"{row.margin_delta:+.1f}pt<br>{row.actual_margin:.1f}%",
                 f"{format_heatmap_amount(row.cf_delta)}<br>{row.cf_pct:+.1f}%",
-                f"{row.loss_risk_count} loss<br>{row.critical_count} Critical",
+                f"赤字 {row.loss_risk_count}件<br>Critical {row.critical_count}件",
             ]
         )
 
@@ -3371,7 +3371,7 @@ def render_segment_kpi_heatmap(kpis: pd.DataFrame, risk: pd.DataFrame, selected_
             showscale=False,
         )
     )
-    fig.update_layout(title="Segment KPI Heatmap / Budget variance and loss-risk concentration")
+    fig.update_layout(title="セグメントKPIヒートマップ / 予算差異・赤字化リスク集中度")
     fig.update_xaxes(side="top", tickfont={"size": 12})
     fig.update_yaxes(autorange="reversed", tickfont={"size": 11})
     fig = style_fig(fig, 420)
