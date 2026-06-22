@@ -1256,6 +1256,9 @@ def inject_css() -> None:
         .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarContent"] > :not([data-testid="stSidebarHeader"]) {
             display: none !important;
         }
+        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarUserContent"] {
+            display: none !important;
+        }
         .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarHeader"] {
             width: 56px !important;
         }
@@ -1332,7 +1335,9 @@ def inject_css() -> None:
         .st-key-proposal-turn-controls [data-testid="stVerticalBlock"] {
             gap: 8px;
         }
-        .st-key-proposal-turn-controls button {
+        .st-key-proposal-turn-controls button,
+        .st-key-proposal-turn-controls [data-testid="stLinkButton"] a,
+        .st-key-proposal-turn-controls a {
             align-items: center;
             background: rgba(8,20,31,0.92) !important;
             border: 1px solid rgba(57,197,187,0.34) !important;
@@ -1346,16 +1351,22 @@ def inject_css() -> None:
             justify-content: center;
             min-height: 42px;
             padding: 0 !important;
+            text-decoration: none !important;
             width: 42px;
         }
-        .st-key-proposal-turn-controls button:hover {
+        .st-key-proposal-turn-controls button:hover,
+        .st-key-proposal-turn-controls [data-testid="stLinkButton"] a:hover,
+        .st-key-proposal-turn-controls a:hover {
             background: rgba(57,197,187,0.20) !important;
             border-color: rgba(57,197,187,0.72) !important;
             color: #ffffff !important;
         }
-        .st-key-proposal-turn-controls button:disabled {
+        .st-key-proposal-turn-controls button:disabled,
+        .st-key-proposal-turn-controls [data-testid="stLinkButton"] a[aria-disabled="true"],
+        .st-key-proposal-turn-controls a[aria-disabled="true"] {
             color: rgba(159,178,195,0.36) !important;
             border-color: rgba(159,178,195,0.16) !important;
+            pointer-events: none;
         }
         .st-key-proposal-turn-controls .proposal-button-index {
             color: #9fb2c3;
@@ -1978,7 +1989,7 @@ def inject_css() -> None:
             align-items: stretch;
             display: grid;
             gap: 12px;
-            grid-template-columns: minmax(250px, 0.88fr) 56px minmax(0, 1.32fr);
+            grid-template-columns: minmax(250px, 0.88fr) 82px minmax(0, 1.32fr);
         }
         .fpna-expectation {
             background: linear-gradient(180deg, rgba(255,176,0,0.11), rgba(255,176,0,0.055));
@@ -2033,6 +2044,10 @@ def inject_css() -> None:
             line-height: 1.35;
             text-align: center;
         }
+        .problem-connector span {
+            display: block;
+            width: 76px;
+        }
         .problem-connector::before,
         .problem-connector::after {
             background: rgba(57,197,187,0.28);
@@ -2059,15 +2074,19 @@ def inject_css() -> None:
             line-height: 1.42;
         }
         .executive-question {
-            background: rgba(255, 176, 0, 0.10);
-            border: 1px solid rgba(255, 176, 0, 0.32);
+            align-items: center;
+            background: linear-gradient(90deg, rgba(57,197,187,0.13), rgba(96,165,250,0.10));
+            border: 1px solid rgba(57,197,187,0.36);
             border-radius: 8px;
-            color: #fff2c2;
+            color: #e5fbff;
+            display: flex;
             font-size: 0.98rem;
             font-weight: 750;
+            justify-content: center;
             line-height: 1.55;
             margin-top: 0;
             padding: 10px 14px;
+            text-align: center;
         }
         .flow-ribbon {
             display: grid;
@@ -3290,7 +3309,7 @@ def render_proposal_problem_statement() -> None:
                         <div>誰が、いつまでに動くかを決める</div>
                     </div>
                 </div>
-                <div class="problem-connector"><span>4つの課題が阻害</span></div>
+                <div class="problem-connector"><span>4つの課題が<br>阻害</span></div>
                 <div class="fragment-stage problem-blockers">
                     <div class="fragment-card" style="--accent:#60a5fa">
                         <em>Financials</em>
@@ -3315,7 +3334,7 @@ def render_proposal_problem_statement() -> None:
                 </div>
             </div>
             <div class="executive-question">
-                AI活用の前提は、財務KPIと案件・調達・工程データがつながり、悪化要因を確認できることです。
+                AI活用の前提は、財務KPIと案件・調達・工程データがつながり、増減要因を確認できることです。
             </div>
         </div>
         """,
@@ -3553,11 +3572,11 @@ def ai_app_architecture_component_html() -> str:
         "agent": {
             "nav": "3. 横断AIエージェント型",
             "title": "横断AIエージェント型",
-            "subtitle": "AIエージェントが複数システムをAPI・コネクタ経由で横断する構成",
+            "subtitle": "業務エージェントと開発・運用エージェントが、複数システムをAPI・コネクタ経由で横断する構成",
             "products": "Azure OpenAI / Amazon Bedrock / Google Vertex AI",
-            "fit": "経営問答、レポート自動作成、複数システム横断の業務支援",
-            "strength": "ベンダー横断で柔軟に設計でき、BI、FP&A、ERP、文書、会議情報をまたいだ体験を作れる。",
-            "watch": "権限継承、監査、データ境界、コスト制御、Human-in-the-loopを最初から設計する。",
+            "fit": "経営問答、レポート自動作成、複数システム横断の業務支援、AIアプリ実装、データ連携、テスト、運用改善",
+            "strength": "ベンダー横断で柔軟に設計でき、BI、FP&A、ERP、文書、会議情報をまたいだ業務体験と開発・運用支援を作れる。",
+            "watch": "権限継承、監査、データ境界、コスト制御、Human-in-the-loopを最初から設計する。開発・運用エージェントは本番データや権限境界に直接触れさせず、リポジトリ、CI/CD、承認フローで統制する。",
             "focus": {
                 "label": "AI Agent / Orchestration Layer",
                 "detail": "中心に置くのは業務横断のエージェント層です。各システムの正本を持たず、権限付きで参照・提案します。",
@@ -3579,13 +3598,25 @@ def ai_app_architecture_component_html() -> str:
                     "primary",
                     products="Microsoft Copilot Studio / LangGraph / Semantic Kernel / Vertex AI Agent Builder / Amazon Bedrock Agents",
                 ),
-                node("policy", "Policy Engine\nIAM / Guardrails", 505, 475, "control", "権限継承、PII制御、監査ログ、承認ゲート。", "#64748b", 220, 72, products="Microsoft Entra ID / Okta / Microsoft Purview / AWS IAM / Google Cloud IAM"),
+                node("policy", "Policy Engine\nIAM / Guardrails", 505, 455, "control", "権限継承、PII制御、監査ログ、承認ゲート。", "#64748b", 220, 72, products="Microsoft Entra ID / Okta / Microsoft Purview / AWS IAM / Google Cloud IAM"),
                 node("erp_api", "ERP API\nActuals / GL", 280, 112, "source", "実績、会計伝票、勘定残高を権限付きで参照。", "#2563eb", 152, 68, products="SAP BTP APIs / Oracle Integration Cloud / MuleSoft / Boomi"),
                 node("fpna_api", "FP&A API\nPlan / Forecast", 280, 258, "fpna", "予算、見込、シナリオ、承認ステータスを参照。", "#7c3aed", 154, 68, products="Anaplan APIs / Pigment API / Oracle EPM REST API / CCH Tagetik connectors"),
                 node("docs", "Docs / Meetings\nBoard Pack / Minutes", 280, 404, "source", "会議資料、議事録、注記、業務ルールを検索。", "#2563eb", 160, 70, products="SharePoint / Confluence / Google Drive / Box / Microsoft Teams"),
                 node("bi", "BI Semantic Layer\nMetrics / Dashboard", 760, 132, "data", "KPI定義、メジャー、ダッシュボード指標を参照。", "#0f766e", 170, 72, products="Power BI / Tableau / Looker / Qlik"),
                 node("data", "DWH / Lakehouse\nTrusted Data", 760, 284, "data", "横断分析、特徴量、リネージ、履歴データを提供。", "#0f766e", 170, 72, products="Snowflake / Databricks / Microsoft Fabric / BigQuery"),
                 node("workflow", "Workflow\nApproval / Ticket", 760, 430, "control", "承認、通知、チケット、案件アクションへ接続。", "#64748b", 174, 70, products="Microsoft Teams / Slack / ServiceNow / Jira / Power Automate"),
+                node(
+                    "engineering_agent",
+                    "Engineering Agent\nAI SDLC / DevOps\nCode + Test + Docs",
+                    505,
+                    570,
+                    "ai",
+                    "データ連携、API、RAG、テスト、監視、ドキュメント更新を支援する開発・運用エージェント。",
+                    "#a855f7",
+                    230,
+                    78,
+                    products="Codex / Claude Code / Cursor / Devin / GitHub Copilot",
+                ),
                 node("qa", "Management\nQ&A", 1000, 128, "usecase", "経営問答。", "#dc2626", products="Microsoft 365 Copilot / Gemini Enterprise / custom AI assistant"),
                 node("draft", "Board Pack\nDrafting", 1000, 258, "usecase", "取締役会・経営会議資料の草案。", "#dc2626", products="Microsoft PowerPoint / Workiva / Google Slides / Oracle Narrative Reporting"),
                 node("action", "Action\nRecommendation", 1000, 388, "usecase", "打ち手候補、担当、期限の提案。", "#dc2626", products="ServiceNow / Jira / Microsoft Planner / Asana"),
@@ -3606,6 +3637,12 @@ def ai_app_architecture_component_html() -> str:
                 edge("a13", "policy", "agent", "guardrail", "control-edge"),
                 edge("a14", "policy", "llm", "logging", "control-edge"),
                 edge("a15", "policy", "workflow", "approval", "control-edge"),
+                edge("a16", "engineering_agent", "agent", "app delivery", "ai-edge"),
+                edge("a17", "engineering_agent", "erp_api", "connector", "ai-edge"),
+                edge("a18", "engineering_agent", "fpna_api", "API build", "ai-edge"),
+                edge("a19", "engineering_agent", "data", "pipeline", "ai-edge"),
+                edge("a20", "engineering_agent", "workflow", "ops", "ai-edge"),
+                edge("a21", "policy", "engineering_agent", "repo policy", "control-edge"),
             ],
         },
     }
@@ -4063,6 +4100,18 @@ def ai_app_architecture_component_html() -> str:
             ]
           });
           cy.on("tap", "node", (event) => showNodeDetail(event.target.data(), pattern.products));
+          window.architectureCy = cy;
+          window.architecturePatterns = patterns;
+          window.selectArchitectureNode = function(id) {
+            const node = cy.getElementById(id);
+            if (!node || node.empty()) {
+              return false;
+            }
+            cy.elements().unselect();
+            node.select();
+            showNodeDetail(node.data(), pattern.products);
+            return true;
+          };
           cy.ready(() => setTimeout(() => cy.fit(cy.elements(), 28), 20));
         }
 
@@ -6378,8 +6427,9 @@ def main(app_mode: str = "internal") -> None:
         else:
             st.session_state["show_guide"] = False
 
-    def choose_proposal_page(page_key: str) -> None:
+    def turn_to_proposal_page(page_key: str) -> None:
         choose_page("presenter", page_key)
+        st.session_state["presenter_page_selector"] = page_key
 
     def render_proposal_turn_controls() -> None:
         surface_pages = presenter_pages if presenter_only else presentation_pages
@@ -6394,11 +6444,12 @@ def main(app_mode: str = "internal") -> None:
         with st.container(key="proposal-turn-controls"):
             st.button(
                 "<",
-                key="proposal_prev_page",
+                key=f"proposal_prev_{current_index}",
+                on_click=turn_to_proposal_page,
+                args=(prev_key or current_page,),
                 disabled=prev_key is None,
                 help="前のページへ",
-                on_click=choose_proposal_page,
-                args=(prev_key or current_page,),
+                type="secondary",
                 width="stretch",
             )
             st.markdown(
@@ -6407,11 +6458,12 @@ def main(app_mode: str = "internal") -> None:
             )
             st.button(
                 ">",
-                key="proposal_next_page",
+                key=f"proposal_next_{current_index}",
+                on_click=turn_to_proposal_page,
+                args=(next_key or current_page,),
                 disabled=next_key is None,
                 help="次のページへ",
-                on_click=choose_proposal_page,
-                args=(next_key or current_page,),
+                type="secondary",
                 width="stretch",
             )
 
@@ -6471,14 +6523,18 @@ def main(app_mode: str = "internal") -> None:
             surface_page_labels = presenter_page_labels if presenter_only else presentation_page_labels
             page_options = [key for key, _, _ in surface_pages]
             active_page = st.session_state.get("active_page")
+            if st.session_state.get("presenter_page_selector") not in page_options:
+                st.session_state["presenter_page_selector"] = (
+                    active_page if active_page in page_options else page_options[0]
+                )
             selected_page = st.radio(
                 "ページ",
                 page_options,
-                index=page_options.index(active_page) if active_page in page_options else 0,
+                index=None,
                 format_func=lambda key: surface_page_labels[key],
                 key="presenter_page_selector",
             )
-            if selected_page != st.session_state.get("active_page"):
+            if selected_page is not None and selected_page != st.session_state.get("active_page"):
                 choose_page("presenter", selected_page)
         elif active_surface == "internal":
             page_options = [key for key, _, _ in internal_pages]
