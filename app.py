@@ -3801,8 +3801,8 @@ def main(app_mode: str = "internal") -> None:
         if not client_only and not presenter_only:
             surface_options = ["presenter", "internal"]
             surface_labels = {
-                "presenter": "プレゼンテーション資料",
-                "internal": "当デモに関する情報",
+                "presenter": "【社外用】プレゼンテーション資料",
+                "internal": "【社内用】当デモに関する情報",
             }
             active_surface = st.session_state.get("active_surface")
             selected_surface = st.radio(
@@ -3871,10 +3871,10 @@ def main(app_mode: str = "internal") -> None:
         current_page = st.session_state.get("active_page")
         current_surface_label = {
             "client": "本体デモ",
-            "presenter": "プレゼンテーション資料",
+            "presenter": "【社外用】プレゼンテーション資料",
             "operational": "本体デモ確認",
-            "internal": "当デモに関する情報",
-        }.get(current_surface, "プレゼンテーション資料")
+            "internal": "【社内用】当デモに関する情報",
+        }.get(current_surface, "【社外用】プレゼンテーション資料")
         current_page_label = {
             **client_page_labels,
             **presenter_page_labels,
@@ -3905,7 +3905,7 @@ def main(app_mode: str = "internal") -> None:
         mode_label = "本体デモ"
     elif st.session_state.get("active_surface") == "presenter":
         current_label = presenter_page_labels.get(page, page)
-        mode_label = "プレゼンテーション資料"
+        mode_label = "【社外用】プレゼンテーション資料"
     elif st.session_state.get("active_surface") == "internal":
         internal_label_map = {
             "Internal Demo Guide": "説明者向けガイド",
@@ -3913,7 +3913,7 @@ def main(app_mode: str = "internal") -> None:
             "Data Explorer": "データ確認",
         }
         current_label = internal_label_map.get(page, page)
-        mode_label = "当デモに関する情報"
+        mode_label = "【社内用】当デモに関する情報"
     else:
         mode_label = "本体デモ確認"
     surface_note = "このページは、共有・説明の目的に合わせた補助ページです。"
