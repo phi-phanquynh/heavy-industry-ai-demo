@@ -1878,16 +1878,105 @@ def inject_css() -> None:
             font-size: 0.88rem;
             line-height: 1.48;
         }
+        .problem-logic {
+            display: grid;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .problem-map {
+            align-items: stretch;
+            display: grid;
+            gap: 12px;
+            grid-template-columns: minmax(250px, 0.88fr) 56px minmax(0, 1.32fr);
+        }
+        .fpna-expectation {
+            background: linear-gradient(180deg, rgba(255,176,0,0.11), rgba(255,176,0,0.055));
+            border: 1px solid rgba(255,176,0,0.30);
+            border-left: 5px solid #ffb000;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 14px 15px;
+        }
+        .fpna-expectation em {
+            color: #ffcf66;
+            display: block;
+            font-size: 0.72rem;
+            font-style: normal;
+            font-weight: 850;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .fpna-expectation b {
+            color: #f8fdff;
+            display: block;
+            font-size: 1.02rem;
+            margin-bottom: 0;
+        }
+        .expectation-items {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 8px;
+        }
+        .expectation-items div {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,176,0,0.18);
+            border-radius: 7px;
+            color: #fff2c2;
+            font-size: 0.84rem;
+            font-weight: 760;
+            line-height: 1.34;
+            padding: 8px 10px;
+        }
+        .problem-connector {
+            align-items: center;
+            color: #9ff7ef;
+            display: flex;
+            flex-direction: column;
+            font-size: 0.82rem;
+            font-weight: 850;
+            gap: 12px;
+            justify-content: center;
+            letter-spacing: 0;
+            line-height: 1.35;
+            text-align: center;
+        }
+        .problem-connector::before,
+        .problem-connector::after {
+            background: rgba(57,197,187,0.28);
+            content: "";
+            flex: 1;
+            min-height: 46px;
+            width: 1px;
+        }
+        .fragment-stage.problem-blockers {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 0;
+        }
+        .fragment-stage.problem-blockers .fragment-card {
+            min-height: 132px;
+            padding: 11px 11px 11px 13px;
+        }
+        .fragment-stage.problem-blockers .fragment-card b {
+            font-size: 0.92rem;
+            line-height: 1.34;
+        }
+        .fragment-stage.problem-blockers .fragment-card span {
+            font-size: 0.79rem;
+            line-height: 1.42;
+        }
         .executive-question {
             background: rgba(255, 176, 0, 0.10);
             border: 1px solid rgba(255, 176, 0, 0.32);
             border-radius: 8px;
             color: #fff2c2;
-            font-size: 1.05rem;
+            font-size: 0.98rem;
             font-weight: 750;
             line-height: 1.55;
-            margin-top: 18px;
-            padding: 16px 18px;
+            margin-top: 0;
+            padding: 10px 14px;
         }
         .flow-ribbon {
             display: grid;
@@ -2222,6 +2311,8 @@ def inject_css() -> None:
             }
             .proposal-grid-2,
             .proposal-grid-3,
+            .problem-map,
+            .expectation-items,
             .fragment-stage,
             .flow-ribbon,
             .foundation-quadrant,
@@ -2236,6 +2327,9 @@ def inject_css() -> None:
             }
             .proposal-slide h2 {
                 font-size: 1.75rem;
+            }
+            .fpna-expectation {
+                display: block;
             }
             .proposal-lead {
                 font-size: 0.98rem;
@@ -3094,41 +3188,43 @@ def render_proposal_problem_statement() -> None:
         経営会議で「なぜ悪化したか」「どの案件に手を打つか」を即答しづらくなります。
         """,
         """
-        <div class="proposal-grid-2">
-            <div>
-                <div class="fragment-stage">
+        <div class="problem-logic">
+            <div class="problem-map">
+                <div class="fpna-expectation">
+                    <em>What FP&amp;A should provide</em>
+                    <b>本来FP&amp;Aに求められること</b>
+                    <div class="expectation-items">
+                        <div>「なぜそうなのか」を説明する</div>
+                        <div>「次に何をするか」を示す</div>
+                        <div>誰が、いつまでに動くかを決める</div>
+                    </div>
+                </div>
+                <div class="problem-connector"><span>4つの課題が阻害</span></div>
+                <div class="fragment-stage problem-blockers">
                     <div class="fragment-card" style="--accent:#60a5fa">
                         <em>Financials</em>
-                        <b>数字はある</b>
-                        <span>売上、営業利益、利益率、CFは見えるが、変動理由の説明が別資料に散らばる。</span>
+                        <b>数字がばらばらに散らばっている</b>
+                        <span>売上、営業利益、利益率、CF、案件情報が別々の資料・システムに散在し、同じ粒度で見られない。</span>
                     </div>
                     <div class="fragment-card" style="--accent:#ff647c">
                         <em>Projects</em>
-                        <b>案件がつながらない</b>
-                        <span>EAC悪化、設計変更、追加原価が財務KPIと結びつきにくい。</span>
+                        <b>案件と財務KPIのつながりが不明</b>
+                        <span>EAC悪化、設計変更、追加原価が売上・利益・CFにどう影響するか追いにくい。</span>
                     </div>
                     <div class="fragment-card" style="--accent:#ffb000">
                         <em>Supply chain</em>
-                        <b>調達影響が遅れる</b>
-                        <span>材料費、外注費、長納期部品の変化が月次説明に乗るまで時間がかかる。</span>
+                        <b>調達コストの増減把握が遅い</b>
+                        <span>材料費、外注費、長納期部品の変化が月次説明に反映されるまで時間がかかる。</span>
                     </div>
                     <div class="fragment-card" style="--accent:#39c5bb">
                         <em>Commentary</em>
-                        <b>説明が属人的</b>
-                        <span>会議コメントの作成、根拠確認、手戻りが担当者の経験に依存する。</span>
+                        <b>差異説明が属人的/職人芸</b>
+                        <span>差異要因の特定、根拠確認、説明文作成が担当者の経験と暗黙知に依存している。</span>
                     </div>
                 </div>
             </div>
-            <div class="proposal-panel accent-amber">
-                <b>経営会議で問われること</b>
-                <ul>
-                    <li>売上が伸びているのに、なぜ利益・CFが悪化しているのか</li>
-                    <li>どの案件、どの要因が悪化の主因なのか</li>
-                    <li>次月までに誰が、どの打ち手を実行するのか</li>
-                </ul>
-                <div class="executive-question">
-                    AI活用の前提は、財務KPIと案件・調達・工程データがつながり、悪化要因を確認できることです。
-                </div>
+            <div class="executive-question">
+                AI活用の前提は、財務KPIと案件・調達・工程データがつながり、悪化要因を確認できることです。
             </div>
         </div>
         """,
@@ -3226,6 +3322,7 @@ def ai_app_architecture_component_html() -> str:
         w: int = 132,
         h: int = 58,
         classes: str = "",
+        products: str = "",
     ) -> dict[str, Any]:
         return {
             "data": {
@@ -3236,6 +3333,7 @@ def ai_app_architecture_component_html() -> str:
                 "color": color,
                 "w": w,
                 "h": h,
+                "products": products,
             },
             "position": {"x": x, "y": y},
             "classes": f"{type_} {classes}".strip(),
