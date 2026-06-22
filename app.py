@@ -3002,7 +3002,7 @@ def render_presentation_slide(eyebrow: str, title: str, body_html: str, footer: 
     st.markdown(html, unsafe_allow_html=True)
 
 
-def proposal_dots_html(active: int, total: int = 7) -> str:
+def proposal_dots_html(active: int, total: int = 8) -> str:
     return "".join(
         f'<span class="proposal-dot{" active" if index == active else ""}"></span>'
         for index in range(1, total + 1)
@@ -3016,7 +3016,7 @@ def render_proposal_slide(page_no: int, label: str, title: str, lead_html: str, 
             f"""
             <div class="presentation-slide proposal-slide">
                 <div class="proposal-topline">
-                    <div class="proposal-kicker"><b>{page_no:02d}/07</b>AI時代のFP&amp;Aデータ基盤リファレンス構成 / {escape(label)}</div>
+                    <div class="proposal-kicker"><b>{page_no:02d}/08</b>AI時代のFP&amp;Aデータ基盤リファレンス構成 / {escape(label)}</div>
                     <div class="proposal-dots">{proposal_dots_html(page_no)}</div>
                 </div>
                 <h2>{escape(title)}</h2>
@@ -3033,7 +3033,7 @@ def render_proposal_problem_statement() -> None:
     render_proposal_slide(
         1,
         "導入・問題提起",
-        "売上は見えても、利益悪化と打ち手まで説明しきれない",
+        "数字が出ていても、「なぜそうなのか」・「次に何をするか」が分からないと意味がない",
         """
         重工業では、売上が上振れていても、EAC悪化、設計変更、調達費高騰、工程遅延によって
         利益・キャッシュフローが悪化します。財務、案件、調達、工程が分断されていると、
@@ -3073,7 +3073,7 @@ def render_proposal_problem_statement() -> None:
                     <li>次月までに誰が、どの打ち手を実行するのか</li>
                 </ul>
                 <div class="executive-question">
-                    AIでコメントを速く作る前に、コメントが戻るべき根拠をつなぐ必要があります。
+                    AI活用の前提は、財務KPIと案件・調達・工程データがつながり、悪化要因を確認できることです。
                 </div>
             </div>
         </div>
@@ -3160,9 +3160,688 @@ def render_proposal_data_foundation() -> None:
     )
 
 
+def ai_app_architecture_component_html() -> str:
+    def node(
+        node_id: str,
+        label: str,
+        x: int,
+        y: int,
+        type_: str,
+        detail: str,
+        color: str,
+        w: int = 132,
+        h: int = 58,
+        classes: str = "",
+    ) -> dict[str, Any]:
+        return {
+            "data": {
+                "id": node_id,
+                "label": label,
+                "type": type_,
+                "detail": detail,
+                "color": color,
+                "w": w,
+                "h": h,
+            },
+            "position": {"x": x, "y": y},
+            "classes": f"{type_} {classes}".strip(),
+        }
+
+    def edge(edge_id: str, source: str, target: str, label: str, classes: str = "") -> dict[str, Any]:
+        return {
+            "data": {"id": edge_id, "source": source, "target": target, "label": label},
+            "classes": classes,
+        }
+
+    patterns = {
+        "embedded": {
+            "nav": "1. FP&A / EPM製品内蔵AI型",
+            "title": "FP&A / EPM製品内蔵AI型",
+            "subtitle": "計画・予測・連結・開示の業務プロセス内でAIを使う構成",
+            "products": "Anaplan / Pigment / Workday Adaptive Planning / Oracle Cloud EPM / CCH Tagetik",
+            "fit": "予算策定、ローリングフォーキャスト、差異説明、連結、経営レポート",
+            "strength": "FP&Aモデル、承認、権限、計画サイクルに近く、初期導入しやすい。",
+            "watch": "AI活用範囲は製品標準機能に依存するため、横断データ分析や独自エージェントは別設計にする。",
+            "focus": {
+                "label": "FP&A / EPM Platform",
+                "detail": "中心に置くのは計画・予測・承認・レポーティングを担うFP&A/EPM製品です。",
+            },
+            "nodes": [
+                node("erp", "ERP / GL\nActuals", 80, 96, "source", "実績会計、売上、原価、利益の正本。", "#2563eb"),
+                node("crm", "CRM\nPipeline", 80, 176, "source", "受注見込、商談、顧客別売上の先行指標。", "#2563eb"),
+                node("hcm", "HCM\nWorkforce", 80, 256, "source", "人員、労務費、組織、要員計画。", "#2563eb"),
+                node("scm", "SCM / Project\nEAC", 80, 336, "source", "調達、工程、案件EAC、原価見通し。", "#2563eb"),
+                node("excel", "Excel\nLocal Inputs", 80, 416, "source", "部門別入力、補正、管理表。", "#2563eb"),
+                node("etl", "API / ETL\nData Sync", 255, 256, "data", "各システムから計画粒度へデータを同期。", "#0f766e", 142, 62),
+                node("datahub", "DWH / Data Hub\nReference Data", 420, 256, "data", "必要な実績、マスタ、履歴だけをFP&A製品へ供給。", "#0f766e", 160, 64),
+                node(
+                    "fpna",
+                    "FP&A / EPM Platform\nAnaplan / Pigment\nWorkday Adaptive Planning\nOracle Cloud EPM / CCH Tagetik",
+                    615,
+                    256,
+                    "fpna",
+                    "予算、見込、シナリオ、承認、レポートの業務プロセスを保持。",
+                    "#7c3aed",
+                    250,
+                    112,
+                    "primary",
+                ),
+                node("embedded_ai", "Built-in AI\nForecast / Narrative", 615, 104, "ai", "製品内の予測、差異説明、レポート文案生成。", "#a855f7", 190, 68),
+                node("workflow", "Workflow\nApproval", 615, 430, "control", "計画提出、レビュー、承認、差戻し、通知。", "#64748b", 176, 64),
+                node("governance", "Governance\nIAM / Audit", 420, 430, "control", "権限、監査ログ、版管理、変更履歴。", "#64748b", 168, 64),
+                node("variance", "Variance\nExplanation", 850, 116, "usecase", "予実差異・見込差異の説明。", "#dc2626"),
+                node("forecast", "Rolling\nForecast", 850, 216, "usecase", "月次・週次の見込更新。", "#dc2626"),
+                node("scenario", "Scenario\nPlanning", 850, 316, "usecase", "価格、為替、案件EACのシナリオ。", "#dc2626"),
+                node("reporting", "Narrative\nReporting", 850, 416, "usecase", "経営会議、取締役会資料の文案。", "#dc2626"),
+            ],
+            "edges": [
+                edge("e1", "erp", "etl", "actuals"),
+                edge("e2", "crm", "etl", "pipeline"),
+                edge("e3", "hcm", "etl", "workforce"),
+                edge("e4", "scm", "etl", "EAC"),
+                edge("e5", "excel", "etl", "inputs"),
+                edge("e6", "etl", "datahub", "standardize"),
+                edge("e7", "datahub", "fpna", "load"),
+                edge("e8", "embedded_ai", "fpna", "AI in process", "ai-edge"),
+                edge("e9", "fpna", "variance", "explain"),
+                edge("e10", "fpna", "forecast", "forecast"),
+                edge("e11", "fpna", "scenario", "simulate"),
+                edge("e12", "fpna", "reporting", "draft"),
+                edge("e13", "governance", "datahub", "lineage", "control-edge"),
+                edge("e14", "governance", "fpna", "access", "control-edge"),
+                edge("e15", "workflow", "fpna", "approval", "control-edge"),
+            ],
+        },
+        "data_ai": {
+            "nav": "2. データ基盤AI型",
+            "title": "データ基盤AI型",
+            "subtitle": "全社データ基盤上でAI分析・予測・RAGを行い、FP&Aへ結果連携する構成",
+            "products": "Snowflake Cortex / Databricks Mosaic AI / Microsoft Fabric Copilot",
+            "fit": "全社データ分析、異常検知、KPI要因分析、予測モデル、RAG",
+            "strength": "ERP、CRM、SCM、HCMなど横断データに強く、独自ロジックや予測モデルを作りやすい。",
+            "watch": "FP&A製品への書き戻し、承認フロー、数値の正本管理を明確にする必要がある。",
+            "focus": {
+                "label": "DWH / Lakehouse AI Foundation",
+                "detail": "中心に置くのは全社データ基盤です。AIはデータの近くで動かし、結果をFP&A業務へ返します。",
+            },
+            "nodes": [
+                node("systems", "ERP / CRM / HCM\nSCM / Project", 90, 180, "source", "実績、商談、人員、調達、案件EACを横断的に取得。", "#2563eb", 160, 78),
+                node("external", "External Drivers\nFX / Market / Macro", 90, 330, "source", "為替、金利、市況、サプライヤ情報など外部説明変数。", "#2563eb", 160, 74),
+                node("elt", "ELT / Streaming\nData Quality", 265, 255, "data", "取り込み、標準化、品質チェック、更新管理。", "#0f766e", 156, 68),
+                node(
+                    "lakehouse",
+                    "DWH / Lakehouse AI Foundation\nSnowflake / Databricks\nMicrosoft Fabric / BigQuery",
+                    475,
+                    255,
+                    "data",
+                    "全社データ、履歴、権限、リネージを保持するAI活用の中心。",
+                    "#0f766e",
+                    240,
+                    106,
+                    "primary",
+                ),
+                node("catalog", "Data Catalog\nLineage / Policy", 475, 455, "control", "データ定義、リネージ、ポリシー、利用状況を管理。", "#64748b", 190, 66),
+                node("ai_sql", "Native AI\nCortex / Mosaic AI\nFabric Copilot", 665, 112, "ai", "SQL、ノートブック、Copilot経由でAI分析を実行。", "#a855f7", 204, 82),
+                node("forecast_model", "Forecast Model\nML / AutoML", 675, 242, "ai", "ローリングフォーキャストやリスク予測をモデル化。", "#a855f7", 174, 66),
+                node("rag", "RAG / AI Search\nPolicy + Docs", 675, 365, "ai", "レポート、議事録、ルール、注記を検索拡張で参照。", "#a855f7", 174, 66),
+                node("fpna_tools", "FP&A / EPM Platform\nAnaplan / Pigment\nOracle EPM / CCH Tagetik", 850, 255, "fpna", "計画、承認、予算、見込の業務運用を担う。", "#7c3aed", 210, 88),
+                node("variance", "KPI Driver\nAnalysis", 1025, 135, "usecase", "KPI変動の主因を横断データで分解。", "#dc2626"),
+                node("anomaly", "Anomaly\nDetection", 1025, 255, "usecase", "案件、原価、CFの異常を早期検知。", "#dc2626"),
+                node("writeback", "Planning\nWrite-back", 1025, 375, "usecase", "予測結果やアラートを計画業務へ戻す。", "#dc2626"),
+            ],
+            "edges": [
+                edge("d1", "systems", "elt", "internal data"),
+                edge("d2", "external", "elt", "drivers"),
+                edge("d3", "elt", "lakehouse", "curate"),
+                edge("d4", "lakehouse", "ai_sql", "AI SQL/RAG", "ai-edge"),
+                edge("d5", "lakehouse", "forecast_model", "features", "ai-edge"),
+                edge("d6", "lakehouse", "rag", "documents", "ai-edge"),
+                edge("d7", "ai_sql", "variance", "explain"),
+                edge("d8", "forecast_model", "anomaly", "predict"),
+                edge("d9", "forecast_model", "fpna_tools", "forecast"),
+                edge("d10", "rag", "fpna_tools", "context"),
+                edge("d11", "fpna_tools", "writeback", "workflow"),
+                edge("d12", "catalog", "lakehouse", "policy", "control-edge"),
+                edge("d13", "catalog", "fpna_tools", "lineage", "control-edge"),
+            ],
+        },
+        "agent": {
+            "nav": "3. 横断AIエージェント型",
+            "title": "横断AIエージェント型",
+            "subtitle": "AIエージェントが複数システムをAPI・コネクタ経由で横断する構成",
+            "products": "Azure OpenAI / Amazon Bedrock / Google Vertex AI",
+            "fit": "経営問答、レポート自動作成、複数システム横断の業務支援",
+            "strength": "ベンダー横断で柔軟に設計でき、BI、FP&A、ERP、文書、会議情報をまたいだ体験を作れる。",
+            "watch": "権限継承、監査、データ境界、コスト制御、Human-in-the-loopを最初から設計する。",
+            "focus": {
+                "label": "AI Agent / Orchestration Layer",
+                "detail": "中心に置くのは業務横断のエージェント層です。各システムの正本を持たず、権限付きで参照・提案します。",
+            },
+            "nodes": [
+                node("executive", "Executive / CFO\nNatural Language Q&A", 92, 140, "usecase", "経営層が自然言語で業績、案件、打ち手を確認。", "#dc2626", 170, 74),
+                node("fpna_user", "FP&A Team\nReview / Approval", 92, 340, "usecase", "FP&A担当が結果を確認し、会議資料とアクションへ反映。", "#dc2626", 170, 74),
+                node("llm", "LLM Gateway\nAzure OpenAI / Bedrock\nVertex AI", 505, 90, "ai", "モデル選択、プロンプト、利用ログ、コスト制御。", "#a855f7", 220, 84),
+                node(
+                    "agent",
+                    "AI Agent / Orchestration Layer\nPlanning + Tool Use\nMCP / API Connectors",
+                    505,
+                    258,
+                    "ai",
+                    "ユーザー意図を解釈し、必要なシステムを呼び出して回答・提案を生成。",
+                    "#a855f7",
+                    260,
+                    112,
+                    "primary",
+                ),
+                node("policy", "Policy Engine\nIAM / Guardrails", 505, 475, "control", "権限継承、PII制御、監査ログ、承認ゲート。", "#64748b", 220, 72),
+                node("erp_api", "ERP API\nActuals / GL", 285, 112, "source", "実績、会計伝票、勘定残高を権限付きで参照。", "#2563eb", 152, 68),
+                node("fpna_api", "FP&A API\nPlan / Forecast", 285, 258, "fpna", "予算、見込、シナリオ、承認ステータスを参照。", "#7c3aed", 154, 68),
+                node("docs", "Docs / Meetings\nBoard Pack / Minutes", 285, 404, "source", "会議資料、議事録、注記、業務ルールを検索。", "#2563eb", 160, 70),
+                node("bi", "BI Semantic Layer\nPower BI / Tableau", 720, 132, "data", "KPI定義、メジャー、ダッシュボード指標を参照。", "#0f766e", 170, 72),
+                node("data", "DWH / Lakehouse\nTrusted Data", 720, 284, "data", "横断分析、特徴量、リネージ、履歴データを提供。", "#0f766e", 170, 72),
+                node("workflow", "Workflow\nTeams / ServiceNow", 720, 430, "control", "承認、通知、チケット、案件アクションへ接続。", "#64748b", 174, 70),
+                node("qa", "Management\nQ&A", 960, 128, "usecase", "経営問答。", "#dc2626"),
+                node("draft", "Board Pack\nDrafting", 960, 258, "usecase", "取締役会・経営会議資料の草案。", "#dc2626"),
+                node("action", "Action\nRecommendation", 960, 388, "usecase", "打ち手候補、担当、期限の提案。", "#dc2626"),
+            ],
+            "edges": [
+                edge("a1", "executive", "agent", "ask"),
+                edge("a2", "fpna_user", "agent", "review"),
+                edge("a3", "llm", "agent", "reasoning", "ai-edge"),
+                edge("a4", "agent", "erp_api", "tool call"),
+                edge("a5", "agent", "fpna_api", "tool call"),
+                edge("a6", "agent", "docs", "search"),
+                edge("a7", "agent", "bi", "metric"),
+                edge("a8", "agent", "data", "query"),
+                edge("a9", "agent", "workflow", "create task"),
+                edge("a10", "agent", "qa", "answer"),
+                edge("a11", "agent", "draft", "draft"),
+                edge("a12", "agent", "action", "recommend"),
+                edge("a13", "policy", "agent", "guardrail", "control-edge"),
+                edge("a14", "policy", "llm", "logging", "control-edge"),
+                edge("a15", "policy", "workflow", "approval", "control-edge"),
+            ],
+        },
+    }
+    patterns_json = json.dumps(patterns, ensure_ascii=False).replace("</", "<\\/")
+    html = """
+    <!doctype html>
+    <html lang="ja">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <script src="https://unpkg.com/cytoscape@3.30.4/dist/cytoscape.min.js"></script>
+      <style>
+        :root {
+          --panel: #0b1722;
+          --line: rgba(57,197,187,0.28);
+          --cyan: #39c5bb;
+          --text: #f8fdff;
+          --muted: #9fb2c3;
+        }
+        * { box-sizing: border-box; }
+        body {
+          margin: 0;
+          background: transparent;
+          color: var(--text);
+          font-family: "Inter", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+          letter-spacing: 0;
+        }
+        .slide {
+          position: relative;
+          min-height: 836px;
+          padding: 30px 34px;
+          overflow: hidden;
+          background:
+            linear-gradient(135deg, rgba(9,18,29,0.99), rgba(5,12,20,0.99) 58%, rgba(18,26,37,0.99)),
+            repeating-linear-gradient(90deg, rgba(57,197,187,0.07) 0 1px, transparent 1px 112px);
+          border: 1px solid rgba(57,197,187,0.30);
+          border-radius: 8px;
+          box-shadow: 0 22px 70px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+        .slide::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #39c5bb, #60a5fa, #ffb000, #ff647c);
+        }
+        .topline {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 18px;
+          margin-bottom: 12px;
+        }
+        .kicker {
+          color: var(--muted);
+          font-size: 0.74rem;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+        .kicker b {
+          color: var(--cyan);
+          margin-right: 8px;
+        }
+        .dots { display: flex; gap: 6px; }
+        .dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: rgba(159,178,195,0.32);
+        }
+        .dot.active {
+          width: 24px;
+          background: var(--cyan);
+          box-shadow: 0 0 18px rgba(57,197,187,0.55);
+        }
+        h1 {
+          margin: 0 0 9px 0;
+          color: var(--text);
+          font-size: clamp(2rem, 2.85vw, 3.15rem);
+          line-height: 1.08;
+          letter-spacing: 0;
+        }
+        .lead {
+          color: #d6e7ee;
+          max-width: 1160px;
+          margin: 0 0 16px 0;
+          font-size: 1.02rem;
+          line-height: 1.58;
+        }
+        .pattern-tabs {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 10px;
+          margin: 18px 0 14px 0;
+        }
+        .pattern-tab {
+          background: rgba(14,29,42,0.90);
+          border: 1px solid rgba(159,178,195,0.20);
+          border-radius: 8px;
+          color: #c8dce6;
+          cursor: pointer;
+          font: inherit;
+          font-size: 0.9rem;
+          font-weight: 750;
+          min-height: 48px;
+          padding: 10px 12px;
+          text-align: left;
+        }
+        .pattern-tab.active {
+          background: rgba(57,197,187,0.14);
+          border-color: rgba(57,197,187,0.58);
+          color: #f8fdff;
+          box-shadow: 0 0 0 1px rgba(57,197,187,0.18) inset;
+        }
+        .main-grid {
+          display: grid;
+          grid-template-columns: minmax(760px, 1fr) 330px;
+          gap: 16px;
+          align-items: stretch;
+        }
+        .graph-card,
+        .side-card {
+          background: linear-gradient(180deg, rgba(14,29,42,0.92), rgba(7,18,28,0.96));
+          border: 1px solid rgba(57,197,187,0.25);
+          border-radius: 8px;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .graph-card { padding: 12px; min-height: 566px; }
+        .graph-title {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 12px;
+          min-height: 44px;
+          padding: 0 2px 10px 2px;
+          border-bottom: 1px solid rgba(57,197,187,0.18);
+        }
+        .graph-title b {
+          color: #f8fdff;
+          display: block;
+          font-size: 1.05rem;
+        }
+        .graph-title span {
+          color: #9fb2c3;
+          font-size: 0.78rem;
+          white-space: nowrap;
+        }
+        #cy {
+          width: 100%;
+          height: 500px;
+          background:
+            linear-gradient(90deg, rgba(57,197,187,0.04) 0 1px, transparent 1px 80px),
+            linear-gradient(0deg, rgba(96,165,250,0.04) 0 1px, transparent 1px 70px),
+            rgba(4, 10, 17, 0.42);
+          border-radius: 6px;
+          margin-top: 10px;
+        }
+        .side-card {
+          padding: 16px;
+          min-height: 566px;
+        }
+        .side-eyebrow {
+          color: var(--cyan);
+          display: block;
+          font-size: 0.74rem;
+          font-weight: 850;
+          margin-bottom: 5px;
+          text-transform: uppercase;
+        }
+        .side-card h2 {
+          color: #f8fdff;
+          font-size: 1.25rem;
+          line-height: 1.24;
+          margin: 0 0 8px 0;
+        }
+        .side-card p {
+          color: #c8dce6;
+          font-size: 0.9rem;
+          line-height: 1.55;
+          margin: 0;
+        }
+        .info-block {
+          border-top: 1px solid rgba(57,197,187,0.18);
+          margin-top: 14px;
+          padding-top: 12px;
+        }
+        .info-block b {
+          color: #d9fffb;
+          display: block;
+          font-size: 0.8rem;
+          margin-bottom: 5px;
+        }
+        .info-block span {
+          color: #c8dce6;
+          display: block;
+          font-size: 0.86rem;
+          line-height: 1.5;
+        }
+        .node-detail {
+          background: rgba(57,197,187,0.09);
+          border: 1px solid rgba(57,197,187,0.26);
+          border-left: 4px solid #39c5bb;
+          border-radius: 8px;
+          margin-top: 14px;
+          padding: 12px;
+        }
+        .node-detail strong {
+          color: #f8fdff;
+          display: block;
+          font-size: 0.92rem;
+          line-height: 1.32;
+          margin-bottom: 5px;
+          white-space: pre-line;
+        }
+        .node-detail span {
+          color: #d9fffb;
+          font-size: 0.84rem;
+          line-height: 1.48;
+        }
+        .legend {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 12px;
+        }
+        .legend span {
+          align-items: center;
+          color: #9fb2c3;
+          display: inline-flex;
+          font-size: 0.75rem;
+          gap: 5px;
+        }
+        .legend i {
+          border-radius: 3px;
+          display: inline-block;
+          height: 10px;
+          width: 10px;
+        }
+        .fallback {
+          color: #d9fffb;
+          padding: 24px;
+          line-height: 1.6;
+        }
+        @media (max-width: 980px) {
+          .slide { min-height: auto; padding: 22px; }
+          .pattern-tabs { grid-template-columns: 1fr; }
+          .main-grid { grid-template-columns: 1fr; }
+          .graph-card, .side-card { min-height: auto; }
+          #cy { height: 560px; }
+          .graph-title { align-items: flex-start; flex-direction: column; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="slide">
+        <div class="topline">
+          <div class="kicker"><b>04/08</b>AI時代のFP&amp;Aデータ基盤リファレンス構成 / AI App Architecture</div>
+          <div class="dots" aria-hidden="true">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <h1>FP&amp;AプラットフォームにAIを組み込む3つの実装パターン</h1>
+        <p class="lead">
+          AIを単一製品の機能としてではなく、FP&amp;A業務、全社データ基盤、横断AIエージェントのどこに置くかで設計を分ける。
+          図はCytoscape.jsの固定レイアウトで、発表時に1パターンずつ大きく見せる。
+        </p>
+        <div id="tabBar" class="pattern-tabs"></div>
+        <div class="main-grid">
+          <section class="graph-card">
+            <div class="graph-title">
+              <b id="patternTitle">Architecture</b>
+              <span>Cytoscape.js / preset layout</span>
+            </div>
+            <div id="cy"></div>
+            <div class="legend">
+              <span><i style="background:#2563eb"></i>Source</span>
+              <span><i style="background:#0f766e"></i>Data</span>
+              <span><i style="background:#7c3aed"></i>FP&amp;A</span>
+              <span><i style="background:#a855f7"></i>AI</span>
+              <span><i style="background:#64748b"></i>Control</span>
+              <span><i style="background:#dc2626"></i>Use case</span>
+            </div>
+          </section>
+          <aside class="side-card">
+            <span class="side-eyebrow">Implementation Pattern</span>
+            <h2 id="sideTitle"></h2>
+            <p id="sideSubtitle"></p>
+            <div class="info-block">
+              <b>代表製品</b>
+              <span id="sideProducts"></span>
+            </div>
+            <div class="info-block">
+              <b>向いている用途</b>
+              <span id="sideFit"></span>
+            </div>
+            <div class="info-block">
+              <b>強み</b>
+              <span id="sideStrength"></span>
+            </div>
+            <div class="info-block">
+              <b>設計上の注意点</b>
+              <span id="sideWatch"></span>
+            </div>
+            <div class="node-detail">
+              <strong id="nodeLabel"></strong>
+              <span id="nodeDetail"></span>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <script>
+        const patterns = __PATTERNS__;
+        let cy = null;
+        let activeKey = Object.keys(patterns)[0];
+
+        function setText(id, value) {
+          document.getElementById(id).textContent = value || "";
+        }
+
+        function showNodeDetail(data) {
+          setText("nodeLabel", data.label || "");
+          setText("nodeDetail", data.detail || "");
+        }
+
+        function renderTabs() {
+          const tabBar = document.getElementById("tabBar");
+          tabBar.innerHTML = "";
+          Object.entries(patterns).forEach(([key, pattern]) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "pattern-tab" + (key === activeKey ? " active" : "");
+            button.textContent = pattern.nav;
+            button.addEventListener("click", () => renderPattern(key));
+            tabBar.appendChild(button);
+          });
+        }
+
+        function renderPattern(key) {
+          activeKey = key;
+          const pattern = patterns[key];
+          renderTabs();
+          setText("patternTitle", pattern.title);
+          setText("sideTitle", pattern.title);
+          setText("sideSubtitle", pattern.subtitle);
+          setText("sideProducts", pattern.products);
+          setText("sideFit", pattern.fit);
+          setText("sideStrength", pattern.strength);
+          setText("sideWatch", pattern.watch);
+          showNodeDetail(pattern.focus);
+
+          if (!window.cytoscape) {
+            document.getElementById("cy").innerHTML = '<div class="fallback">Cytoscape.jsを読み込めませんでした。ネットワーク接続またはCDN許可設定を確認してください。</div>';
+            return;
+          }
+          if (cy) {
+            cy.destroy();
+          }
+          document.getElementById("cy").innerHTML = "";
+          cy = cytoscape({
+            container: document.getElementById("cy"),
+            elements: [...pattern.nodes, ...pattern.edges],
+            layout: { name: "preset", fit: true, padding: 26 },
+            minZoom: 0.42,
+            maxZoom: 1.8,
+            boxSelectionEnabled: false,
+            autoungrabify: true,
+            style: [
+              {
+                selector: "node",
+                style: {
+                  "shape": "round-rectangle",
+                  "width": "data(w)",
+                  "height": "data(h)",
+                  "background-color": "data(color)",
+                  "background-opacity": 0.95,
+                  "border-width": 1.2,
+                  "border-color": "rgba(248,253,255,0.30)",
+                  "label": "data(label)",
+                  "color": "#f8fdff",
+                  "font-family": "Inter, Noto Sans JP, Yu Gothic, Meiryo, sans-serif",
+                  "font-size": 10.5,
+                  "font-weight": 700,
+                  "line-height": 1.18,
+                  "text-wrap": "wrap",
+                  "text-max-width": 150,
+                  "text-valign": "center",
+                  "text-halign": "center",
+                  "padding": "8px",
+                  "overlay-opacity": 0
+                }
+              },
+              {
+                selector: "node.primary",
+                style: {
+                  "border-width": 3,
+                  "border-color": "#f8fdff",
+                  "font-size": 12.5,
+                  "text-max-width": 225
+                }
+              },
+              {
+                selector: "node.control",
+                style: {
+                  "border-style": "dashed",
+                  "border-color": "rgba(203,213,225,0.58)"
+                }
+              },
+              {
+                selector: "edge",
+                style: {
+                  "curve-style": "bezier",
+                  "width": 2.1,
+                  "line-color": "rgba(57,197,187,0.72)",
+                  "target-arrow-shape": "triangle",
+                  "target-arrow-color": "rgba(57,197,187,0.82)",
+                  "label": "data(label)",
+                  "color": "#d9fffb",
+                  "font-family": "Inter, Noto Sans JP, Yu Gothic, Meiryo, sans-serif",
+                  "font-size": 8.5,
+                  "font-weight": 700,
+                  "text-background-color": "#071016",
+                  "text-background-opacity": 0.86,
+                  "text-background-padding": "3px",
+                  "text-rotation": "autorotate",
+                  "z-index": 1
+                }
+              },
+              {
+                selector: "edge.ai-edge",
+                style: {
+                  "line-color": "rgba(168,85,247,0.86)",
+                  "target-arrow-color": "rgba(168,85,247,0.95)",
+                  "width": 2.6
+                }
+              },
+              {
+                selector: "edge.control-edge",
+                style: {
+                  "line-style": "dashed",
+                  "line-color": "rgba(148,163,184,0.70)",
+                  "target-arrow-color": "rgba(148,163,184,0.80)",
+                  "width": 1.7
+                }
+              },
+              {
+                selector: "node:selected",
+                style: {
+                  "border-color": "#ffb000",
+                  "border-width": 3
+                }
+              }
+            ]
+          });
+          cy.on("tap", "node", (event) => showNodeDetail(event.target.data()));
+          cy.ready(() => setTimeout(() => cy.fit(cy.elements(), 28), 20));
+        }
+
+        window.addEventListener("resize", () => {
+          if (cy) {
+            cy.resize();
+            cy.fit(cy.elements(), 28);
+          }
+        });
+        renderPattern(activeKey);
+      </script>
+    </body>
+    </html>
+    """
+    return html.replace("__PATTERNS__", patterns_json)
+
+
+def render_proposal_ai_app_architecture() -> None:
+    st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
+    components.html(ai_app_architecture_component_html(), height=858, scrolling=False)
+
+
 def render_proposal_system_architecture() -> None:
     render_proposal_slide(
-        4,
+        5,
         "システムアーキテクチャ",
         "既存システムの上に、FP&AデータマートとAI説明サービスを配置する",
         """
@@ -3230,23 +3909,23 @@ def render_proposal_system_architecture() -> None:
 
 def render_proposal_approach_options() -> None:
     render_proposal_slide(
-        5,
+        6,
         "進め方の選択肢",
-        "先に解消すべき不確実性から、着手方法を選ぶ",
+        "先に解消すべき不確実性から、アプローチを選ぶ",
         """
-        進め方は作業メニューではありません。経営層の完成像、実データでの効果、統制・承認運用のうち、
+        進め方は作業メニューではありません。経営層の構想、実データでの効果、統制・承認運用のうち、
         どの不確実性を先に潰すかで選びます。
         """,
         """
         <div class="proposal-grid-3">
             <div class="option-card" style="--accent:#39c5bb">
                 <em>Option 1</em>
-                <b>完成イメージ合意型</b>
-                <span>経営層・関係者が、同じ完成像を持てるかを先に確認する。</span>
+                <b>構想具体化型</b>
+                <span>経営層・関係者が、目指す業務像と利用イメージを共有できるかを先に確認する。</span>
                 <div class="option-meta">
                     <div><strong>成果物:</strong> 画面イメージ、説明ストーリー、AIコメント例</div>
                     <div><strong>負荷:</strong> 低〜中</div>
-                    <div><strong>向く状況:</strong> まず合意形成したい</div>
+                    <div><strong>向く状況:</strong> まず構想を具体化したい</div>
                 </div>
             </div>
             <div class="option-card" style="--accent:#ffb000">
@@ -3271,7 +3950,7 @@ def render_proposal_approach_options() -> None:
             </div>
         </div>
         <div class="proposal-close">
-            初期段階では、合意形成・効果検証・本番運用のどれを先に確かめるかを明確にすることが重要です。
+            初期段階では、構想具体化・効果検証・本番運用のどれを先に確かめるかを明確にすることが重要です。
         </div>
         """,
     )
@@ -3279,20 +3958,20 @@ def render_proposal_approach_options() -> None:
 
 def render_proposal_recommended_roadmap() -> None:
     render_proposal_slide(
-        6,
+        7,
         "推奨ロードマップ",
-        "完成像の合意から始め、実証結果を本番化判断につなげる",
+        "構想の具体化から始め、実証結果を本番化判断につなげる",
         """
         いきなり本番設計に入ると重く、PoCだけでは経営価値が曖昧になりやすい。
-        まず経営会議での完成像を合わせ、その後に重点KPIで有効性を確認し、実証結果をもとに本番化判断へ進めます。
+        まず経営会議での利用シーンと目指す業務像を具体化し、その後に重点KPIで有効性を確認し、実証結果をもとに本番化判断へ進めます。
         """,
         """
         <div class="roadmap">
             <div class="roadmap-phase" style="--accent:#39c5bb">
                 <em>Phase 1 / 2-4 weeks</em>
-                <b>完成像合意</b>
+                <b>構想具体化</b>
                 <span>対象会議を一つ選び、画面イメージ、説明ストーリー、AIコメント例を作る。</span>
-                <div class="roadmap-gate">判断ポイント: 経営層・FP&amp;A・ITが同じ完成像を持てるか</div>
+                <div class="roadmap-gate">判断ポイント: 経営層・FP&amp;A・ITが目指す業務像を共有できるか</div>
             </div>
             <div class="roadmap-phase" style="--accent:#ffb000">
                 <em>Phase 2 / 6-8 weeks</em>
@@ -3308,7 +3987,7 @@ def render_proposal_recommended_roadmap() -> None:
             </div>
         </div>
         <div class="proposal-close">
-            推奨は、完成イメージ合意型 → 重点KPI実証型 → 本番運用設計型の段階導入です。
+            推奨は、構想具体化型 → 重点KPI実証型 → 本番運用設計型の段階導入です。
         </div>
         """,
     )
@@ -3316,7 +3995,7 @@ def render_proposal_recommended_roadmap() -> None:
 
 def render_proposal_assessment() -> None:
     render_proposal_slide(
-        7,
+        8,
         "アセスメント提案",
         "次フェーズで、PoCの対象と判断材料を具体化する",
         """
@@ -3353,7 +4032,7 @@ def render_proposal_assessment() -> None:
             <div class="assessment-item">
                 <em>Agenda 6</em>
                 <b>PoC範囲</b>
-                <span>完成イメージ、接続範囲、成果物、判断基準を具体化する。</span>
+                <span>構想、接続範囲、成果物、判断基準を具体化する。</span>
             </div>
         </div>
         <div class="proposal-close">
@@ -5343,6 +6022,7 @@ def main(app_mode: str = "internal") -> None:
         ("Problem Statement", "導入・問題提起", False),
         ("Target Operating Model", "目指す業務像", False),
         ("FPA Data Foundation", "FP&Aデータ基盤", False),
+        ("AI App Architecture", "AIアプリアーキテクチャ", False),
         ("System Architecture", "システムアーキテクチャ", False),
         ("Approach Options", "進め方の選択肢", False),
         ("Recommended Roadmap", "推奨ロードマップ", False),
@@ -5602,6 +6282,8 @@ def main(app_mode: str = "internal") -> None:
         render_proposal_target_operating_model()
     elif page == "FPA Data Foundation":
         render_proposal_data_foundation()
+    elif page == "AI App Architecture":
+        render_proposal_ai_app_architecture()
     elif page == "System Architecture":
         render_proposal_system_architecture()
     elif page == "Approach Options":
