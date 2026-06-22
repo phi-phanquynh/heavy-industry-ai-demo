@@ -710,11 +710,22 @@ def inject_css() -> None:
             white-space: nowrap;
         }
         .stApp:has(#presentation-focus-mode) [data-testid="stSidebar"],
-        .stApp:has(#presentation-focus-mode) [data-testid="stHeader"],
         .stApp:has(#presentation-focus-mode) [data-testid="stToolbar"],
         .stApp:has(#presentation-focus-mode) [data-testid="stDecoration"],
         .stApp:has(#presentation-focus-mode) footer {
             display: none !important;
+        }
+        .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] {
+            background: transparent !important;
+            pointer-events: none;
+        }
+        .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] button,
+        .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] [role="button"] {
+            pointer-events: auto !important;
+        }
+        .stApp:has(#presentation-focus-mode) button[data-testid="stBaseButton-headerNoPadding"] {
+            visibility: visible !important;
+            opacity: 1 !important;
         }
         .stApp:has(#presentation-focus-mode) .block-container {
             max-width: 100vw;
@@ -1209,10 +1220,53 @@ def inject_css() -> None:
             max-width: 100vw;
             padding: 1.25rem 1.55rem 2.3rem 1.55rem;
         }
-        .stApp:has(.presentation-slide) [data-testid="stHeader"],
         .stApp:has(.presentation-slide) [data-testid="stToolbar"],
         .stApp:has(.presentation-slide) [data-testid="stDecoration"] {
             display: none !important;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stHeader"] {
+            background: transparent !important;
+            pointer-events: none;
+            z-index: 999999;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stHeader"] button,
+        .stApp:has(.presentation-slide) [data-testid="stHeader"] [role="button"],
+        .stApp:has(.presentation-slide) [data-testid="stSidebarCollapsedControl"] {
+            pointer-events: auto !important;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stSidebarCollapseButton"] {
+            pointer-events: auto !important;
+            position: relative !important;
+            visibility: visible !important;
+            z-index: 1000000;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] {
+            max-width: 56px !important;
+            min-width: 56px !important;
+            transform: none !important;
+            width: 56px !important;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarContent"] {
+            background: #09131b !important;
+            border-right: 1px solid rgba(57,197,187,0.22);
+            min-width: 56px !important;
+            overflow: hidden !important;
+            width: 56px !important;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarHeader"] {
+            width: 56px !important;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarCollapseButton"] {
+            transform: translateX(-30px) !important;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+            transform: rotate(180deg);
+        }
+        .stApp:has(.presentation-slide) button[data-testid="stBaseButton-headerNoPadding"] {
+            position: relative !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 1000001;
         }
         .stApp:has(.presentation-slide) .block-container {
             max-width: 100vw;
