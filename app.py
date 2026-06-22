@@ -732,35 +732,6 @@ def inject_css() -> None:
         .stApp:has(#presentation-focus-mode) .presentation-slide h2 {
             font-size: 2.25rem;
         }
-        .stApp:has(#foundation-page) .presentation-slide {
-            background: #ffffff;
-        }
-        .stApp:has(#foundation-page) {
-            background: #f4f7fb !important;
-        }
-        .stApp:has(#foundation-page) .block-container,
-        .stApp:has(#foundation-page) .block-container h1,
-        .stApp:has(#foundation-page) .block-container h2,
-        .stApp:has(#foundation-page) .block-container h3,
-        .stApp:has(#foundation-page) .block-container p,
-        .stApp:has(#foundation-page) .block-container li {
-            color: #102033 !important;
-        }
-        .stApp:has(#foundation-page) .cockpit-title {
-            border-bottom: 1px solid rgba(15, 23, 42, 0.14);
-        }
-        .stApp:has(#foundation-page) .cockpit-title .subtitle {
-            color: #475569 !important;
-        }
-        .stApp:has(#foundation-page) .pill {
-            background: #e7f7f3;
-            border-color: rgba(15, 118, 110, 0.22);
-            color: #0f766e;
-        }
-        .stApp:has(#foundation-page) .section-label {
-            color: #0f172a;
-            margin-top: 18px;
-        }
         .foundation-hero {
             background:
                 linear-gradient(135deg, rgba(16, 32, 51, 0.96), rgba(19, 78, 74, 0.92)),
