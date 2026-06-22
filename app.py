@@ -3165,160 +3165,273 @@ def render_reference_architecture() -> None:
 
 
 def render_tech_architecture(data: dict[str, Any]) -> None:
-    render_header("Tech Architecture", "How this Streamlit demo is built and what to do next")
-    render_page_guide(
-        "この画面の見方 / デモアプリの技術構成と次の拡張を確認する",
-        "ここでは、現在のMVPがどのファイル、データ、ライブラリで動いているかを整理しています。提案資料では、MVPから本番化へ進むための論点整理として使えます。",
-        [
-            "generate_demo_data.pyが架空データを作り、Parquetとして保存します。",
-            "Streamlitがデータをキャッシュし、pandasでKPIと差異を集計し、Plotlyで可視化します。",
-            "AI Commentaryは外部APIを呼び出さず、差異要因と案件リスクから日本語コメントを生成します。",
-        ],
-        "次の拡張は、デモ台本、データ定義、データ基盤設計、Streamlit Cloud公開の順で進めるのが現実的です。",
-    )
-
-    st.markdown('<div class="section-label">次にやること / Recommended Next Steps</div>', unsafe_allow_html=True)
-    next_steps = pd.DataFrame(
-        [
-            {
-                "Priority": "1",
-                "Theme": "デモシナリオ固定",
-                "Action": "経営会議での説明順を Dashboard -> Variance Analysis -> Project Risk -> AI Commentary に固定する",
-                "Output": "5分版・15分版のデモ台本",
-            },
-            {
-                "Priority": "2",
-                "Theme": "ストーリー強化",
-                "Action": "Marine & Offshore のCritical案件と、Aerospace & Defense のHigh案件を代表例として説明できるようにする",
-                "Output": "注目案件リストと想定質疑",
-            },
-            {
-                "Priority": "3",
-                "Theme": "データ説得力",
-                "Action": "架空データの前提、粒度、KPI定義、差異要因ロジックを1枚に整理する",
-                "Output": "データ定義スライド",
-            },
-            {
-                "Priority": "4",
-                "Theme": "AI活用訴求",
-                "Action": "ルールベース生成の前提、説明ロジック、限界をデモ台本に明記する",
-                "Output": "AIコメント説明メモ",
-            },
-            {
-                "Priority": "5",
-                "Theme": "公開準備",
-                "Action": "GitHubへ配置し、Streamlit Community Cloudで起動設定と公開URLを確認する",
-                "Output": "共有可能なデモURL",
-            },
-        ]
-    )
-    st.dataframe(next_steps, width="stretch", hide_index=True)
-
-    st.markdown('<div class="section-label">技術構成図 / Technical Flow</div>', unsafe_allow_html=True)
-    labels = [
-        "generate_demo_data.py",
-        "Fictional assumptions",
-        "fact_finance.parquet",
-        "fact_variance_drivers.parquet",
-        "project_risk.parquet",
-        "Streamlit cache",
-        "pandas KPI layer",
-        "Plotly visuals",
-        "Rule-based commentary",
-        "Dashboard",
-        "Variance Analysis",
-        "Project Risk",
-        "AI Commentary",
-        "Data Explorer",
-    ]
-    node_colors = [
-        "#60a5fa",
-        "#9fb2c3",
-        "#39c5bb",
-        "#39c5bb",
-        "#39c5bb",
-        "#ffb000",
-        "#ffb000",
-        "#76d275",
-        "#b794f4",
-        "#0ea5e9",
-        "#0ea5e9",
-        "#0ea5e9",
-        "#0ea5e9",
-        "#0ea5e9",
-    ]
-    source = [1, 0, 0, 0, 2, 3, 4, 5, 6, 6, 6, 6, 7, 7, 7, 8, 2, 3, 4]
-    target = [0, 2, 3, 4, 5, 5, 5, 6, 8, 9, 10, 11, 9, 10, 11, 12, 13, 13, 13]
-    value = [1, 3, 2, 1, 3, 2, 1, 4, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1]
-    fig = go.Figure(
-        data=[
-            go.Sankey(
-                arrangement="snap",
-                node={
-                    "pad": 16,
-                    "thickness": 16,
-                    "line": {"color": "rgba(237,246,249,0.35)", "width": 0.5},
-                    "label": labels,
-                    "color": node_colors,
-                },
-                link={
-                    "source": source,
-                    "target": target,
-                    "value": value,
-                    "color": "rgba(57,197,187,0.22)",
-                },
-            )
-        ]
-    )
-    fig.update_layout(title="Data generation -> Cached analytics -> Interactive cockpit", font={"size": 12})
-    st.plotly_chart(style_fig(fig, 520), width="stretch")
-
-    c1, c2 = st.columns([1, 1])
-    with c1:
-        st.markdown('<div class="section-label">Architecture Notes</div>', unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div class="insight-box">
-            <b>Data layer</b><br>
-            <code>scripts/generate_demo_data.py</code> が完全な架空データを生成し、fact系はParquetで保存します。<br><br>
-            <b>Analytics layer</b><br>
-            Streamlitの <code>@st.cache_data</code> で読み込みをキャッシュし、pandasでKPI、差異、案件リスクを集計します。<br><br>
-            <b>Experience layer</b><br>
-            PlotlyでKPIカード、月次推移、ウォーターフォール、リスクマップを描画します。
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with c2:
-        st.markdown('<div class="section-label">AI Commentary Design</div>', unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div class="insight-box">
-            <b>Rule-based generation</b><br>
-            ルールベースで経営会議向けの日本語コメントを生成します。デモ環境だけで完結します。<br><br>
-            <b>No external API</b><br>
-            公開デモでは外部サービス設定を使わず、同じ集計条件なら同じ説明が返る構成にしています。<br><br>
-            <b>Deployment</b><br>
-            Streamlit Community Cloudでは、依存関係とParquetデータだけで起動できます。
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
     metadata = data.get("metadata", {})
-    if metadata:
-        row_counts = metadata.get("row_counts", {})
-        st.markdown('<div class="section-label">Current Demo Data Inventory</div>', unsafe_allow_html=True)
-        st.dataframe(
-            pd.DataFrame(
+    row_counts = metadata.get("row_counts", {})
+    generated_at = format_generated_at(metadata)
+    total_rows = row_count_text(metadata)
+
+    render_header("技術構成プレゼン / Tech Architecture", "社内説明用: デモの構成、処理、公開運用、次の拡張を説明する")
+    st.caption("このページは社内・説明者向けです。クライアント向けダッシュボードURLには表示されません。")
+
+    titles = [
+        "全体像",
+        "URLとアプリ分離",
+        "データ構成",
+        "処理レイヤー",
+        "AIコメント設計",
+        "画面構成",
+        "公開・運用",
+        "本番化ロードマップ",
+    ]
+    slide = render_presentation_controls("tech_architecture", titles)
+
+    if slide == 0:
+        render_presentation_slide(
+            "Architecture / 01",
+            "このデモは、架空データを使ったFP&A差異分析コックピットです",
+            presentation_metric_cards_html(
                 [
-                    {"Dataset": key, "Rows": value}
-                    for key, value in row_counts.items()
-                    if key != "total"
-                ]
+                    ("App", "Streamlit", "Pythonだけで画面、集計、可視化を構成"),
+                    ("Data", total_rows, f"生成日時: {generated_at}"),
+                    ("AI", "No external API", "デモではAPIキーや外部AIサービスを使わない"),
+                    ("Deploy", "Streamlit Cloud", "GitHub上のエントリーポイント別に公開"),
+                ],
+                columns=4,
+            )
+            + presentation_flow_html(
+                [
+                    ("1. データ生成", "scripts/generate_demo_data.py が完全な架空データを作成"),
+                    ("2. 保存", "ParquetとJSONでリポジトリ内の data フォルダに保持"),
+                    ("3. 読み込み", "Streamlit cache で高速にロード"),
+                    ("4. 分析", "pandasでKPI、差異、案件リスクを集計"),
+                    ("5. 体験", "PlotlyとStreamlitでダッシュボードと説明資料を表示"),
+                ],
+                columns=5,
             ),
-            width="stretch",
-            hide_index=True,
+            "本質は、AI単体ではなく、信頼できるFP&Aデータ基盤と説明プロセスを体験させることです。",
+        )
+    elif slide == 1:
+        render_presentation_slide(
+            "Architecture / 02",
+            "URLを分けるために、入口ファイルを3つに分けています",
+            presentation_table_html(
+                ["入口ファイル", "公開対象", "主な利用者", "表示されるページ", "用途"],
+                [
+                    [
+                        "client_app.py",
+                        "https://heavy-industry-ai-demo-client.streamlit.app/",
+                        "クライアント",
+                        "ダッシュボード、差異分析、案件リスク、AIコメント",
+                        "相手が触る本体デモ。説明者向け資料は出さない。",
+                    ],
+                    [
+                        "presenter_app.py",
+                        "社内・説明者向けURL",
+                        "当社側の説明者",
+                        "閲覧前/後プレゼン、データ基盤、技術構成、データ確認",
+                        "商談や社内説明で投影する支援資料。",
+                    ],
+                    [
+                        "app.py",
+                        "フルアプリURL",
+                        "開発・QA担当",
+                        "全ページ",
+                        "動作確認、保守、公開前チェック用。",
+                    ],
+                ],
+            )
+            + presentation_cards_html(
+                [
+                    ("なぜ分けるか", "クライアントが触るURLには、本体デモ以外の説明者向けページを出さないため。"),
+                    ("アクセス制限との違い", "認証ではなく、Streamlit Cloudのデプロイ単位を分けて見せる範囲を制御している。"),
+                    ("運用の利点", "同じコードベースを使いながら、URLごとに体験を変えられる。"),
+                ],
+                columns=3,
+            ),
+            "クライアント向けURLはダッシュボード専用、社内向けURLは説明資料専用、フルアプリは保守用です。",
+        )
+    elif slide == 2:
+        render_presentation_slide(
+            "Architecture / 03",
+            "データは全て架空で、Parquetを中心に軽量に配布しています",
+            presentation_table_html(
+                ["ファイル", "役割", "粒度", "現在行数"],
+                [
+                    [
+                        "data/dim_projects.parquet",
+                        "案件、セグメント、顧客、地域、契約形態などのマスタ",
+                        "1行 = 1案件",
+                        str(row_counts.get("dim_projects", "N/A")),
+                    ],
+                    [
+                        "data/fact_finance.parquet",
+                        "Actual/Budget/Forecastの売上、利益、キャッシュフロー",
+                        "1行 = 案件 x 月 x シナリオ",
+                        str(row_counts.get("fact_finance", "N/A")),
+                    ],
+                    [
+                        "data/fact_variance_drivers.parquet",
+                        "差異要因を価格、数量、調達、工程、為替などに分解",
+                        "1行 = 案件 x 月 x KPI x 要因",
+                        str(row_counts.get("fact_variance_drivers", "N/A")),
+                    ],
+                    [
+                        "data/project_risk.parquet",
+                        "案件リスク、EAC乖離、遅延、調達圧力、品質問題",
+                        "1行 = 1案件の最新リスク状態",
+                        str(row_counts.get("project_risk", "N/A")),
+                    ],
+                    [
+                        "data/demo_metadata.json",
+                        "生成日時、総行数、生成条件、デモ前提",
+                        "1ファイル = データセット説明",
+                        "metadata",
+                    ],
+                ],
+            )
+            + presentation_cards_html(
+                [
+                    ("配布しやすい", "DB接続なしでStreamlit Cloudに置けるため、デモ公開が速い。"),
+                    ("説明しやすい", "実データではなく架空データなので、守秘情報を含めずに商談で使える。"),
+                    ("本番化しやすい", "本番ではParquet部分をDWHやデータマートに置き換える想定。"),
+                ],
+                columns=3,
+            ),
+            "このデモではファイル配布を優先し、本番ではERP/EPM/案件管理システムからの連携に置き換えます。",
+        )
+    elif slide == 3:
+        render_presentation_slide(
+            "Architecture / 04",
+            "分析処理は、読み込み、KPI生成、フィルタ、可視化に分けています",
+            presentation_table_html(
+                ["層", "主な処理", "実装上の役割", "本番化時の置き換え先"],
+                [
+                    [
+                        "Load",
+                        "load_data()",
+                        "Parquet/JSONを読み、欠損時はセットアップ案内を表示する。",
+                        "DWH、Lakehouse、API、権限付きデータサービス",
+                    ],
+                    [
+                        "Cache",
+                        "@st.cache_data",
+                        "Streamlit上で同じデータ読み込みを再利用し、画面操作を軽くする。",
+                        "データ更新時刻、パーティション、クエリキャッシュ管理",
+                    ],
+                    [
+                        "Semantic layer",
+                        "build_project_month_kpis()",
+                        "売上、営業利益、利益率、CF、差異を同じ定義で計算する。",
+                        "KPI定義テーブル、dbt、BIセマンティックレイヤー",
+                    ],
+                    [
+                        "Interaction",
+                        "期間、セグメント、KPI、比較軸のフィルタ",
+                        "説明者が会議中に論点を切り替えられるようにする。",
+                        "ロール別ビュー、案件権限、保存済みシナリオ",
+                    ],
+                    [
+                        "Visual",
+                        "Plotly charts",
+                        "カード、トレンド、ウォーターフォール、リスク散布図を表示する。",
+                        "正式BI、埋め込みアプリ、経営会議ポータル",
+                    ],
+                ],
+            ),
+            "StreamlitはMVPの画面実装に適しており、本番ではデータ処理と権限制御を外部基盤に寄せます。",
+        )
+    elif slide == 4:
+        render_presentation_slide(
+            "Architecture / 05",
+            "AIコメントは、現時点では外部APIを使わない決定的な生成です",
+            presentation_flow_html(
+                [
+                    ("入力", "選択された期間、KPI、セグメント、差異要因、案件リスク"),
+                    ("要約", "差異の方向、金額影響、利益率/CF影響をpandasで集計"),
+                    ("論点抽出", "価格、調達、工程、為替、品質、案件遅延などの上位要因を抽出"),
+                    ("文章化", "経営会議で使える日本語コメントの型に埋め込む"),
+                    ("出力", "要旨、主因、確認事項、次アクションを提示"),
+                ],
+                columns=5,
+            )
+            + presentation_cards_html(
+                [
+                    ("デモでAPIを使わない理由", "APIキー管理、従量課金、通信失敗を避け、公開デモを安定させるため。"),
+                    ("現在の限界", "LLMの柔軟な言い換えや質疑応答は未実装。根拠は集計済みデータに限定される。"),
+                    ("本番での拡張", "OpenAI等を使う場合は、Secrets管理、プロンプト管理、根拠ログ、承認フローを追加する。"),
+                ],
+                columns=3,
+            ),
+            "クライアントには『AIの前に、説明可能なデータとロジックが必要』というメッセージを伝えます。",
+        )
+    elif slide == 5:
+        render_presentation_slide(
+            "Architecture / 06",
+            "画面は、クライアント操作用と説明者支援用に分けています",
+            presentation_table_html(
+                ["区分", "ページ", "目的", "クライアント向けURLでの表示"],
+                [
+                    ["本体デモ", "Dashboard", "経営トップ向けに全社KPIと異常値をつかむ。", "表示する"],
+                    ["本体デモ", "Variance Analysis", "差異要因をドリルダウンし、説明可能な粒度に分解する。", "表示する"],
+                    ["本体デモ", "Project Risk", "利益悪化や納期遅延につながる案件を特定する。", "表示する"],
+                    ["本体デモ", "AI Commentary", "会議資料に使う日本語コメントを生成する。", "表示する"],
+                    ["説明者支援", "Client Pre/Post Demo", "デモ前後の説明、期待値調整、次アクション整理。", "表示しない"],
+                    ["説明者支援", "Data Foundation", "AI活用に必要なデータ基盤の論点を説明する。", "表示しない"],
+                    ["説明者支援", "Tech Architecture", "この技術構成プレゼン。実装と運用を説明する。", "表示しない"],
+                    ["内部確認", "Data Explorer", "架空データの列、件数、サンプルを検証する。", "表示しない"],
+                ],
+            ),
+            "『相手に触ってもらう画面』と『こちらが説明する画面』を分けることで、デモ体験が混ざらないようにしています。",
+        )
+    elif slide == 6:
+        render_presentation_slide(
+            "Architecture / 07",
+            "公開運用は、GitHubを正とし、Streamlit Cloudが読み込む形です",
+            presentation_flow_html(
+                [
+                    ("1. ローカル編集", "cloneした作業フォルダで app.py、client_app.py、presenter_app.py を更新"),
+                    ("2. 動作確認", "py_compile と Streamlit AppTest で主要導線を確認"),
+                    ("3. commit", "GitHub Desktopまたはgitで変更理由を残す"),
+                    ("4. push", "GitHubのmainへ反映"),
+                    ("5. redeploy", "Streamlit Cloudが更新を検知し、各URLへ反映"),
+                ],
+                columns=5,
+            )
+            + presentation_table_html(
+                ["運用項目", "現在の方針", "注意点"],
+                [
+                    ["Secrets", "デモでは外部APIを使わないため未設定", "将来APIを使う場合はStreamlit Secretsに置き、GitHubへ置かない。"],
+                    ["不要ファイル", ".venv、__pycache__、ログ、QA画像はcommitしない", ".gitignoreで除外し、公開リポジトリを軽く保つ。"],
+                    ["データ更新", "scripts/generate_demo_data.pyで再生成", "更新後はmetadataの日時と件数を確認する。"],
+                    ["公開前QA", "クライアントURLに本体4ページだけ出ることを確認", "説明者向けページが混ざっていないかを見る。"],
+                ],
+            ),
+            "長期運用では、GitHub上で履歴を残し、ローカルと公開環境の差分を小さく保つことが重要です。",
+        )
+    else:
+        render_presentation_slide(
+            "Architecture / 08",
+            "本番化では、データ接続、権限、AI統制、監査ログを追加します",
+            presentation_table_html(
+                ["優先度", "テーマ", "やること", "成果物"],
+                [
+                    ["1", "実データ棚卸し", "ERP、EPM、案件管理、調達、工程、為替、マスタの所在と責任者を整理する。", "データソース一覧"],
+                    ["2", "KPI定義", "売上、営業利益、利益率、CF、EAC、リスク指標の定義を合意する。", "KPI定義書"],
+                    ["3", "データ基盤", "DWH/データマートにFP&A用の統合テーブルを設計する。", "To-Beアーキテクチャ"],
+                    ["4", "AI実装", "LLM API、プロンプト、根拠引用、出力レビュー、禁止事項を設計する。", "AIコメント設計書"],
+                    ["5", "統制", "権限、監査ログ、更新頻度、承認フロー、モデル変更管理を決める。", "運用設計"],
+                    ["6", "段階展開", "代表セグメントまたは重点案件からPoCし、月次FP&Aプロセスへ組み込む。", "PoC計画"],
+                ],
+            )
+            + presentation_cards_html(
+                [
+                    ("営業メッセージ", "このデモは完成品の販売ではなく、FP&A高度化の完成イメージを短時間で共有するためのもの。"),
+                    ("次の会話", "相手企業のデータ成熟度、会議体、KPI運用、AI利用ルールを確認する。"),
+                    ("提案の焦点", "画面開発だけでなく、データ基盤、業務設計、AI統制をセットで提案する。"),
+                ],
+                columns=3,
+            ),
+            "このスライドは、デモ後に『では自社で実装するには何が必要か』へ会話を進めるために使います。",
         )
 
 
@@ -3361,7 +3474,7 @@ def main(app_mode: str = "internal") -> None:
     ]
     internal_pages = [
         ("Internal Demo Guide", "デモ解説用", False),
-        ("Tech Architecture", "技術構成", False),
+        ("Tech Architecture", "技術構成プレゼン", False),
         ("Data Explorer", "データ確認", False),
     ]
     presenter_pages = presentation_pages + internal_pages
@@ -3573,7 +3686,7 @@ def main(app_mode: str = "internal") -> None:
     elif st.session_state.get("active_surface") == "internal":
         internal_label_map = {
             "Internal Demo Guide": "説明者向けガイド",
-            "Tech Architecture": "技術構成",
+            "Tech Architecture": "技術構成プレゼン",
             "Data Explorer": "データ確認",
         }
         current_label = internal_label_map.get(page, page)
