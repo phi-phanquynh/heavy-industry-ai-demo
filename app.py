@@ -554,6 +554,31 @@ def inject_css() -> None:
             color: #64748b;
             font-size: 0.86rem;
         }
+        .stApp:has(#presentation-focus-mode) [data-testid="stSidebar"],
+        .stApp:has(#presentation-focus-mode) [data-testid="stHeader"],
+        .stApp:has(#presentation-focus-mode) [data-testid="stToolbar"],
+        .stApp:has(#presentation-focus-mode) [data-testid="stDecoration"],
+        .stApp:has(#presentation-focus-mode) footer {
+            display: none !important;
+        }
+        .stApp:has(#presentation-focus-mode) .block-container {
+            max-width: 100vw;
+            padding: 0.75rem 1.15rem 1rem 1.15rem;
+        }
+        .stApp:has(#presentation-focus-mode) .cockpit-title {
+            display: none;
+        }
+        .stApp:has(#presentation-focus-mode) .presentation-progress {
+            margin: 0.35rem 0 0.55rem 0;
+        }
+        .stApp:has(#presentation-focus-mode) .presentation-slide {
+            min-height: calc(100vh - 132px);
+            padding: clamp(22px, 3.1vw, 48px);
+            box-shadow: none;
+        }
+        .stApp:has(#presentation-focus-mode) .presentation-slide h2 {
+            font-size: clamp(1.75rem, 2.8vw, 2.75rem);
+        }
         .stApp:has(#foundation-page) .presentation-slide {
             background: #ffffff;
         }
@@ -1182,10 +1207,12 @@ def render_segment_story_cards() -> None:
 
 def render_presentation_controls(deck_key: str, titles: list[str]) -> int:
     index_key = f"{deck_key}_slide_index"
+    focus_key = f"{deck_key}_focus_mode"
     index = int(st.session_state.get(index_key, 0))
     index = max(0, min(index, len(titles) - 1))
+    focus_mode = bool(st.session_state.get(focus_key, False))
 
-    controls = st.columns([1.15, *([0.48] * len(titles)), 1.15], gap="small")
+    controls = st.columns([1.15, *([0.48] * len(titles)), 1.15, 0.98], gap="small")
     with controls[0]:
         if st.button("← 前へ", key=f"{deck_key}_prev", disabled=index == 0, width="stretch"):
             index = max(0, index - 1)
@@ -1198,9 +1225,17 @@ def render_presentation_controls(deck_key: str, titles: list[str]) -> int:
                 width="stretch",
             ):
                 index = slide_index
-    with controls[-1]:
+    with controls[-2]:
         if st.button("次へ →", key=f"{deck_key}_next", disabled=index == len(titles) - 1, width="stretch"):
             index = min(len(titles) - 1, index + 1)
+    with controls[-1]:
+        focus_label = "通常表示" if focus_mode else "大きく表示"
+        if st.button(focus_label, key=f"{deck_key}_focus_toggle", width="stretch"):
+            focus_mode = not focus_mode
+            st.session_state[focus_key] = focus_mode
+
+    if focus_mode:
+        st.markdown('<div id="presentation-focus-mode"></div>', unsafe_allow_html=True)
 
     st.session_state[index_key] = index
     dots = "".join(
