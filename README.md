@@ -2,6 +2,8 @@
 
 Fictional FP&A variance analysis demo for **Nippon Advanced Heavy Industries**.
 
+[Live app](https://heavy-industry-ai-demo-6apcskxwufgremlq9bivhk.streamlit.app/)
+
 - Demo data only
 - All figures are fictional
 - No real company financial data is used
