@@ -4360,7 +4360,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
     if slide == 0:
         render_presentation_slide(
             "Architecture / 01",
-            "このデモは、架空データを使ったFP&A差異分析コックピットです",
+            "架空データで体験する FP&Aデータ基盤・AI活用コックピット",
             f"""
             <div class="presentation-lead">
             このデモは、実データや外部AI APIに依存せず、架空データだけでAI-driven FP&amp;Aの体験を見せる構成です。
