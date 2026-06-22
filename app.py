@@ -3211,28 +3211,28 @@ def ai_app_architecture_component_html() -> str:
                 node("crm", "CRM\nPipeline", 80, 176, "source", "受注見込、商談、顧客別売上の先行指標。", "#2563eb"),
                 node("hcm", "HCM\nWorkforce", 80, 256, "source", "人員、労務費、組織、要員計画。", "#2563eb"),
                 node("scm", "SCM / Project\nEAC", 80, 336, "source", "調達、工程、案件EAC、原価見通し。", "#2563eb"),
-                node("excel", "Excel\nLocal Inputs", 80, 416, "source", "部門別入力、補正、管理表。", "#2563eb"),
+                node("excel", "Local Inputs\nManual Adjustments", 80, 416, "source", "部門別入力、補正、管理表。", "#2563eb"),
                 node("etl", "API / ETL\nData Sync", 255, 256, "data", "各システムから計画粒度へデータを同期。", "#0f766e", 142, 62),
                 node("datahub", "DWH / Data Hub\nReference Data", 420, 256, "data", "必要な実績、マスタ、履歴だけをFP&A製品へ供給。", "#0f766e", 160, 64),
                 node(
                     "fpna",
-                    "FP&A / EPM Platform\nAnaplan / Pigment\nWorkday Adaptive Planning\nOracle Cloud EPM / CCH Tagetik",
-                    615,
+                    "FP&A / EPM Platform\nPlanning / Forecast\nConsolidation / Reporting",
+                    665,
                     256,
                     "fpna",
                     "予算、見込、シナリオ、承認、レポートの業務プロセスを保持。",
                     "#7c3aed",
-                    250,
-                    112,
+                    230,
+                    100,
                     "primary",
                 ),
-                node("embedded_ai", "Built-in AI\nForecast / Narrative", 615, 104, "ai", "製品内の予測、差異説明、レポート文案生成。", "#a855f7", 190, 68),
-                node("workflow", "Workflow\nApproval", 615, 430, "control", "計画提出、レビュー、承認、差戻し、通知。", "#64748b", 176, 64),
+                node("embedded_ai", "Built-in AI\nForecast / Narrative", 665, 104, "ai", "製品内の予測、差異説明、レポート文案生成。", "#a855f7", 190, 68),
+                node("workflow", "Workflow\nApproval", 665, 430, "control", "計画提出、レビュー、承認、差戻し、通知。", "#64748b", 176, 64),
                 node("governance", "Governance\nIAM / Audit", 420, 430, "control", "権限、監査ログ、版管理、変更履歴。", "#64748b", 168, 64),
-                node("variance", "Variance\nExplanation", 850, 116, "usecase", "予実差異・見込差異の説明。", "#dc2626"),
-                node("forecast", "Rolling\nForecast", 850, 216, "usecase", "月次・週次の見込更新。", "#dc2626"),
-                node("scenario", "Scenario\nPlanning", 850, 316, "usecase", "価格、為替、案件EACのシナリオ。", "#dc2626"),
-                node("reporting", "Narrative\nReporting", 850, 416, "usecase", "経営会議、取締役会資料の文案。", "#dc2626"),
+                node("variance", "Variance\nExplanation", 925, 116, "usecase", "予実差異・見込差異の説明。", "#dc2626"),
+                node("forecast", "Rolling\nForecast", 925, 216, "usecase", "月次・週次の見込更新。", "#dc2626"),
+                node("scenario", "Scenario\nPlanning", 925, 316, "usecase", "価格、為替、案件EACのシナリオ。", "#dc2626"),
+                node("reporting", "Narrative\nReporting", 925, 416, "usecase", "経営会議、取締役会資料の文案。", "#dc2626"),
             ],
             "edges": [
                 edge("e1", "erp", "etl", "actuals"),
@@ -3270,24 +3270,24 @@ def ai_app_architecture_component_html() -> str:
                 node("elt", "ELT / Streaming\nData Quality", 265, 255, "data", "取り込み、標準化、品質チェック、更新管理。", "#0f766e", 156, 68),
                 node(
                     "lakehouse",
-                    "DWH / Lakehouse AI Foundation\nSnowflake / Databricks\nMicrosoft Fabric / BigQuery",
-                    475,
+                    "DWH / Lakehouse\nAI Foundation",
+                    455,
                     255,
                     "data",
                     "全社データ、履歴、権限、リネージを保持するAI活用の中心。",
                     "#0f766e",
-                    240,
-                    106,
+                    210,
+                    86,
                     "primary",
                 ),
-                node("catalog", "Data Catalog\nLineage / Policy", 475, 455, "control", "データ定義、リネージ、ポリシー、利用状況を管理。", "#64748b", 190, 66),
-                node("ai_sql", "Native AI\nCortex / Mosaic AI\nFabric Copilot", 665, 112, "ai", "SQL、ノートブック、Copilot経由でAI分析を実行。", "#a855f7", 204, 82),
-                node("forecast_model", "Forecast Model\nML / AutoML", 675, 242, "ai", "ローリングフォーキャストやリスク予測をモデル化。", "#a855f7", 174, 66),
-                node("rag", "RAG / AI Search\nPolicy + Docs", 675, 365, "ai", "レポート、議事録、ルール、注記を検索拡張で参照。", "#a855f7", 174, 66),
-                node("fpna_tools", "FP&A / EPM Platform\nAnaplan / Pigment\nOracle EPM / CCH Tagetik", 850, 255, "fpna", "計画、承認、予算、見込の業務運用を担う。", "#7c3aed", 210, 88),
-                node("variance", "KPI Driver\nAnalysis", 1025, 135, "usecase", "KPI変動の主因を横断データで分解。", "#dc2626"),
-                node("anomaly", "Anomaly\nDetection", 1025, 255, "usecase", "案件、原価、CFの異常を早期検知。", "#dc2626"),
-                node("writeback", "Planning\nWrite-back", 1025, 375, "usecase", "予測結果やアラートを計画業務へ戻す。", "#dc2626"),
+                node("catalog", "Data Catalog\nLineage / Policy", 455, 455, "control", "データ定義、リネージ、ポリシー、利用状況を管理。", "#64748b", 190, 66),
+                node("ai_sql", "Native AI\nSQL / Notebook\nAssist", 690, 112, "ai", "SQL、ノートブック、対話型支援でAI分析を実行。", "#a855f7", 178, 82),
+                node("forecast_model", "Forecast Model\nML / AutoML", 690, 242, "ai", "ローリングフォーキャストやリスク予測をモデル化。", "#a855f7", 166, 66),
+                node("rag", "RAG / AI Search\nPolicy + Docs", 690, 365, "ai", "レポート、議事録、ルール、注記を検索拡張で参照。", "#a855f7", 166, 66),
+                node("fpna_tools", "FP&A / EPM Platform\nPlanning Workflow", 885, 255, "fpna", "計画、承認、予算、見込の業務運用を担う。", "#7c3aed", 180, 76),
+                node("variance", "KPI Driver\nAnalysis", 1080, 135, "usecase", "KPI変動の主因を横断データで分解。", "#dc2626"),
+                node("anomaly", "Anomaly\nDetection", 1080, 255, "usecase", "案件、原価、CFの異常を早期検知。", "#dc2626"),
+                node("writeback", "Planning\nWrite-back", 1080, 375, "usecase", "予測結果やアラートを計画業務へ戻す。", "#dc2626"),
             ],
             "edges": [
                 edge("d1", "systems", "elt", "internal data"),
@@ -3320,16 +3320,16 @@ def ai_app_architecture_component_html() -> str:
             "nodes": [
                 node("executive", "Executive / CFO\nNatural Language Q&A", 92, 140, "usecase", "経営層が自然言語で業績、案件、打ち手を確認。", "#dc2626", 170, 74),
                 node("fpna_user", "FP&A Team\nReview / Approval", 92, 340, "usecase", "FP&A担当が結果を確認し、会議資料とアクションへ反映。", "#dc2626", 170, 74),
-                node("llm", "LLM Gateway\nAzure OpenAI / Bedrock\nVertex AI", 505, 90, "ai", "モデル選択、プロンプト、利用ログ、コスト制御。", "#a855f7", 220, 84),
+                node("llm", "LLM Gateway\nModel Routing\nPrompt / Logging", 505, 90, "ai", "モデル選択、プロンプト、利用ログ、コスト制御。", "#a855f7", 210, 84),
                 node(
                     "agent",
-                    "AI Agent / Orchestration Layer\nPlanning + Tool Use\nMCP / API Connectors",
+                    "AI Agent / Orchestration Layer\nPlanning + Tool Use\nAPI Connectors",
                     505,
                     258,
                     "ai",
                     "ユーザー意図を解釈し、必要なシステムを呼び出して回答・提案を生成。",
                     "#a855f7",
-                    260,
+                    240,
                     112,
                     "primary",
                 ),
@@ -3337,12 +3337,12 @@ def ai_app_architecture_component_html() -> str:
                 node("erp_api", "ERP API\nActuals / GL", 285, 112, "source", "実績、会計伝票、勘定残高を権限付きで参照。", "#2563eb", 152, 68),
                 node("fpna_api", "FP&A API\nPlan / Forecast", 285, 258, "fpna", "予算、見込、シナリオ、承認ステータスを参照。", "#7c3aed", 154, 68),
                 node("docs", "Docs / Meetings\nBoard Pack / Minutes", 285, 404, "source", "会議資料、議事録、注記、業務ルールを検索。", "#2563eb", 160, 70),
-                node("bi", "BI Semantic Layer\nPower BI / Tableau", 720, 132, "data", "KPI定義、メジャー、ダッシュボード指標を参照。", "#0f766e", 170, 72),
-                node("data", "DWH / Lakehouse\nTrusted Data", 720, 284, "data", "横断分析、特徴量、リネージ、履歴データを提供。", "#0f766e", 170, 72),
-                node("workflow", "Workflow\nTeams / ServiceNow", 720, 430, "control", "承認、通知、チケット、案件アクションへ接続。", "#64748b", 174, 70),
-                node("qa", "Management\nQ&A", 960, 128, "usecase", "経営問答。", "#dc2626"),
-                node("draft", "Board Pack\nDrafting", 960, 258, "usecase", "取締役会・経営会議資料の草案。", "#dc2626"),
-                node("action", "Action\nRecommendation", 960, 388, "usecase", "打ち手候補、担当、期限の提案。", "#dc2626"),
+                node("bi", "BI Semantic Layer\nMetrics / Dashboard", 760, 132, "data", "KPI定義、メジャー、ダッシュボード指標を参照。", "#0f766e", 170, 72),
+                node("data", "DWH / Lakehouse\nTrusted Data", 760, 284, "data", "横断分析、特徴量、リネージ、履歴データを提供。", "#0f766e", 170, 72),
+                node("workflow", "Workflow\nApproval / Ticket", 760, 430, "control", "承認、通知、チケット、案件アクションへ接続。", "#64748b", 174, 70),
+                node("qa", "Management\nQ&A", 1000, 128, "usecase", "経営問答。", "#dc2626"),
+                node("draft", "Board Pack\nDrafting", 1000, 258, "usecase", "取締役会・経営会議資料の草案。", "#dc2626"),
+                node("action", "Action\nRecommendation", 1000, 388, "usecase", "打ち手候補、担当、期限の提案。", "#dc2626"),
             ],
             "edges": [
                 edge("a1", "executive", "agent", "ask"),
@@ -3627,14 +3627,13 @@ def ai_app_architecture_component_html() -> str:
         <h1>FP&amp;AプラットフォームにAIを組み込む3つの実装パターン</h1>
         <p class="lead">
           AIを単一製品の機能としてではなく、FP&amp;A業務、全社データ基盤、横断AIエージェントのどこに置くかで設計を分ける。
-          図はCytoscape.jsの固定レイアウトで、発表時に1パターンずつ大きく見せる。
         </p>
         <div id="tabBar" class="pattern-tabs"></div>
         <div class="main-grid">
           <section class="graph-card">
             <div class="graph-title">
               <b id="patternTitle">Architecture</b>
-              <span>Cytoscape.js / preset layout</span>
+              <span>Technical architecture view</span>
             </div>
             <div id="cy"></div>
             <div class="legend">
