@@ -126,7 +126,7 @@ def inject_css() -> None:
         }
         .cockpit-title h1 {
             margin: 0;
-            font-size: clamp(1.7rem, 2.7vw, 2.55rem);
+            font-size: 2.1rem;
             line-height: 1.08;
         }
         .cockpit-title .subtitle {
@@ -165,7 +165,7 @@ def inject_css() -> None:
         }
         .metric-value {
             color: var(--text);
-            font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+            font-size: 1.55rem;
             font-weight: 700;
             line-height: 1.05;
             white-space: nowrap;
@@ -624,7 +624,7 @@ def inject_css() -> None:
             box-shadow: none;
         }
         .stApp:has(#presentation-focus-mode) .presentation-slide h2 {
-            font-size: clamp(1.75rem, 2.8vw, 2.75rem);
+            font-size: 2.25rem;
         }
         .stApp:has(#foundation-page) .presentation-slide {
             background: #ffffff;
@@ -674,7 +674,7 @@ def inject_css() -> None:
         }
         .foundation-hero h2 {
             color: #ffffff !important;
-            font-size: clamp(1.8rem, 3.2vw, 2.85rem);
+            font-size: 2.25rem;
             line-height: 1.08;
             margin: 0 0 13px 0;
             max-width: 980px;
@@ -1118,6 +1118,350 @@ def inject_css() -> None:
             color: #ffffff;
             background: rgba(57,197,187,0.22);
         }
+        .stApp:has(#demo-briefing-page),
+        .stApp:has(#foundation-page) {
+            background:
+                linear-gradient(180deg, rgba(3, 8, 14, 0.98), rgba(6, 14, 22, 1) 58%),
+                repeating-linear-gradient(90deg, rgba(57,197,187,0.08) 0 1px, transparent 1px 118px),
+                repeating-linear-gradient(0deg, rgba(96,165,250,0.055) 0 1px, transparent 1px 96px) !important;
+        }
+        .stApp:has(#demo-briefing-page) .block-container,
+        .stApp:has(#foundation-page) .block-container {
+            max-width: 100vw;
+            padding: 1.05rem 1.2rem 0.85rem 1.2rem;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stHeader"],
+        .stApp:has(.presentation-slide) [data-testid="stToolbar"],
+        .stApp:has(.presentation-slide) [data-testid="stDecoration"] {
+            display: none !important;
+        }
+        .stApp:has(.presentation-slide) .block-container {
+            max-width: 100vw;
+            padding-top: 0.45rem !important;
+            padding-bottom: 0.55rem !important;
+        }
+        .stApp:has(#demo-briefing-page) .block-container,
+        .stApp:has(#demo-briefing-page) .block-container h1,
+        .stApp:has(#demo-briefing-page) .block-container h2,
+        .stApp:has(#demo-briefing-page) .block-container h3,
+        .stApp:has(#demo-briefing-page) .block-container p,
+        .stApp:has(#demo-briefing-page) .block-container li,
+        .stApp:has(#foundation-page) .block-container,
+        .stApp:has(#foundation-page) .block-container h1,
+        .stApp:has(#foundation-page) .block-container h2,
+        .stApp:has(#foundation-page) .block-container h3,
+        .stApp:has(#foundation-page) .block-container p,
+        .stApp:has(#foundation-page) .block-container li {
+            color: #edf6f9 !important;
+        }
+        .stApp:has(#demo-briefing-page) .cockpit-title,
+        .stApp:has(#foundation-page) .cockpit-title {
+            border-bottom: 1px solid rgba(57,197,187,0.30);
+            padding: 6px 0 10px 0;
+            margin-bottom: 10px;
+        }
+        .stApp:has(.presentation-slide) .cockpit-title {
+            display: none;
+        }
+        .stApp:has(#demo-briefing-page) .cockpit-title .subtitle,
+        .stApp:has(#foundation-page) .cockpit-title .subtitle {
+            color: #9fb2c3 !important;
+        }
+        .stApp:has(#demo-briefing-page) .pill,
+        .stApp:has(#foundation-page) .pill {
+            background: rgba(57,197,187,0.10);
+            border-color: rgba(57,197,187,0.36);
+            color: #d9fffb;
+        }
+        .presentation-progress {
+            margin: 0.3rem 0 0.5rem 0;
+            color: #9fb2c3;
+        }
+        .presentation-progress b {
+            color: #edf6f9;
+            font-size: 0.94rem;
+        }
+        .presentation-progress span {
+            color: #39c5bb;
+            font-size: 0.78rem;
+        }
+        .presentation-dot {
+            background: rgba(159,178,195,0.32);
+        }
+        .presentation-dot.active {
+            background: #39c5bb;
+            box-shadow: 0 0 12px rgba(57,197,187,0.45);
+        }
+        .presentation-slide {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(11, 23, 34, 0.98), rgba(6, 15, 24, 0.99)),
+                linear-gradient(90deg, rgba(57,197,187,0.08), transparent 42%);
+            border: 1px solid rgba(57,197,187,0.30);
+            border-radius: 8px;
+            box-shadow: 0 22px 70px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06);
+            min-height: min(610px, calc(100vh - 190px));
+            padding: clamp(16px, 1.55vw, 24px);
+            gap: 10px;
+        }
+        .presentation-slide::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(57,197,187,0.08) 0 1px, transparent 1px 84px),
+                linear-gradient(0deg, rgba(96,165,250,0.07) 0 1px, transparent 1px 72px);
+            opacity: 0.36;
+            pointer-events: none;
+        }
+        .presentation-slide > * {
+            position: relative;
+            z-index: 1;
+        }
+        .presentation-eyebrow {
+            color: #39c5bb;
+            font-size: 0.72rem;
+            margin-bottom: 7px;
+        }
+        .presentation-slide h2 {
+            color: #f8fdff !important;
+            font-size: 1.78rem;
+            line-height: 1.12;
+            margin: 0 0 7px 0;
+            max-width: 1180px;
+        }
+        .presentation-lead {
+            color: #d6e7ee;
+            font-size: 0.94rem;
+            line-height: 1.48;
+            max-width: 1120px;
+        }
+        .presentation-card-grid {
+            gap: 7px;
+            margin-top: 9px;
+        }
+        .presentation-card,
+        .presentation-metric-card,
+        .architecture-node {
+            background: linear-gradient(180deg, rgba(14, 29, 42, 0.92), rgba(9, 20, 30, 0.94));
+            border: 1px solid rgba(57,197,187,0.25);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .presentation-card,
+        .presentation-metric-card {
+            padding: 10px 11px;
+            min-height: 88px;
+        }
+        .presentation-card b,
+        .presentation-metric-card b,
+        .architecture-node strong {
+            color: #39c5bb;
+        }
+        .presentation-card span,
+        .presentation-metric-card span,
+        .architecture-node span {
+            color: #c8dce6;
+            line-height: 1.34;
+            font-size: 0.78rem;
+        }
+        .presentation-metric-card strong {
+            color: #f8fdff;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        .presentation-flow {
+            gap: 7px;
+            margin-top: 9px;
+        }
+        .presentation-step {
+            background: linear-gradient(180deg, rgba(14, 29, 42, 0.92), rgba(9, 20, 30, 0.94));
+            border: 1px solid rgba(57,197,187,0.25);
+            border-top: 3px solid #39c5bb;
+            padding: 9px;
+            min-height: 94px;
+        }
+        .presentation-step b,
+        .architecture-node b {
+            color: #f8fdff;
+        }
+        .presentation-step span {
+            color: #c8dce6;
+            font-size: 0.76rem;
+            line-height: 1.32;
+        }
+        .architecture-diagram {
+            gap: 7px;
+            margin-top: 9px;
+        }
+        .architecture-node {
+            border-top: 3px solid #39c5bb;
+            padding: 10px;
+            min-height: 94px;
+        }
+        .architecture-node:not(:last-child)::after {
+            color: #39c5bb;
+        }
+        .presentation-table {
+            background: rgba(9, 20, 30, 0.92);
+            border: 1px solid rgba(57,197,187,0.24);
+            margin-top: 9px;
+        }
+        .presentation-table th {
+            background: rgba(57,197,187,0.18);
+            color: #d9fffb;
+            padding: 6px 7px;
+            font-size: 0.74rem;
+        }
+        .presentation-table td {
+            color: #d6e7ee;
+            padding: 6px 7px;
+            border-top: 1px solid rgba(57,197,187,0.16);
+            line-height: 1.25;
+            font-size: 0.74rem;
+        }
+        .presentation-note {
+            background: rgba(57,197,187,0.10);
+            border: 1px solid rgba(57,197,187,0.30);
+            border-left: 4px solid #39c5bb;
+            color: #d9fffb;
+            padding: 9px 11px;
+            line-height: 1.38;
+            margin-top: 9px;
+        }
+        .presentation-footer {
+            border-top: 1px solid rgba(57,197,187,0.22);
+            color: #9fb2c3;
+            font-size: 0.74rem;
+            padding-top: 7px;
+        }
+        .briefing-hero,
+        .briefing-card,
+        .briefing-step,
+        .foundation-thesis,
+        .foundation-tabs-copy,
+        .snapshot-cell,
+        .stApp:has(#demo-briefing-page) .snapshot-cell {
+            background: linear-gradient(180deg, rgba(14, 29, 42, 0.94), rgba(9, 20, 30, 0.95));
+            border: 1px solid rgba(57,197,187,0.25);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .briefing-hero h2,
+        .briefing-step b,
+        .briefing-card b,
+        .foundation-thesis-item b,
+        .foundation-tabs-copy b,
+        .stApp:has(#demo-briefing-page) .snapshot-cell strong {
+            color: #f8fdff !important;
+        }
+        .briefing-hero p,
+        .briefing-card span,
+        .briefing-step span,
+        .foundation-thesis-item span,
+        .foundation-tabs-copy,
+        .stApp:has(#demo-briefing-page) .snapshot-cell span {
+            color: #c8dce6 !important;
+        }
+        .briefing-table {
+            background: rgba(9,20,30,0.94);
+            border: 1px solid rgba(57,197,187,0.24);
+            box-shadow: none;
+        }
+        .briefing-table th {
+            background: rgba(57,197,187,0.18);
+            color: #d9fffb;
+        }
+        .briefing-table td {
+            color: #d6e7ee;
+            border-top: 1px solid rgba(57,197,187,0.16);
+        }
+        .stApp:has(#presentation-focus-mode) .block-container {
+            padding: 0.55rem 0.9rem 0.75rem 0.9rem;
+        }
+        .stApp:has(#presentation-focus-mode) .presentation-slide {
+            min-height: calc(100vh - 96px);
+            padding: clamp(22px, 2.4vw, 38px);
+        }
+        .stApp:has(#presentation-focus-mode) .presentation-slide h2 {
+            font-size: 2.25rem;
+        }
+        .foundation-flow-map {
+            display: grid;
+            grid-template-columns: 1.05fr 0.7fr 1.1fr 1fr;
+            gap: 8px;
+            align-items: stretch;
+            margin-top: 10px;
+        }
+        .foundation-flow-block {
+            background: linear-gradient(180deg, rgba(14, 29, 42, 0.94), rgba(9, 20, 30, 0.96));
+            border: 1px solid rgba(57,197,187,0.25);
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 172px;
+        }
+        .foundation-flow-block b {
+            color: #f8fdff;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .foundation-flow-block span {
+            display: block;
+            color: #c8dce6;
+            font-size: 0.78rem;
+            line-height: 1.34;
+        }
+        .foundation-flow-items {
+            display: grid;
+            gap: 6px;
+        }
+        .foundation-flow-item {
+            border: 1px solid rgba(159,178,195,0.20);
+            background: rgba(255,255,255,0.035);
+            border-radius: 6px;
+            color: #d6e7ee;
+            font-size: 0.74rem;
+            padding: 5px 6px;
+        }
+        .foundation-flow-block.hot {
+            border-color: rgba(255,176,0,0.36);
+        }
+        .foundation-flow-block.ai {
+            border-color: rgba(183,148,244,0.38);
+        }
+        .foundation-quality-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .foundation-quality-card {
+            background: linear-gradient(180deg, rgba(14, 29, 42, 0.94), rgba(9, 20, 30, 0.96));
+            border: 1px solid rgba(57,197,187,0.25);
+            border-top: 3px solid #39c5bb;
+            border-radius: 8px;
+            padding: 9px;
+            min-height: 108px;
+        }
+        .foundation-quality-card b {
+            color: #f8fdff;
+            display: block;
+            font-size: 0.88rem;
+            margin-bottom: 6px;
+        }
+        .foundation-quality-card span {
+            color: #c8dce6;
+            display: block;
+            font-size: 0.74rem;
+            line-height: 1.28;
+        }
+        .foundation-quality-card em {
+            color: #39c5bb;
+            display: block;
+            font-size: 0.7rem;
+            font-style: normal;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
         @media (max-width: 900px) {
             .cockpit-title {
                 align-items: flex-start;
@@ -1180,6 +1524,10 @@ def inject_css() -> None:
                 padding: 22px 18px;
             }
             .fragment-grid {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .foundation-flow-map,
+            .foundation-quality-grid {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
             }
             .metric-value {
@@ -1265,36 +1613,58 @@ def render_segment_story_cards() -> None:
 def render_presentation_controls(deck_key: str, titles: list[str]) -> int:
     index_key = f"{deck_key}_slide_index"
     focus_key = f"{deck_key}_focus_mode"
+    if index_key not in st.session_state:
+        st.session_state[index_key] = 0
+    if focus_key not in st.session_state:
+        st.session_state[focus_key] = False
+
     index = int(st.session_state.get(index_key, 0))
     index = max(0, min(index, len(titles) - 1))
+    st.session_state[index_key] = index
     focus_mode = bool(st.session_state.get(focus_key, False))
+
+    def set_slide(next_index: int) -> None:
+        st.session_state[index_key] = max(0, min(next_index, len(titles) - 1))
+
+    def toggle_focus_mode() -> None:
+        st.session_state[focus_key] = not bool(st.session_state.get(focus_key, False))
 
     controls = st.columns([1.15, *([0.48] * len(titles)), 1.15, 0.98], gap="small")
     with controls[0]:
-        if st.button("← 前へ", key=f"{deck_key}_prev", disabled=index == 0, width="stretch"):
-            index = max(0, index - 1)
+        st.button(
+            "← 前へ",
+            key=f"{deck_key}_prev",
+            disabled=index == 0,
+            width="stretch",
+            on_click=set_slide,
+            args=(index - 1,),
+        )
     for slide_index, _title in enumerate(titles):
         with controls[slide_index + 1]:
-            if st.button(
+            st.button(
                 str(slide_index + 1),
                 key=f"{deck_key}_jump_{slide_index}",
                 type="primary" if slide_index == index else "secondary",
                 width="stretch",
-            ):
-                index = slide_index
+                on_click=set_slide,
+                args=(slide_index,),
+            )
     with controls[-2]:
-        if st.button("次へ →", key=f"{deck_key}_next", disabled=index == len(titles) - 1, width="stretch"):
-            index = min(len(titles) - 1, index + 1)
+        st.button(
+            "次へ →",
+            key=f"{deck_key}_next",
+            disabled=index == len(titles) - 1,
+            width="stretch",
+            on_click=set_slide,
+            args=(index + 1,),
+        )
     with controls[-1]:
         focus_label = "通常表示" if focus_mode else "大きく表示"
-        if st.button(focus_label, key=f"{deck_key}_focus_toggle", width="stretch"):
-            focus_mode = not focus_mode
-            st.session_state[focus_key] = focus_mode
+        st.button(focus_label, key=f"{deck_key}_focus_toggle", width="stretch", on_click=toggle_focus_mode)
 
     if focus_mode:
         st.markdown('<div id="presentation-focus-mode"></div>', unsafe_allow_html=True)
 
-    st.session_state[index_key] = index
     dots = "".join(
         f'<span class="presentation-dot{" active" if i == index else ""}"></span>'
         for i in range(len(titles))
@@ -1364,6 +1734,94 @@ def architecture_diagram_html(nodes: list[tuple[str, str, str]]) -> str:
         for layer, title, text in nodes
     )
     return f'<div class="architecture-diagram">{items}</div>'
+
+
+def foundation_flow_map_html() -> str:
+    columns = [
+        (
+            "Source data",
+            "業務データ",
+            ["ERP実績", "EPM予算・見込", "案件EAC", "調達・外注", "工程・納期", "マスタ"],
+            "",
+        ),
+        (
+            "Quality gates",
+            "品質ゲート",
+            ["照合", "版管理", "案件ID統合", "勘定分類", "時間粒度", "リネージ"],
+            "hot",
+        ),
+        (
+            "Trusted foundation",
+            "FP&Aデータ基盤",
+            ["共通KPI定義", "差異要因レイヤー", "案件リスクレイヤー", "根拠リンク", "更新・監査ログ"],
+            "",
+        ),
+        (
+            "AI-driven FP&A",
+            "経営説明",
+            ["根拠付きAIコメント", "案件アクション", "会議資料", "意思決定", "次回更新"],
+            "ai",
+        ),
+    ]
+    blocks = []
+    for eyebrow, title, items, variant in columns:
+        item_html = "".join(f'<div class="foundation-flow-item">{escape(item)}</div>' for item in items)
+        blocks.append(
+            f"""
+            <div class="foundation-flow-block {variant}">
+                <span>{escape(eyebrow)}</span>
+                <b>{escape(title)}</b>
+                <div class="foundation-flow-items">{item_html}</div>
+            </div>
+            """
+        )
+    return f'<div class="foundation-flow-map">{"".join(blocks)}</div>'
+
+
+def foundation_quality_gates_html() -> str:
+    gates = [
+        (
+            "RECONCILE",
+            "実績照合",
+            "ERP実績、補助元帳、案件実績が同じ売上・利益に戻ることを確認する。",
+        ),
+        (
+            "VERSION",
+            "版管理",
+            "予算、最新見込、前回見込、実績の比較軸と締め時点を固定する。",
+        ),
+        (
+            "PROJECT ID",
+            "案件ID統合",
+            "財務、EAC、調達、工程を案件単位で結び、原因を案件アクションへ落とす。",
+        ),
+        (
+            "ACCOUNT MAP",
+            "勘定分類",
+            "材料費、外注費、設計変更、為替、品質費などの要因分類をそろえる。",
+        ),
+        (
+            "TIME GRAIN",
+            "時間粒度",
+            "月次、四半期、検収時期、キャッシュ発生時期を同じ説明軸にそろえる。",
+        ),
+        (
+            "LINEAGE",
+            "根拠追跡",
+            "AIコメントからKPI、差異要因、案件、元データまで戻れる状態にする。",
+        ),
+    ]
+    cards = "".join(
+        (
+            '<div class="foundation-quality-card">'
+            f"<em>{escape(eyebrow)}</em>"
+            f"<b>{escape(title)}</b>"
+            f"<span>{escape(text)}</span>"
+            "</div>"
+        )
+        for eyebrow, title, text in gates
+    )
+    return f'<div class="foundation-quality-grid">{cards}</div>'
 
 
 def presentation_table_html(headers: list[str], rows: list[list[str]]) -> str:
@@ -1559,7 +2017,7 @@ def render_internal_demo_guide() -> None:
             <tbody>
                 <tr>
                     <td>Client Preview</td>
-                    <td>AI FP&amp;Aの完成イメージを先に合わせる</td>
+                    <td>AI-driven FP&amp;Aの完成イメージを先に合わせる</td>
                     <td>架空データであること、重工業の典型課題、見る順を短く説明する。</td>
                     <td>「すぐ本番で使えます」と言い切る。</td>
                 </tr>
@@ -1683,7 +2141,7 @@ def render_client_post_demo() -> None:
             "デモ後に持ち帰っていただきたいこと",
             """
             <div class="presentation-lead">
-            AI FP&amp;Aの価値は、月次差異説明を速くするだけではありません。
+            AI-driven FP&amp;Aの価値は、月次差異説明を速くするだけではありません。
             経営KPIから差異要因、案件リスク、推奨アクション、根拠データまでを同じ流れで確認できるようにし、
             経営会議での説明を再現可能にすることが本質です。
             </div>
@@ -2817,166 +3275,6 @@ def render_data_explorer(data: dict[str, Any]) -> None:
             st.json(metadata)
 
 
-def render_foundation_sankey(height: int = 460) -> None:
-    labels = [
-        "ERP実績",
-        "EPM予算・見込",
-        "案件EAC",
-        "調達・外注",
-        "工程・納期",
-        "マスタ",
-        "手元Excel連結",
-        "根拠を追えないAIコメント",
-        "Ingestion & Quality Gates",
-        "Trusted FP&A Data Foundation",
-        "KPI / Variance / Project Risk Layer",
-        "根拠付きAIコメント",
-        "案件アクション",
-        "説明責任の不足",
-        "経営会議で意思決定",
-    ]
-    node_colors = [
-        "#60a5fa",
-        "#60a5fa",
-        "#60a5fa",
-        "#60a5fa",
-        "#60a5fa",
-        "#9fb2c3",
-        "#ef4444",
-        "#dc2626",
-        "#f59e0b",
-        "#39c5bb",
-        "#76d275",
-        "#b794f4",
-        "#ffb000",
-        "#991b1b",
-        "#d9fffb",
-    ]
-    source = [
-        0, 1, 2, 3, 4, 5,
-        0, 1, 2, 3, 4, 5,
-        6, 7,
-        8, 9, 10, 10, 11, 12,
-    ]
-    target = [
-        6, 6, 6, 6, 6, 6,
-        8, 8, 8, 8, 8, 8,
-        7, 13,
-        9, 10, 11, 12, 14, 14,
-    ]
-    value = [
-        1, 1, 1, 1, 1, 1,
-        4, 4, 3, 2, 2, 2,
-        6, 6,
-        17, 17, 11, 6, 11, 6,
-    ]
-    red = "rgba(220,38,38,0.30)"
-    teal = "rgba(57,197,187,0.25)"
-    link_colors = [
-        red, red, red, red, red, red,
-        teal, teal, teal, teal, teal, teal,
-        "rgba(220,38,38,0.42)",
-        "rgba(153,27,27,0.48)",
-        "rgba(245,158,11,0.36)",
-        "rgba(57,197,187,0.38)",
-        "rgba(118,210,117,0.34)",
-        "rgba(255,176,0,0.30)",
-        "rgba(183,148,244,0.36)",
-        "rgba(255,176,0,0.32)",
-    ]
-    fig = go.Figure(
-        data=[
-            go.Sankey(
-                arrangement="snap",
-                node={
-                    "pad": 18,
-                    "thickness": 16,
-                    "line": {"color": "rgba(237,246,249,0.45)", "width": 0.6},
-                    "label": labels,
-                    "color": node_colors,
-                },
-                link={
-                    "source": source,
-                    "target": target,
-                    "value": value,
-                    "color": link_colors,
-                },
-            )
-        ]
-    )
-    fig.update_layout(
-        title="Disconnected facts produce unverifiable AI comments; governed data produces accountable management commentary",
-        height=height,
-        paper_bgcolor="#071016",
-        plot_bgcolor="#071016",
-        font={"color": "#edf6f9", "size": 12},
-        margin={"l": 12, "r": 12, "t": 54, "b": 18},
-    )
-    st.plotly_chart(fig, width="stretch")
-
-
-def render_foundation_quality_matrix() -> None:
-    z = [
-        [3, 1, 1, 3, 3, 3],
-        [2, 3, 1, 1, 3, 3],
-        [1, 2, 3, 1, 2, 3],
-        [2, 1, 2, 3, 2, 3],
-        [1, 1, 2, 1, 3, 3],
-        [1, 2, 3, 3, 2, 3],
-    ]
-    text = [
-        ["必須", "参照", "参照", "必須", "必須", "必須"],
-        ["重要", "必須", "参照", "参照", "必須", "必須"],
-        ["参照", "重要", "必須", "参照", "重要", "必須"],
-        ["重要", "参照", "重要", "必須", "重要", "必須"],
-        ["参照", "参照", "重要", "参照", "必須", "必須"],
-        ["参照", "重要", "必須", "必須", "重要", "必須"],
-    ]
-    fig = go.Figure(
-        data=[
-            go.Heatmap(
-                z=z,
-                x=["照合", "版管理", "案件ID", "勘定分類", "時間粒度", "リネージ"],
-                y=["ERP実績", "予算・見込", "案件EAC", "調達・外注", "工程・納期", "マスタ"],
-                text=text,
-                texttemplate="%{text}",
-                textfont={"color": "#0f172a", "size": 12},
-                colorscale=[
-                    [0.0, "#cbd5e1"],
-                    [0.34, "#7dd3fc"],
-                    [0.67, "#5eead4"],
-                    [1.0, "#f59e0b"],
-                ],
-                showscale=False,
-                hovertemplate="Data: %{y}<br>Gate: %{x}<br>Priority: %{text}<extra></extra>",
-            )
-        ]
-    )
-    fig.update_layout(
-        title="Data domain x quality gate priority",
-        template="plotly_white",
-        height=380,
-        paper_bgcolor="#f8fafc",
-        plot_bgcolor="#f8fafc",
-        font={"color": "#0f172a", "size": 12},
-        title_font={"color": "#0f172a", "size": 15},
-        margin={"l": 12, "r": 12, "t": 54, "b": 34},
-    )
-    fig.update_xaxes(
-        tickfont={"color": "#334155", "size": 12},
-        title_font={"color": "#334155"},
-        linecolor="rgba(15, 23, 42, 0.22)",
-        gridcolor="rgba(15, 23, 42, 0.08)",
-    )
-    fig.update_yaxes(
-        tickfont={"color": "#334155", "size": 12},
-        title_font={"color": "#334155"},
-        linecolor="rgba(15, 23, 42, 0.22)",
-        gridcolor="rgba(15, 23, 42, 0.08)",
-    )
-    st.plotly_chart(fig, width="stretch")
-
-
 def render_data_foundation(data: dict[str, Any]) -> None:
     st.markdown('<div id="foundation-page"></div>', unsafe_allow_html=True)
     render_header("データ基盤 / Data Foundation", "AI投資の前に、経営データの分断を解く")
@@ -3033,9 +3331,10 @@ def render_data_foundation(data: dict[str, Any]) -> None:
             同じデータでも、手元Excelでつなぐだけでは「根拠を追えないAIコメント」に流れます。
             品質ゲートとTrusted FP&amp;A Data Foundationを通すことで、KPI、差異要因、案件リスク、AIコメント、経営判断が同じ根拠でつながります。
             </div>
-            """,
+            """
+            + foundation_flow_map_html(),
+            "図は概念図です。本番では既存DWH、EPM、ERP、案件管理システムの構成に合わせて接続点を設計します。",
         )
-        render_foundation_sankey(height=410)
     elif slide == 3:
         render_presentation_slide(
             "Data Domains",
@@ -3062,9 +3361,10 @@ def render_data_foundation(data: dict[str, Any]) -> None:
             AIコメントから元データまで戻れることが、経営会議で使う最低条件です。
             コメント、KPI、差異要因、案件、元データの線が切れていると、説明責任を果たす材料にはなりません。
             </div>
-            """,
+            """
+            + foundation_quality_gates_html(),
+            "まずは代表KPIと重点案件に絞り、この6つのゲートを月次運用に組み込みます。",
         )
-        render_foundation_quality_matrix()
     else:
         render_presentation_slide(
             "Executive Decisions",
@@ -3090,30 +3390,23 @@ def render_data_foundation(data: dict[str, Any]) -> None:
 def render_reference_architecture() -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
     render_header(
-        "リファレンスアーキテクチャ / Reference Architecture",
-        "AI-driven FP&Aの構築案と導入アプローチ",
+        "リファレンス構成 / Reference Architecture",
+        "AI-driven FP&Aの推奨構成と導入ステップ",
     )
 
     slide = render_presentation_controls(
         "reference_architecture",
-        [
-            "全体像",
-            "案1: 短期検証型",
-            "案2: 統制データマート型",
-            "案3: 全社AI基盤連携型",
-            "選び方",
-            "導入アプローチ",
-        ],
+        ["全体像", "推奨構成", "構成要素", "導入ステップ"],
     )
 
     if slide == 0:
         render_presentation_slide(
-            "Architecture Options",
-            "AI-driven FP&Aに唯一の正解はない。目的、データ成熟度、統制要件で構成を選ぶ。",
+            "Reference View",
+            "AI-driven FP&Aは、画面、データ、AI、統制を一体で設計する",
             """
             <div class="presentation-lead">
-            クライアントがこのデモのようなAI-driven FP&amp;Aを構築する場合、最初に決めるべきことは「どのLLMを使うか」ではありません。
-            どの会議で、どのKPIを、どの根拠データに戻れる状態で説明するかを決め、その成熟度に合うアーキテクチャを選びます。
+            最初に決めるべきことは、LLMの製品名ではありません。
+            どの会議で、どのKPIを、どの根拠データに戻れる状態で説明するかを定義し、その上にAIを置きます。
             </div>
             """
             + architecture_diagram_html(
@@ -3124,149 +3417,60 @@ def render_reference_architecture() -> None:
                     ("AI", "コメント生成", "根拠データを参照し、会議で使える説明文と確認事項を作る。"),
                     ("Control", "統制・運用", "権限、ログ、承認、品質ゲート、更新頻度を運用に組み込む。"),
                 ]
-            )
-            + presentation_cards_html(
-                [
-                    ("案1: 短期検証型", "既存Excel、EPM出力、BIデータを使い、短期間で画面とAIコメントの価値を検証する。"),
-                    ("案2: 統制データマート型", "FP&Aデータマートと品質ゲートを整備し、説明責任を持てる基盤を作る。"),
-                    ("案3: 全社AI基盤連携型", "全社データ基盤、AI基盤、業務ポータルと連携し、複数業務へ拡張する。"),
-                ],
-                columns=3,
             ),
-            "多くの場合は、案1で業務仮説を検証し、案2を本番化の基準案として設計するのが現実的です。",
+            "このデモは画面デモですが、本番化の焦点はFP&Aデータ基盤、AI実装、統制運用をつなぐことです。",
         )
     elif slide == 1:
         render_presentation_slide(
-            "Option 1",
-            "案1: 短期検証型",
+            "Recommended Architecture",
+            "推奨構成: 全社AI基盤とつなぐFP&A構成",
             architecture_diagram_html(
                 [
-                    ("Source", "既存出力", "Excel、EPM出力、BI抽出、案件リストを一時的に利用する。"),
-                    ("Prepare", "軽量加工", "PythonまたはSQLで代表KPI、比較軸、案件粒度に整える。"),
-                    ("Analyze", "差異ロジック", "予実差、見込差、要因分解を再現可能な形で固定する。"),
-                    ("AI", "コメント草案", "定型プロンプトと人のレビューで会議用コメントを作る。"),
-                    ("Experience", "検証画面", "StreamlitやBI試作で、経営会議の説明順に見せる。"),
+                    ("Enterprise Data", "全社データ基盤", "Lakehouse / DWH、MDM、データカタログ、リネージを活用する。"),
+                    ("FP&A Mart", "FP&Aデータマート", "実績、予算、見込、EAC、調達、工程、マスタを経営説明粒度で統合する。"),
+                    ("AI Platform", "AI共通基盤", "モデルゲートウェイ、RAG、ツール実行、評価、監査ログを共通化する。"),
+                    ("Workflow", "業務ワークフロー", "承認、タスク、通知、会議アジェンダ、アクション管理と連携する。"),
+                    ("Experience", "業務ポータル", "FP&A Cockpitを入口に、調達、PMO、経営管理へ横展開する。"),
                 ]
-            )
-            + presentation_table_html(
-                ["構成要素", "内容", "注意点"],
-                [
-                    ["データ", "既存Excel、EPM出力、BI抽出、案件リスト", "版管理と更新責任を明記しないと、本番化時に崩れやすい。"],
-                    ["処理", "Python / SQL / 軽量データ加工", "PoCでもKPI定義と比較軸は固定する。"],
-                    ["AI", "コメント草案、説明テンプレート、人の確認", "AIの自由回答より、根拠付きの定型説明を優先する。"],
-                    ["画面", "Streamlit / Power BI prototype", "機能一覧ではなく、会議で説明する順番に並べる。"],
-                ],
             )
             + presentation_cards_html(
                 [
-                    ("向いているケース", "4〜8週間で価値仮説を見せたい。現行データ基盤の整備を待たず、業務側の反応を取りたい。"),
-                    ("主なリスク", "Excel依存のままだと、データの版、根拠、更新責任が曖昧になり、本番運用へ移行しにくい。"),
-                    ("成功条件", "PoCでもKPI定義、比較軸、データ更新日、AIコメントの根拠を明記する。"),
+                    ("なぜこの構成か", "FP&Aだけで閉じず、全社データ基盤とAI共通基盤を使うことで、他業務にも横展開しやすい。"),
+                    ("最初の範囲", "代表KPI、代表会議、重点案件に絞り、FP&Aデータマートの最小構成から始める。"),
+                    ("成功条件", "AIコメントと根拠データ、権限、ログ、承認を最初から同じ運用設計に入れる。"),
                 ],
                 columns=3,
             ),
-            "この案は本番アーキテクチャではなく、何を作るべきかを決めるための検証アーキテクチャです。",
+            "短期PoCでも、この将来構成に接続できる形でKPI定義とデータ粒度を決めます。",
         )
     elif slide == 2:
         render_presentation_slide(
-            "Option 2",
-            "案2: 統制データマート型",
-            architecture_diagram_html(
-                [
-                    ("Source", "業務システム", "ERP、EPM、Project EAC、調達、工程、マスタを接続する。"),
-                    ("Foundation", "FP&Aデータマート", "実績照合、シナリオ版管理、案件ID統合、勘定科目対応を管理する。"),
-                    ("Semantic", "KPI定義層", "売上、利益、CF、差異要因、案件リスクを共通定義で提供する。"),
-                    ("AI", "コメント生成サービス", "根拠引用、プロンプト管理、出力ログ、レビュー状態を持つ。"),
-                    ("Experience", "FP&A Cockpit", "会議前確認、会議中説明、会議後アクションに使う。"),
-                ]
-            )
-            + presentation_table_html(
-                ["構成要素", "内容", "注意点"],
-                [
-                    ["データソース", "ERP、EPM、案件EAC、調達、工程、マスタ", "会計、計画、案件を同じ粒度でつなぐ。"],
-                    ["データ基盤", "FP&Aデータマート、品質ゲート、シナリオ版管理", "実績照合、案件ID、勘定科目、比較軸を統制する。"],
-                    ["定義層", "KPI定義、差異要因定義、権限付きメトリクス", "AIが読む前に、業務定義を固定する。"],
-                    ["AI層", "コメント生成API、根拠引用、プロンプト管理、出力ログ", "説明文と根拠データをセットで管理する。"],
-                    ["利用画面", "FP&A Cockpit、BI、Teams/Slack通知、会議資料出力", "説明、確認、アクションを同じ流れにする。"],
-                ],
-            )
-            + presentation_cards_html(
-                [
-                    ("標準推奨", "このデモの本番化に最も近い構成。FP&Aの説明責任とAI活用を両立しやすい。"),
-                    ("主なリスク", "データ統制を軽く見ると、AIの品質ではなく基礎データの不整合が問題になる。"),
-                    ("成功条件", "最初から全社ではなく、代表KPI、代表セグメント、代表会議で始める。"),
-                ],
-                columns=3,
-            ),
-            "クライアントに提案する本命案としては、この構成を基準に置くのが最も説明しやすいです。",
-        )
-    elif slide == 3:
-        render_presentation_slide(
-            "Option 3",
-            "案3: 全社AI基盤連携型",
-            architecture_diagram_html(
-                [
-                    ("Enterprise", "全社データ基盤", "Lakehouse / DWH、MDM、データカタログ、lineageを活用する。"),
-                    ("Analytics", "分析・予測層", "セマンティックモデル、予測、シナリオ、異常検知を組み込む。"),
-                    ("AI Platform", "AI共通基盤", "モデルゲートウェイ、RAG、ツール実行、評価、監査ログを共通化する。"),
-                    ("Workflow", "業務ワークフロー", "承認、タスク、通知、会議アジェンダ、アクション管理と連携する。"),
-                    ("Experience", "業務ポータル", "FP&Aだけでなく、調達、PMO、経営管理へ横展開する。"),
-                ]
-            )
-            + presentation_table_html(
-                ["構成要素", "内容", "注意点"],
-                [
-                    ["全社データ", "Lakehouse / DWH、MDM、data catalog、lineage", "FP&A以外の業務データにも広げる前提。"],
-                    ["分析機能", "semantic model、forecasting、scenario simulation", "予測、シナリオ、異常検知を組み込む。"],
-                    ["AI共通基盤", "RAG、tool calling、agent workflow、model gateway", "会話UIだけでなく、業務ツール実行まで扱う。"],
-                    ["統制", "RBAC、監査ログ、prompt/output evaluation", "権限、監査、評価を全社標準で管理する。"],
-                    ["利用体験", "FP&A portal、chat UI、BI embedded、workflow integration", "業務ワークフローに埋め込む。"],
-                ],
-            )
-            + presentation_cards_html(
-                [
-                    ("向いているケース", "全社データ基盤があり、FP&A以外にもAI分析基盤を横展開したい。"),
-                    ("主なリスク", "初期投資と設計範囲が大きい。業務ユースケースが曖昧だと大規模基盤だけが先行する。"),
-                    ("成功条件", "案2相当のFP&Aデータ定義を先に固め、その上に全社AI基盤を連携する。"),
-                ],
-                columns=3,
-            ),
-            "大企業向けの将来像として有効ですが、最初のPoCからこの構成を全部作る必要はありません。",
-        )
-    elif slide == 4:
-        render_presentation_slide(
-            "Decision Criteria",
-            "どの案を選ぶべきか",
+            "Building Blocks",
+            "主要な構成要素",
             presentation_table_html(
-                ["観点", "案1: 短期検証型", "案2: 統制データマート型", "案3: 全社AI基盤連携型"],
+                ["構成要素", "内容", "注意点"],
                 [
-                    ["初期スピード", "最速。短期デモ向き", "中。基礎設計が必要", "遅い。全社設計が必要"],
-                    ["説明責任", "弱い。人の補完が必要", "強い。根拠管理しやすい", "強いが設計が重い"],
-                    ["拡張性", "限定的", "FP&A領域で高い", "全社横展開に強い"],
-                    ["技術負荷", "低〜中", "中", "高"],
-                    ["向いている場面", "価値仮説検証", "本番化の標準案", "全社AI基盤化"],
+                    ["データ接続", "ERP、EPM、案件EAC、調達、工程、マスタ", "会計、計画、案件を同じ粒度でつなぐ。"],
+                    ["FP&Aデータマート", "実績照合、シナリオ版管理、案件ID統合、勘定分類、リネージ", "AIが読む前に根拠データを統制する。"],
+                    ["KPI定義層", "売上、利益、CF、EAC、差異要因、案件リスク", "会議ごとに数字が変わらないよう定義を固定する。"],
+                    ["AIサービス", "コメント生成、根拠引用、プロンプト管理、出力評価、監査ログ", "説明文と根拠データをセットで管理する。"],
+                    ["利用体験", "FP&A Cockpit、BI埋め込み、会議資料、Teams/Slack通知", "説明、確認、アクションを同じ流れにする。"],
                 ],
             )
-            + """
-            <div class="presentation-note">
-            推奨判断: 短期では案1で経営・FP&amp;A部門の反応を確認し、本番化は案2を軸にする。
-            全社データ基盤やAI共通基盤が既にある企業では、案3へ段階的に拡張します。
-            </div>
-            """
             + presentation_cards_html(
                 [
-                    ("最初の一手", "代表会議と代表KPIを決め、案1で業務仮説を短期検証する。"),
-                    ("本番化の基準", "根拠データと説明責任が重要なら、案2を標準案として設計する。"),
-                    ("将来像", "全社AI基盤がある場合は、案3で他業務への横展開まで設計する。"),
+                    ("デモから本番への置換", "このデモのParquetファイルを、DWHやFP&Aデータマートへ置き換える。"),
+                    ("AIの位置づけ", "AIは最後の文章化だけではなく、根拠付き説明と確認事項を返すサービスとして扱う。"),
+                    ("統制の焦点", "権限、監査ログ、プロンプト管理、出力レビューを業務運用に入れる。"),
                 ],
                 columns=3,
             ),
-            "選択肢を1つに固定せず、検証、本番化、全社展開で段階的に組み合わせます。",
+            "構成要素を分けておくと、短期PoC、本番化、全社展開を段階的に進めやすくなります。",
         )
     else:
         render_presentation_slide(
             "Implementation Approach",
-            "導入アプローチ: 会議テーマを起点に、データ基盤とAIを段階的に広げる",
+            "導入ステップ: 会議テーマを起点に、データ基盤とAIを段階的に広げる",
             presentation_flow_html(
                 [
                     ("0. 課題選定", "対象会議、KPI、説明したい差異、代表セグメントを決める。"),
@@ -3280,7 +3484,7 @@ def render_reference_architecture() -> None:
                 [
                     ("成果物", "KPI定義書、データソース棚卸し、To-Beアーキテクチャ、PoC画面、AIコメント評価観点、運用設計。"),
                     ("ガバナンス", "権限、監査ログ、プロンプト管理、出力レビュー、根拠リンク、モデル変更管理を初期から設計する。"),
-                    ("次の一手", "クライアントの代表ユースケースを1つ選び、案1で検証しながら案2の本番設計を並行して進める。"),
+                    ("次の一手", "代表ユースケースを1つ選び、短期PoCと推奨構成の本番設計を並行して進める。"),
                 ],
                 columns=3,
             ),
@@ -3289,13 +3493,13 @@ def render_reference_architecture() -> None:
 
 
 def render_tech_architecture(data: dict[str, Any]) -> None:
+    st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
     metadata = data.get("metadata", {})
     row_counts = metadata.get("row_counts", {})
     generated_at = format_generated_at(metadata)
     total_rows = row_count_text(metadata)
 
     render_header("技術構成 / Tech Architecture", "社内説明用: デモの構成、処理、公開運用、次の拡張を説明する")
-    st.caption("このページは社内・説明者向けです。クライアント向けダッシュボードURLには表示されません。")
 
     titles = [
         "全体像",
@@ -3359,7 +3563,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
                         "app.py",
                         "社内情報URL",
                         "当社側の説明者・管理者",
-                        "プレゼンテーション資料、当デモに関する情報",
+                        "説明資料、当デモに関する情報",
                         "社内説明、技術説明、データ確認用。",
                     ],
                 ],
@@ -3372,7 +3576,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
                 ],
                 columns=3,
             ),
-            "クライアント向けURLはダッシュボード専用、社内情報URLはプレゼンテーション資料と当デモ情報に絞っています。",
+            "クライアント向けURLはダッシュボード専用、社内情報URLは説明資料と当デモ情報に絞っています。",
         )
     elif slide == 2:
         render_presentation_slide(
@@ -3491,7 +3695,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
     elif slide == 5:
         render_presentation_slide(
             "Architecture / 06",
-            "画面は、本体デモ、プレゼンテーション資料、当デモ情報に分けています",
+            "画面は、本体デモ、説明資料、当デモ情報に分けています",
             presentation_table_html(
                 ["区分", "ページ", "目的", "クライアント向けURLでの表示"],
                 [
@@ -3499,8 +3703,8 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
                     ["本体デモ", "Variance Analysis", "差異要因をドリルダウンし、説明可能な粒度に分解する。", "表示する"],
                     ["本体デモ", "Project Risk", "利益悪化や納期遅延につながる案件を特定する。", "表示する"],
                     ["本体デモ", "AI Commentary", "会議資料に使う日本語コメントを生成する。", "表示する"],
-                    ["プレゼンテーション資料", "Client Pre/Post Demo", "デモ前後の説明、期待値調整、次アクション整理。", "表示しない"],
-                    ["プレゼンテーション資料", "Data Foundation", "AI活用に必要なデータ基盤の論点を説明する。", "表示しない"],
+                    ["説明資料", "Client Pre/Post Demo", "デモ前後の説明、期待値調整、次アクション整理。", "表示しない"],
+                    ["説明資料", "Data Foundation", "AI活用に必要なデータ基盤の論点を説明する。", "表示しない"],
                     ["当デモに関する情報", "Tech Architecture", "この技術構成資料。実装と運用を説明する。", "表示しない"],
                     ["当デモに関する情報", "Data Explorer", "架空データの列、件数、サンプルを検証する。", "表示しない"],
                 ],
