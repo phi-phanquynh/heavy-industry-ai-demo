@@ -1741,25 +1741,25 @@ def foundation_flow_map_html() -> str:
         (
             "Source data",
             "業務データ",
-            ["ERP実績", "EPM予算・見込", "案件EAC", "調達・外注", "工程・納期", "マスタ"],
+            ["財務・計画", "案件・調達・工程", "マスタ"],
             "",
         ),
         (
             "Quality gates",
             "品質ゲート",
-            ["照合", "版管理", "案件ID統合", "勘定分類", "時間粒度", "リネージ"],
+            ["数字の照合", "版と粒度の固定", "案件への紐付け"],
             "hot",
         ),
         (
             "Trusted foundation",
             "FP&Aデータ基盤",
-            ["共通KPI定義", "差異要因レイヤー", "案件リスクレイヤー", "根拠リンク", "更新・監査ログ"],
+            ["共通KPI", "差異とリスク", "根拠リンク"],
             "",
         ),
         (
             "AI-driven FP&A",
             "経営説明",
-            ["根拠付きAIコメント", "案件アクション", "会議資料", "意思決定", "次回更新"],
+            ["根拠付きコメント", "案件アクション", "意思決定"],
             "ai",
         ),
     ]
@@ -1782,33 +1782,18 @@ def foundation_quality_gates_html() -> str:
     gates = [
         (
             "RECONCILE",
-            "実績照合",
-            "ERP実績、補助元帳、案件実績が同じ売上・利益に戻ることを確認する。",
+            "数字が戻れる",
+            "AIコメントの数字が、ERP実績や案件実績まで戻れる状態にする。",
         ),
         (
-            "VERSION",
-            "版管理",
-            "予算、最新見込、前回見込、実績の比較軸と締め時点を固定する。",
-        ),
-        (
-            "PROJECT ID",
-            "案件ID統合",
-            "財務、EAC、調達、工程を案件単位で結び、原因を案件アクションへ落とす。",
-        ),
-        (
-            "ACCOUNT MAP",
-            "勘定分類",
-            "材料費、外注費、設計変更、為替、品質費などの要因分類をそろえる。",
-        ),
-        (
-            "TIME GRAIN",
-            "時間粒度",
-            "月次、四半期、検収時期、キャッシュ発生時期を同じ説明軸にそろえる。",
+            "CONTEXT",
+            "比較軸が揃っている",
+            "予算、最新見込、前回見込、実績の締め時点と粒度を固定する。",
         ),
         (
             "LINEAGE",
-            "根拠追跡",
-            "AIコメントからKPI、差異要因、案件、元データまで戻れる状態にする。",
+            "案件に落ちる",
+            "財務、EAC、調達、工程を案件単位で結び、打ち手へつなげる。",
         ),
     ]
     cards = "".join(
@@ -1954,15 +1939,18 @@ def render_client_pre_demo(kpis: pd.DataFrame, risk: pd.DataFrame, metadata: dic
     elif slide == 3:
         render_presentation_slide(
             "Demo Flow",
-            "デモで見る流れ",
-            presentation_flow_html(
+            "デモは、経営説明の一本の流れとして見ます",
+            """
+            <div class="presentation-lead">
+            画面を順番に紹介するのではなく、経営会議で説明するときの思考の流れに沿って見ます。
+            まず全社KPIの違和感をつかみ、差異の主因を絞り、最後に案件アクションとコメントへ落とします。
+            </div>
+            """
+            + presentation_cards_html(
                 [
-                    ("1. Dashboard", "売上上振れと利益・CF悪化が同時に起きている全社状況を確認します。"),
-                    ("2. Variance Analysis", "予算、見込、前年などの比較軸で、差異の主要因を分解します。"),
-                    ("3. Project Risk", "利益悪化につながるCritical/High案件を特定します。"),
-                    ("4. AI Commentary", "分析結果を経営会議で使える日本語コメントに変換します。"),
-                    ("5. Data Foundation", "AI活用に必要なデータ、品質管理、導入ステップを確認します。"),
-                    ("6. Reference Architecture", "複数の構築案と、本番化に向けた導入アプローチを確認します。"),
+                    ("全社KPI", "売上は伸びているのに、利益率とキャッシュフローが悪化する矛盾を最初に捉えます。"),
+                    ("差異と案件", "差異要因を追い、利益悪化につながる案件へ話を落とします。"),
+                    ("説明と実装論点", "AIコメントを見たうえで、なぜデータ基盤が必要なのかへつなげます。"),
                 ],
                 columns=3,
             ),
@@ -1972,14 +1960,15 @@ def render_client_pre_demo(kpis: pd.DataFrame, risk: pd.DataFrame, metadata: dic
         render_presentation_slide(
             "Assumptions",
             "このデモの前提",
-            presentation_table_html(
-                ["項目", "内容"],
-                [
-                    ["データ", "すべて架空データです。実在企業の財務・案件情報は使っていません。"],
-                    ["目的", "完成済み製品の紹介ではなく、AIを使ったFP&A差異分析の完成イメージと実装論点を共有することです。"],
-                    ["見てほしい観点", "画面の見た目だけでなく、どのデータがつながると経営説明が速く・深く・再現可能になるかを確認してください。"],
-                ],
-            ),
+            """
+            <div class="presentation-lead">
+            数値はすべて架空です。実在企業の財務・案件情報は使っていません。
+            ここで見ていただきたいのは、完成済み製品ではなく、AI-driven FP&amp;Aがどのような経営説明体験になるかです。
+            </div>
+            <div class="presentation-note">
+            画面の見た目だけでなく、どのデータがつながると説明が速く、深く、再現可能になるかを確認してください。
+            </div>
+            """,
             "この前提を置いたうえで、次のダッシュボード以降を確認します。",
         )
 
@@ -2178,30 +2167,39 @@ def render_client_post_demo() -> None:
         render_presentation_slide(
             "Assessment",
             "自社適用に向けた確認観点",
-            presentation_table_html(
-                ["論点", "確認すること", "初期アウトプット"],
+            """
+            <div class="presentation-lead">
+            次に確認すべきことは多くありません。最初の会議テーマを選び、その説明に必要なデータとKPI定義を確認し、
+            PoCで扱う範囲を小さく決めます。
+            </div>
+            """
+            + presentation_cards_html(
                 [
-                    ["ユースケース", "予実差、見込差、案件リスク、CF悪化など、最初に解きたい会議テーマを1つ選ぶ。", "PoC対象KPIと対象会議"],
-                    ["データソース", "ERP、EPM、案件EAC、調達、工程、為替、マスタの所在と責任部門を確認する。", "データソース棚卸し"],
-                    ["KPI定義", "売上、営業利益、利益率、CF、EACなどの計算式、粒度、比較軸を固定する。", "KPI・差異要因定義書"],
-                    ["品質ゲート", "実績照合、シナリオ版管理、案件ID紐づけ、勘定科目マッピング、根拠追跡を確認する。", "データ品質チェックリスト"],
-                    ["PoC範囲", "代表セグメント、代表案件、代表KPIに絞り、短期間で価値を検証する。", "PoCスコープと成功条件"],
+                    ("会議テーマ", "予実差、見込差、案件リスク、CF悪化など、最初に改善したい説明業務を一つに絞ります。"),
+                    ("根拠データ", "ERP、EPM、案件EAC、調達、工程、マスタの所在と責任部門を確認します。"),
+                    ("PoC範囲", "代表セグメント、代表案件、代表KPIに限定し、短期間で価値を検証します。"),
                 ],
+                columns=3,
             ),
-            "この表を次回ディスカッションの確認リストとして使います。",
+            "詳細なチェックリストは、この3点が決まってから作る方が会話が進みます。",
         )
     elif slide == 3:
         render_presentation_slide(
             "Next Steps",
             "次の進め方",
-            presentation_flow_html(
+            """
+            <div class="presentation-lead">
+            進め方は、最初から大きな基盤を作るのではなく、説明責任が高い会議テーマから小さく始めます。
+            そのテーマで必要なデータとKPIを固め、画面とAIコメントを検証し、月次運用に組み込みます。
+            </div>
+            """
+            + presentation_flow_html(
                 [
-                    ("1. 課題選定", "経営会議、予実会議、見込更新など、最初に改善したい説明業務を選びます。"),
-                    ("2. データ棚卸し", "必要データの所在、粒度、更新頻度、品質課題を確認します。"),
-                    ("3. KPI設計", "比較軸、KPI、差異要因、案件リスクの定義をそろえます。"),
-                    ("4. PoC構築", "代表領域に絞り、ダッシュボード、差異分解、AIコメントを検証します。"),
-                    ("5. 業務定着", "月次サイクル、承認プロセス、データ品質運用へ組み込みます。"),
-                ]
+                    ("課題を絞る", "最初に変えたい会議とKPIを決めます。"),
+                    ("根拠をそろえる", "必要データ、比較軸、案件粒度を固定します。"),
+                    ("運用に入れる", "PoC後に月次サイクルと承認プロセスへ組み込みます。"),
+                ],
+                columns=3,
             ),
             "最初から全社展開を狙わず、説明責任が高い会議テーマに絞って検証します。",
         )
@@ -2211,13 +2209,11 @@ def render_client_post_demo() -> None:
             "推奨する次回アジェンダ",
             presentation_cards_html(
                 [
-                    ("1. 代表ユースケース", "自社で最初に改善したい会議テーマを1つ選びます。"),
-                    ("2. 必要データ", "ERP、EPM、案件EAC、調達、工程、マスタの所在と粒度を確認します。"),
-                    ("3. KPI定義", "比較軸、計算式、更新頻度、責任部門を揃えます。"),
-                    ("4. 品質課題", "欠損、版ずれ、案件ID不一致、勘定科目マッピングの課題を整理します。"),
-                    ("5. アーキテクチャ案", "短期検証型、統制データマート型、全社AI基盤連携型のどれを軸にするかを決めます。"),
+                    ("ユースケース", "自社で最初に改善したい会議テーマを一つ選びます。"),
+                    ("データとKPI", "必要データの所在、粒度、比較軸、責任部門を確認します。"),
+                    ("進め方", "短期PoCで何を示し、どの範囲を本番設計に進めるかを決めます。"),
                 ],
-                columns=5,
+                columns=3,
             ),
             "AIコメント生成より前に、整えるべきデータ基盤の範囲を明確にします。",
         )
@@ -3339,16 +3335,19 @@ def render_data_foundation(data: dict[str, Any]) -> None:
         render_presentation_slide(
             "Data Domains",
             "つなぐべきデータ",
-            presentation_table_html(
-                ["Domain", "Source", "Why it matters"],
+            """
+            <div class="presentation-lead">
+            すべてのデータを最初から集める必要はありません。経営説明に効く起点は、財務の比較軸、案件の見通し、
+            そして両者を結ぶマスタです。この3つがつながると、AIコメントの根拠が追えるようになります。
+            </div>
+            """
+            + presentation_cards_html(
                 [
-                    ["Actuals / 実績", "ERP, GL, sub-ledger", "予算・見込との差異説明の起点"],
-                    ["Budget & Forecast / 予算・見込", "EPM, planning system", "比較軸の正本"],
-                    ["Project EAC / 案件見積総原価", "Project control, PMO", "赤字化リスクと設計変更影響の中核"],
-                    ["Procurement / 調達・外注", "Procurement, supplier contracts", "材料費・外注費・長納期部品の影響"],
-                    ["Schedule / 工程・納期", "Project schedule, milestones", "計上時期、検収遅れ、CF悪化"],
-                    ["Master Data / マスタ", "MDM, ERP master", "セグメント、案件、勘定科目、顧客の定義"],
+                    ("財務の比較軸", "ERP実績とEPMの予算・見込を、同じ期間と粒度で比較できる状態にします。"),
+                    ("案件の見通し", "EAC、調達、工程の変化を案件単位で見て、利益悪化の原因を説明します。"),
+                    ("共通マスタ", "セグメント、案件、勘定科目、顧客の定義をそろえ、数字の意味をぶらさないようにします。"),
                 ],
+                columns=3,
             ),
             "AIコメントの精度は、これらのデータが同じ粒度と定義でつながるかで決まります。",
         )
@@ -3363,19 +3362,25 @@ def render_data_foundation(data: dict[str, Any]) -> None:
             </div>
             """
             + foundation_quality_gates_html(),
-            "まずは代表KPIと重点案件に絞り、この6つのゲートを月次運用に組み込みます。",
+            "まずは代表KPIと重点案件に絞り、この3つの品質ゲートを月次運用に組み込みます。",
         )
     else:
         render_presentation_slide(
             "Executive Decisions",
             "経営層が決めること",
-            presentation_table_html(
-                ["Theme", "Executive question", "Initial scope"],
+            """
+            <div class="presentation-lead">
+            経営層が決めるべきことは、AIツールの種類ではありません。
+            どの会議で、どのKPIを、どの事業領域から説明可能にするかです。
+            </div>
+            """
+            + presentation_cards_html(
                 [
-                    ["KPI", "どの経営指標を、AIで説明責任を果たせる状態にするか", "売上、営業利益、営業利益率、キャッシュフロー"],
-                    ["Meeting", "どの会議の説明品質と意思決定スピードを変えるか", "月次経営会議、予実会議、見込更新会議"],
-                    ["Business area", "どのセグメント・案件タイプから始めるか", "赤字化リスクが高い案件群、EAC悪化が大きい事業"],
+                    ("会議", "月次経営会議、予実会議、見込更新会議のどこから説明品質を変えるか。"),
+                    ("KPI", "売上、営業利益、利益率、キャッシュフローのどこに説明責任を持たせるか。"),
+                    ("開始範囲", "赤字化リスクやEAC悪化が大きい案件群から始め、成果を見せやすくする。"),
                 ],
+                columns=3,
             )
             + """
             <div class="presentation-note">
@@ -3391,12 +3396,12 @@ def render_reference_architecture() -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
     render_header(
         "リファレンス構成 / Reference Architecture",
-        "AI-driven FP&Aの推奨構成と導入ステップ",
+        "AI-driven FP&Aの推奨構成を説明する",
     )
 
     slide = render_presentation_controls(
         "reference_architecture",
-        ["全体像", "推奨構成", "構成要素", "導入ステップ"],
+        ["全体像", "推奨構成", "構成要素"],
     )
 
     if slide == 0:
@@ -3411,11 +3416,9 @@ def render_reference_architecture() -> None:
             """
             + architecture_diagram_html(
                 [
-                    ("Business", "会議テーマ", "予実会議、見込更新、案件リスクなど最初に改善する説明業務を決める。"),
-                    ("Data", "根拠データ", "ERP、EPM、EAC、調達、工程、マスタを同じ粒度でつなぐ。"),
-                    ("Logic", "KPI・差異定義", "売上、利益、CF、案件リスク、差異要因の計算式を固定する。"),
-                    ("AI", "コメント生成", "根拠データを参照し、会議で使える説明文と確認事項を作る。"),
-                    ("Control", "統制・運用", "権限、ログ、承認、品質ゲート、更新頻度を運用に組み込む。"),
+                    ("Business", "会議テーマ", "最初に変えたい経営説明を決める。"),
+                    ("Data", "根拠データ", "財務、案件、マスタを同じ粒度でつなぐ。"),
+                    ("AI & Control", "AIと統制", "コメント生成、権限、ログ、承認を同じ運用に入れる。"),
                 ]
             ),
             "このデモは画面デモですが、本番化の焦点はFP&Aデータ基盤、AI実装、統制運用をつなぐことです。",
@@ -3426,20 +3429,17 @@ def render_reference_architecture() -> None:
             "推奨構成: 全社AI基盤とつなぐFP&A構成",
             architecture_diagram_html(
                 [
-                    ("Enterprise Data", "全社データ基盤", "Lakehouse / DWH、MDM、データカタログ、リネージを活用する。"),
-                    ("FP&A Mart", "FP&Aデータマート", "実績、予算、見込、EAC、調達、工程、マスタを経営説明粒度で統合する。"),
-                    ("AI Platform", "AI共通基盤", "モデルゲートウェイ、RAG、ツール実行、評価、監査ログを共通化する。"),
-                    ("Workflow", "業務ワークフロー", "承認、タスク、通知、会議アジェンダ、アクション管理と連携する。"),
-                    ("Experience", "業務ポータル", "FP&A Cockpitを入口に、調達、PMO、経営管理へ横展開する。"),
+                    ("Data", "全社データ基盤", "DWH、MDM、リネージを活用し、FP&Aデータマートへ渡す。"),
+                    ("AI", "AI共通基盤", "モデルゲートウェイ、RAG、評価、監査ログを共通化する。"),
+                    ("Workflow", "業務ポータル", "FP&A Cockpitを入口に、承認、通知、会議アクションへつなぐ。"),
                 ]
             )
             + presentation_cards_html(
                 [
-                    ("なぜこの構成か", "FP&Aだけで閉じず、全社データ基盤とAI共通基盤を使うことで、他業務にも横展開しやすい。"),
+                    ("設計の考え方", "FP&Aだけで閉じず、全社データ基盤とAI共通基盤に接続できる形で作る。"),
                     ("最初の範囲", "代表KPI、代表会議、重点案件に絞り、FP&Aデータマートの最小構成から始める。"),
-                    ("成功条件", "AIコメントと根拠データ、権限、ログ、承認を最初から同じ運用設計に入れる。"),
                 ],
-                columns=3,
+                columns=2,
             ),
             "短期PoCでも、この将来構成に接続できる形でKPI定義とデータ粒度を決めます。",
         )
@@ -3447,48 +3447,21 @@ def render_reference_architecture() -> None:
         render_presentation_slide(
             "Building Blocks",
             "主要な構成要素",
-            presentation_table_html(
-                ["構成要素", "内容", "注意点"],
-                [
-                    ["データ接続", "ERP、EPM、案件EAC、調達、工程、マスタ", "会計、計画、案件を同じ粒度でつなぐ。"],
-                    ["FP&Aデータマート", "実績照合、シナリオ版管理、案件ID統合、勘定分類、リネージ", "AIが読む前に根拠データを統制する。"],
-                    ["KPI定義層", "売上、利益、CF、EAC、差異要因、案件リスク", "会議ごとに数字が変わらないよう定義を固定する。"],
-                    ["AIサービス", "コメント生成、根拠引用、プロンプト管理、出力評価、監査ログ", "説明文と根拠データをセットで管理する。"],
-                    ["利用体験", "FP&A Cockpit、BI埋め込み、会議資料、Teams/Slack通知", "説明、確認、アクションを同じ流れにする。"],
-                ],
-            )
+            """
+            <div class="presentation-lead">
+            構成要素は多く見えますが、説明するときは三層で十分です。
+            根拠データを整え、AIがその根拠を読めるようにし、会議とアクションに戻す。
+            </div>
+            """
             + presentation_cards_html(
                 [
-                    ("デモから本番への置換", "このデモのParquetファイルを、DWHやFP&Aデータマートへ置き換える。"),
-                    ("AIの位置づけ", "AIは最後の文章化だけではなく、根拠付き説明と確認事項を返すサービスとして扱う。"),
-                    ("統制の焦点", "権限、監査ログ、プロンプト管理、出力レビューを業務運用に入れる。"),
+                    ("Data foundation", "ERP、EPM、案件EAC、調達、工程、マスタを、FP&Aデータマートで同じ説明粒度にそろえる。"),
+                    ("AI service", "AIは自由回答ではなく、根拠引用、プロンプト管理、出力評価を持つ説明サービスとして扱う。"),
+                    ("Experience", "Cockpit、BI、会議資料、通知をつなぎ、確認とアクションを同じ流れにする。"),
                 ],
                 columns=3,
             ),
             "構成要素を分けておくと、短期PoC、本番化、全社展開を段階的に進めやすくなります。",
-        )
-    else:
-        render_presentation_slide(
-            "Implementation Approach",
-            "導入ステップ: 会議テーマを起点に、データ基盤とAIを段階的に広げる",
-            presentation_flow_html(
-                [
-                    ("0. 課題選定", "対象会議、KPI、説明したい差異、代表セグメントを決める。"),
-                    ("1. データ棚卸し", "ERP、EPM、EAC、調達、工程、マスタの所在、粒度、責任者を確認する。"),
-                    ("2. MVP構築", "代表KPIと代表案件に絞り、ダッシュボード、差異分解、AIコメントを作る。"),
-                    ("3. 統制設計", "KPI定義、品質ゲート、権限、ログ、承認フロー、根拠追跡を設計する。"),
-                    ("4. 本番化", "データ連携を自動化し、月次FP&Aプロセスと会議運営に組み込む。"),
-                ]
-            )
-            + presentation_cards_html(
-                [
-                    ("成果物", "KPI定義書、データソース棚卸し、To-Beアーキテクチャ、PoC画面、AIコメント評価観点、運用設計。"),
-                    ("ガバナンス", "権限、監査ログ、プロンプト管理、出力レビュー、根拠リンク、モデル変更管理を初期から設計する。"),
-                    ("次の一手", "代表ユースケースを1つ選び、短期PoCと推奨構成の本番設計を並行して進める。"),
-                ],
-                columns=3,
-            ),
-            "AI-driven FP&Aはツール導入ではなく、経営説明プロセスとデータ基盤を再設計する取り組みです。",
         )
 
 
@@ -3517,24 +3490,22 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
         render_presentation_slide(
             "Architecture / 01",
             "このデモは、架空データを使ったFP&A差異分析コックピットです",
-            presentation_metric_cards_html(
+            f"""
+            <div class="presentation-lead">
+            このデモは、実データや外部AI APIに依存せず、架空データだけでAI-driven FP&amp;Aの体験を見せる構成です。
+            Python、Parquet、Streamlit Cloudを使い、短期間で見せられる一方、本番化時はデータ基盤とAI統制へ差し替える前提です。
+            </div>
+            <div class="presentation-note">
+            現在のデータは {escape(total_rows)}。生成日時は {escape(generated_at)} です。
+            </div>
+            """
+            + presentation_cards_html(
                 [
-                    ("App", "Streamlit", "Pythonだけで画面、集計、可視化を構成"),
-                    ("Data", total_rows, f"生成日時: {generated_at}"),
-                    ("AI", "No external API", "デモではAPIキーや外部AIサービスを使わない"),
-                    ("Deploy", "Streamlit Cloud", "GitHub上のエントリーポイント別に公開"),
+                    ("画面", "Streamlitでダッシュボードと説明資料を一体化しています。"),
+                    ("データ", "架空のParquetとJSONを読み込み、pandasでKPIとリスクを集計します。"),
+                    ("公開", "GitHubの入口ファイルを分け、Streamlit CloudでURLごとの体験を出し分けます。"),
                 ],
-                columns=4,
-            )
-            + presentation_flow_html(
-                [
-                    ("1. データ生成", "scripts/generate_demo_data.py が完全な架空データを作成"),
-                    ("2. 保存", "ParquetとJSONでリポジトリ内の data フォルダに保持"),
-                    ("3. 読み込み", "Streamlit cache で高速にロード"),
-                    ("4. 分析", "pandasでKPI、差異、案件リスクを集計"),
-                    ("5. 体験", "PlotlyとStreamlitでダッシュボードと説明資料を表示"),
-                ],
-                columns=5,
+                columns=3,
             ),
             "本質は、AI単体ではなく、信頼できるFP&Aデータ基盤と説明プロセスを体験させることです。",
         )
@@ -3542,39 +3513,18 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
         render_presentation_slide(
             "Architecture / 02",
             "URLを分けるために、入口ファイルを3つに分けています",
-            presentation_table_html(
-                ["入口ファイル", "公開対象", "主な利用者", "表示されるページ", "用途"],
-                [
-                    [
-                        "client_app.py",
-                        "https://heavy-industry-ai-demo-client.streamlit.app/",
-                        "クライアント",
-                        "ダッシュボード、差異分析、案件リスク、AIコメント",
-                        "相手が触る本体デモ。説明者向け資料は出さない。",
-                    ],
-                    [
-                        "presenter_app.py",
-                        "社内・説明者向けURL",
-                        "当社側の説明者",
-                        "閲覧前/後の説明、データ基盤、技術構成、データ確認",
-                        "商談や社内説明で投影する支援資料。",
-                    ],
-                    [
-                        "app.py",
-                        "社内情報URL",
-                        "当社側の説明者・管理者",
-                        "説明資料、当デモに関する情報",
-                        "社内説明、技術説明、データ確認用。",
-                    ],
-                ],
-            )
+            """
+            <div class="presentation-lead">
+            コードベースは一つですが、入口ファイルを分けることでURLごとに体験を変えています。
+            クライアントには触る画面だけを見せ、当社側には説明資料と内部確認ページを残します。
+            </div>
+            """
             + presentation_cards_html(
                 [
-                    ("なぜ分けるか", "クライアントが触るURLには、本体デモ以外の説明者向けページを出さないため。"),
-                    ("アクセス制限との違い", "認証ではなく、Streamlit Cloudのデプロイ単位を分けて見せる範囲を制御している。"),
-                    ("運用の利点", "同じコードベースを使いながら、URLごとに体験を変えられる。"),
+                    ("client_app.py", "クライアントが操作する本体デモだけを表示します。"),
+                    ("presenter_app.py / app.py", "説明者用資料、技術構成、データ確認を当社側で使います。"),
                 ],
-                columns=3,
+                columns=2,
             ),
             "クライアント向けURLはダッシュボード専用、社内情報URLは説明資料と当デモ情報に絞っています。",
         )
@@ -3582,46 +3532,17 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
         render_presentation_slide(
             "Architecture / 03",
             "データは全て架空で、Parquetを中心に軽量に配布しています",
-            presentation_table_html(
-                ["ファイル", "役割", "粒度", "現在行数"],
-                [
-                    [
-                        "data/dim_projects.parquet",
-                        "案件、セグメント、顧客、地域、契約形態などのマスタ",
-                        "1行 = 1案件",
-                        str(row_counts.get("dim_projects", "N/A")),
-                    ],
-                    [
-                        "data/fact_finance.parquet",
-                        "Actual/Budget/Forecastの売上、利益、キャッシュフロー",
-                        "1行 = 案件 x 月 x シナリオ",
-                        str(row_counts.get("fact_finance", "N/A")),
-                    ],
-                    [
-                        "data/fact_variance_drivers.parquet",
-                        "差異要因を価格、数量、調達、工程、為替などに分解",
-                        "1行 = 案件 x 月 x KPI x 要因",
-                        str(row_counts.get("fact_variance_drivers", "N/A")),
-                    ],
-                    [
-                        "data/project_risk.parquet",
-                        "案件リスク、EAC乖離、遅延、調達圧力、品質問題",
-                        "1行 = 1案件の最新リスク状態",
-                        str(row_counts.get("project_risk", "N/A")),
-                    ],
-                    [
-                        "data/demo_metadata.json",
-                        "生成日時、総行数、生成条件、デモ前提",
-                        "1ファイル = データセット説明",
-                        "metadata",
-                    ],
-                ],
-            )
+            """
+            <div class="presentation-lead">
+            デモではDBに接続せず、架空データをファイルとして持っています。
+            この構成は公開が速く、守秘情報を含めずに商談で使える一方、本番ではDWHやFP&Aデータマートへ置き換える想定です。
+            </div>
+            """
             + presentation_cards_html(
                 [
-                    ("配布しやすい", "DB接続なしでStreamlit Cloudに置けるため、デモ公開が速い。"),
-                    ("説明しやすい", "実データではなく架空データなので、守秘情報を含めずに商談で使える。"),
-                    ("本番化しやすい", "本番ではParquet部分をDWHやデータマートに置き換える想定。"),
+                    ("案件マスタ", f"案件やセグメントの軸を持ちます。現在 {escape(str(row_counts.get('dim_projects', 'N/A')))} 行。"),
+                    ("財務・差異", "実績、予算、見込、差異要因を月次粒度で保持します。"),
+                    ("案件リスク", f"EAC、遅延、調達圧力などを最新状態として持ちます。現在 {escape(str(row_counts.get('project_risk', 'N/A')))} 行。"),
                 ],
                 columns=3,
             ),
@@ -3631,40 +3552,18 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
         render_presentation_slide(
             "Architecture / 04",
             "分析処理は、読み込み、KPI生成、フィルタ、可視化に分けています",
-            presentation_table_html(
-                ["層", "主な処理", "実装上の役割", "本番化時の置き換え先"],
+            """
+            <div class="presentation-lead">
+            実装上は多くの関数に分かれていますが、説明としては「読み込む」「意味づける」「見せる」の三段階です。
+            本番化する場合は、読み込みと意味づけの部分を外部のデータ基盤やセマンティックレイヤーへ寄せます。
+            </div>
+            """
+            + architecture_diagram_html(
                 [
-                    [
-                        "Load",
-                        "load_data()",
-                        "Parquet/JSONを読み、欠損時はセットアップ案内を表示する。",
-                        "DWH、Lakehouse、API、権限付きデータサービス",
-                    ],
-                    [
-                        "Cache",
-                        "@st.cache_data",
-                        "Streamlit上で同じデータ読み込みを再利用し、画面操作を軽くする。",
-                        "データ更新時刻、パーティション、クエリキャッシュ管理",
-                    ],
-                    [
-                        "Semantic layer",
-                        "build_project_month_kpis()",
-                        "売上、営業利益、利益率、CF、差異を同じ定義で計算する。",
-                        "KPI定義テーブル、dbt、BIセマンティックレイヤー",
-                    ],
-                    [
-                        "Interaction",
-                        "期間、セグメント、KPI、比較軸のフィルタ",
-                        "説明者が会議中に論点を切り替えられるようにする。",
-                        "ロール別ビュー、案件権限、保存済みシナリオ",
-                    ],
-                    [
-                        "Visual",
-                        "Plotly charts",
-                        "カード、トレンド、ウォーターフォール、リスク散布図を表示する。",
-                        "正式BI、埋め込みアプリ、経営会議ポータル",
-                    ],
-                ],
+                    ("Load", "読み込む", "Parquet/JSONを読み、キャッシュで画面操作を軽くする。"),
+                    ("Semantic", "意味づける", "売上、利益、CF、差異、案件リスクを同じ定義で計算する。"),
+                    ("Experience", "見せる", "PlotlyとStreamlitで、会議中に論点を切り替えられるようにする。"),
+                ]
             ),
             "StreamlitはMVPの画面実装に適しており、本番ではデータ処理と権限制御を外部基盤に寄せます。",
         )
@@ -3672,23 +3571,18 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
         render_presentation_slide(
             "Architecture / 05",
             "AIコメントは、現時点では外部APIを使わない決定的な生成です",
-            presentation_flow_html(
-                [
-                    ("入力", "選択された期間、KPI、セグメント、差異要因、案件リスク"),
-                    ("要約", "差異の方向、金額影響、利益率/CF影響をpandasで集計"),
-                    ("論点抽出", "価格、調達、工程、為替、品質、案件遅延などの上位要因を抽出"),
-                    ("文章化", "経営会議で使える日本語コメントの型に埋め込む"),
-                    ("出力", "要旨、主因、確認事項、次アクションを提示"),
-                ],
-                columns=5,
-            )
+            """
+            <div class="presentation-lead">
+            デモのAIコメントは、外部APIを呼ばずに、集計済みの数値と差異要因を日本語テンプレートへ落としています。
+            そのため公開デモとして安定し、APIキーや通信失敗の影響を受けません。
+            </div>
+            """
             + presentation_cards_html(
                 [
-                    ("デモでAPIを使わない理由", "APIキー管理、従量課金、通信失敗を避け、公開デモを安定させるため。"),
-                    ("現在の限界", "LLMの柔軟な言い換えや質疑応答は未実装。根拠は集計済みデータに限定される。"),
-                    ("本番での拡張", "OpenAI等を使う場合は、Secrets管理、プロンプト管理、根拠ログ、承認フローを追加する。"),
+                    ("現在", "期間、KPI、セグメント、差異要因、案件リスクを集計し、定型コメントに変換します。"),
+                    ("本番", "LLMを使う場合は、Secrets管理、根拠引用、出力ログ、承認フローを追加します。"),
                 ],
-                columns=3,
+                columns=2,
             ),
             "クライアントには『AIの前に、説明可能なデータとロジックが必要』というメッセージを伝えます。",
         )
@@ -3696,18 +3590,18 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
         render_presentation_slide(
             "Architecture / 06",
             "画面は、本体デモ、説明資料、当デモ情報に分けています",
-            presentation_table_html(
-                ["区分", "ページ", "目的", "クライアント向けURLでの表示"],
+            """
+            <div class="presentation-lead">
+            画面の分け方はシンプルです。相手に触ってもらうURLには本体デモだけを出し、
+            当社側のURLには説明資料、技術構成、データ確認を残します。
+            </div>
+            """
+            + presentation_cards_html(
                 [
-                    ["本体デモ", "Dashboard", "経営トップ向けに全社KPIと異常値をつかむ。", "表示する"],
-                    ["本体デモ", "Variance Analysis", "差異要因をドリルダウンし、説明可能な粒度に分解する。", "表示する"],
-                    ["本体デモ", "Project Risk", "利益悪化や納期遅延につながる案件を特定する。", "表示する"],
-                    ["本体デモ", "AI Commentary", "会議資料に使う日本語コメントを生成する。", "表示する"],
-                    ["説明資料", "Client Pre/Post Demo", "デモ前後の説明、期待値調整、次アクション整理。", "表示しない"],
-                    ["説明資料", "Data Foundation", "AI活用に必要なデータ基盤の論点を説明する。", "表示しない"],
-                    ["当デモに関する情報", "Tech Architecture", "この技術構成資料。実装と運用を説明する。", "表示しない"],
-                    ["当デモに関する情報", "Data Explorer", "架空データの列、件数、サンプルを検証する。", "表示しない"],
+                    ("クライアントが触る", "Dashboard、Variance Analysis、Project Risk、AI Commentaryだけを表示します。"),
+                    ("当社側が使う", "デモ前後の説明、データ基盤、技術構成、データ確認を投影・確認に使います。"),
                 ],
+                columns=2,
             ),
             "『相手に触ってもらう画面』と『こちらが説明する画面』を分けることで、デモ体験が混ざらないようにしています。",
         )
@@ -3715,47 +3609,37 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
         render_presentation_slide(
             "Architecture / 07",
             "公開運用は、GitHubを正とし、Streamlit Cloudが読み込む形です",
-            presentation_flow_html(
+            """
+            <div class="presentation-lead">
+            長期運用では、GitHubを正にして変更履歴を残します。
+            ローカルで編集し、動作確認してからpushすることで、公開環境とのズレを小さくします。
+            </div>
+            """
+            + presentation_cards_html(
                 [
-                    ("1. ローカル編集", "cloneした作業フォルダで app.py、client_app.py、presenter_app.py を更新"),
-                    ("2. 動作確認", "py_compile と Streamlit AppTest で主要導線を確認"),
-                    ("3. commit", "GitHub Desktopまたはgitで変更理由を残す"),
-                    ("4. push", "GitHubのmainへ反映"),
-                    ("5. redeploy", "Streamlit Cloudが更新を検知し、各URLへ反映"),
+                    ("編集と確認", "cloneした作業フォルダで修正し、py_compileやAppTestで主要導線を確認します。"),
+                    ("commit / push", "GitHub Desktopまたはgitで変更理由を残し、mainへ反映します。"),
+                    ("公開後QA", "クライアントURLに本体4ページだけ出ること、説明者向けページが混ざらないことを確認します。"),
                 ],
-                columns=5,
-            )
-            + presentation_table_html(
-                ["運用項目", "現在の方針", "注意点"],
-                [
-                    ["Secrets", "デモでは外部APIを使わないため未設定", "将来APIを使う場合はStreamlit Secretsに置き、GitHubへ置かない。"],
-                    ["不要ファイル", ".venv、__pycache__、ログ、QA画像はcommitしない", ".gitignoreで除外し、公開リポジトリを軽く保つ。"],
-                    ["データ更新", "scripts/generate_demo_data.pyで再生成", "更新後はmetadataの日時と件数を確認する。"],
-                    ["公開前QA", "クライアントURLに本体4ページだけ出ることを確認", "説明者向けページが混ざっていないかを見る。"],
-                ],
+                columns=3,
             ),
-            "長期運用では、GitHub上で履歴を残し、ローカルと公開環境の差分を小さく保つことが重要です。",
+            "将来APIを使う場合、APIキーはGitHubに置かずStreamlit Secretsへ入れます。",
         )
     else:
         render_presentation_slide(
             "Architecture / 08",
             "本番化では、データ接続、権限、AI統制、監査ログを追加します",
-            presentation_table_html(
-                ["優先度", "テーマ", "やること", "成果物"],
-                [
-                    ["1", "実データ棚卸し", "ERP、EPM、案件管理、調達、工程、為替、マスタの所在と責任者を整理する。", "データソース一覧"],
-                    ["2", "KPI定義", "売上、営業利益、利益率、CF、EAC、リスク指標の定義を合意する。", "KPI定義書"],
-                    ["3", "データ基盤", "DWH/データマートにFP&A用の統合テーブルを設計する。", "To-Beアーキテクチャ"],
-                    ["4", "AI実装", "LLM API、プロンプト、根拠引用、出力レビュー、禁止事項を設計する。", "AIコメント設計書"],
-                    ["5", "統制", "権限、監査ログ、更新頻度、承認フロー、モデル変更管理を決める。", "運用設計"],
-                    ["6", "段階展開", "代表セグメントまたは重点案件からPoCし、月次FP&Aプロセスへ組み込む。", "PoC計画"],
-                ],
-            )
+            """
+            <div class="presentation-lead">
+            本番化で増える論点は多いですが、提案で伝える芯は三つです。
+            実データをつなぎ、AIの出力を統制し、月次FP&Aプロセスへ組み込むことです。
+            </div>
+            """
             + presentation_cards_html(
                 [
-                    ("営業メッセージ", "このデモは完成品の販売ではなく、FP&A高度化の完成イメージを短時間で共有するためのもの。"),
-                    ("次の会話", "相手企業のデータ成熟度、会議体、KPI運用、AI利用ルールを確認する。"),
-                    ("提案の焦点", "画面開発だけでなく、データ基盤、業務設計、AI統制をセットで提案する。"),
+                    ("データ接続", "ERP、EPM、案件管理、調達、工程、マスタを棚卸しし、KPI定義を合意します。"),
+                    ("AI統制", "LLM API、プロンプト、根拠引用、出力レビュー、監査ログを設計します。"),
+                    ("業務定着", "代表セグメントからPoCし、月次サイクルと承認プロセスへ組み込みます。"),
                 ],
                 columns=3,
             ),
