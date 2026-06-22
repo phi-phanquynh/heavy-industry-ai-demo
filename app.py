@@ -3792,6 +3792,33 @@ def ai_app_architecture_component_html() -> str:
           font-size: 0.78rem;
           white-space: nowrap;
         }
+        .graph-title-meta {
+          align-items: center;
+          display: inline-flex;
+          gap: 12px;
+        }
+        .click-cue {
+          align-items: center;
+          color: #d9fffb !important;
+          display: inline-flex;
+          font-size: 0.76rem !important;
+          font-weight: 800;
+          gap: 6px;
+        }
+        .click-cue i {
+          animation: cuePulse 1.7s ease-in-out infinite;
+          background: #ffb000;
+          border-radius: 50%;
+          box-shadow: 0 0 0 0 rgba(255,176,0,0.38);
+          display: inline-block;
+          height: 8px;
+          width: 8px;
+        }
+        @keyframes cuePulse {
+          0% { box-shadow: 0 0 0 0 rgba(255,176,0,0.38); }
+          70% { box-shadow: 0 0 0 7px rgba(255,176,0,0); }
+          100% { box-shadow: 0 0 0 0 rgba(255,176,0,0); }
+        }
         #cy {
           width: 100%;
           height: 500px;
@@ -3803,8 +3830,37 @@ def ai_app_architecture_component_html() -> str:
           margin-top: 10px;
         }
         .side-card {
+          max-height: 566px;
+          overflow-x: hidden;
+          overflow-y: auto;
           padding: 16px;
           min-height: 566px;
+          scrollbar-color: rgba(57,197,187,0.62) rgba(7,18,28,0.92);
+          scrollbar-gutter: stable;
+        }
+        .side-card::-webkit-scrollbar {
+          width: 8px;
+        }
+        .side-card::-webkit-scrollbar-track {
+          background: rgba(7,18,28,0.92);
+          border-radius: 999px;
+        }
+        .side-card::-webkit-scrollbar-thumb {
+          background: rgba(57,197,187,0.62);
+          border-radius: 999px;
+        }
+        .side-group + .side-group {
+          border-top: 1px solid rgba(57,197,187,0.24);
+          margin-top: 14px;
+          padding-top: 14px;
+        }
+        .section-label {
+          color: #9fb2c3;
+          display: block;
+          font-size: 0.72rem;
+          font-weight: 850;
+          margin-bottom: 7px;
+          text-transform: uppercase;
         }
         .side-eyebrow {
           color: var(--cyan);
@@ -3813,6 +3869,19 @@ def ai_app_architecture_component_html() -> str:
           font-weight: 850;
           margin-bottom: 5px;
           text-transform: uppercase;
+        }
+        .dynamic-head {
+          align-items: center;
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          margin-bottom: 8px;
+        }
+        .change-note {
+          color: #ffdf86;
+          font-size: 0.72rem;
+          font-weight: 850;
+          white-space: nowrap;
         }
         .side-card h2 {
           color: #f8fdff;
@@ -3831,6 +3900,11 @@ def ai_app_architecture_component_html() -> str:
           margin-top: 14px;
           padding-top: 12px;
         }
+        .info-block.first {
+          border-top: 0;
+          margin-top: 10px;
+          padding-top: 0;
+        }
         .info-block b {
           color: #d9fffb;
           display: block;
@@ -3848,7 +3922,7 @@ def ai_app_architecture_component_html() -> str:
           border: 1px solid rgba(57,197,187,0.26);
           border-left: 4px solid #39c5bb;
           border-radius: 8px;
-          margin-top: 14px;
+          margin-top: 10px;
           padding: 12px;
         }
         .node-detail strong {
@@ -3893,8 +3967,10 @@ def ai_app_architecture_component_html() -> str:
           .pattern-tabs { grid-template-columns: 1fr; }
           .main-grid { grid-template-columns: 1fr; }
           .graph-card, .side-card { min-height: auto; }
+          .side-card { max-height: none; }
           #cy { height: 560px; }
           .graph-title { align-items: flex-start; flex-direction: column; }
+          .graph-title-meta { align-items: flex-start; flex-direction: column; gap: 4px; }
         }
       </style>
     </head>
@@ -3916,7 +3992,10 @@ def ai_app_architecture_component_html() -> str:
           <section class="graph-card">
             <div class="graph-title">
               <b id="patternTitle">Architecture</b>
-              <span>Technical architecture view</span>
+              <div class="graph-title-meta">
+                <span>Technical architecture view</span>
+                <span class="click-cue"><i></i>オブジェクトをクリック</span>
+              </div>
             </div>
             <div id="cy"></div>
             <div class="legend">
@@ -3929,29 +4008,38 @@ def ai_app_architecture_component_html() -> str:
             </div>
           </section>
           <aside class="side-card">
-            <span class="side-eyebrow">Implementation Pattern</span>
-            <h2 id="sideTitle"></h2>
-            <p id="sideSubtitle"></p>
-            <div class="info-block">
-              <b>代表製品</b>
-              <span id="sideProducts"></span>
-            </div>
-            <div class="info-block">
-              <b>向いている用途</b>
-              <span id="sideFit"></span>
-            </div>
-            <div class="info-block">
-              <b>強み</b>
-              <span id="sideStrength"></span>
-            </div>
-            <div class="info-block">
-              <b>設計上の注意点</b>
-              <span id="sideWatch"></span>
-            </div>
-            <div class="node-detail">
-              <strong id="nodeLabel"></strong>
-              <span id="nodeDetail"></span>
-            </div>
+            <section class="side-group">
+              <div class="dynamic-head">
+                <span class="section-label">選択中のオブジェクト</span>
+                <span class="change-note">クリックで切替</span>
+              </div>
+              <div class="node-detail">
+                <strong id="nodeLabel"></strong>
+                <span id="nodeDetail"></span>
+              </div>
+              <div class="info-block">
+                <b>代表製品</b>
+                <span id="sideProducts"></span>
+              </div>
+            </section>
+            <section class="side-group">
+              <span class="section-label">固定情報</span>
+              <span class="side-eyebrow">Implementation Pattern</span>
+              <h2 id="sideTitle"></h2>
+              <p id="sideSubtitle"></p>
+              <div class="info-block first">
+                <b>向いている用途</b>
+                <span id="sideFit"></span>
+              </div>
+              <div class="info-block">
+                <b>強み</b>
+                <span id="sideStrength"></span>
+              </div>
+              <div class="info-block">
+                <b>設計上の注意点</b>
+                <span id="sideWatch"></span>
+              </div>
+            </section>
           </aside>
         </div>
       </div>
@@ -4099,7 +4187,17 @@ def ai_app_architecture_component_html() -> str:
               }
             ]
           });
-          cy.on("tap", "node", (event) => showNodeDetail(event.target.data(), pattern.products));
+          cy.on("tap", "node", (event) => {
+            cy.elements().unselect();
+            event.target.select();
+            showNodeDetail(event.target.data(), pattern.products);
+          });
+          cy.on("mouseover", "node", () => {
+            cy.container().style.cursor = "pointer";
+          });
+          cy.on("mouseout", "node", () => {
+            cy.container().style.cursor = "default";
+          });
           window.architectureCy = cy;
           window.architecturePatterns = patterns;
           window.selectArchitectureNode = function(id) {
@@ -4112,7 +4210,13 @@ def ai_app_architecture_component_html() -> str:
             showNodeDetail(node.data(), pattern.products);
             return true;
           };
-          cy.ready(() => setTimeout(() => cy.fit(cy.elements(), 28), 20));
+          cy.ready(() => setTimeout(() => {
+            const primaryNode = cy.nodes(".primary").first();
+            if (primaryNode && primaryNode.length) {
+              primaryNode.select();
+            }
+            cy.fit(cy.elements(), 28);
+          }, 20));
         }
 
         window.addEventListener("resize", () => {
