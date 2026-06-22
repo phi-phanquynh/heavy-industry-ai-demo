@@ -828,6 +828,27 @@ def inject_css() -> None:
         .sidebar-meta b {
             color: #d7e7ee;
         }
+        .nav-current {
+            background: rgba(57,197,187,0.10);
+            border: 1px solid rgba(57,197,187,0.32);
+            border-radius: 8px;
+            padding: 10px 11px;
+            margin: 12px 0 14px 0;
+            color: #d7e7ee;
+            line-height: 1.45;
+        }
+        .nav-current b {
+            display: block;
+            color: #39c5bb;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+        .nav-current span {
+            display: block;
+            color: #edf6f9;
+            font-weight: 700;
+        }
         div[data-testid="stMetric"] {
             background: rgba(16,27,36,0.88);
             border: 1px solid var(--line);
@@ -3041,12 +3062,12 @@ def main(app_mode: str = "internal") -> None:
 
     client_pages = [
         ("Client Pre-Demo", "デモ閲覧前", False),
-        ("Client Post-Demo", "デモ閲覧後", False),
-        ("Data Foundation", "データ基盤", False),
-        ("Dashboard", "本体: ダッシュボード", True),
-        ("Variance Analysis", "本体: 差異分析", True),
-        ("Project Risk", "本体: 案件リスク", True),
-        ("AI Commentary", "本体: AIコメント", True),
+        ("Dashboard", "1. ダッシュボード", True),
+        ("Variance Analysis", "2. 差異分析", True),
+        ("Project Risk", "3. 案件リスク", True),
+        ("AI Commentary", "4. AIコメント", True),
+        ("Data Foundation", "5. データ基盤", False),
+        ("Client Post-Demo", "6. デモ閲覧後", False),
     ]
     operational_pages = [
         ("Dashboard", "全社ダッシュボード"),
@@ -3062,6 +3083,9 @@ def main(app_mode: str = "internal") -> None:
     ]
     client_page_keys = {key for key, _, _ in client_pages}
     client_page_guides = {key: guide for key, _, guide in client_pages}
+    client_page_labels = {key: label for key, label, _ in client_pages}
+    internal_page_labels = {key: label for key, label, _ in internal_pages}
+    operational_page_labels = {key: label for key, label in operational_pages}
     internal_page_keys = {key for key, _, _ in internal_pages}
     operational_page_keys = {key for key, _ in operational_pages}
     client_only = app_mode == "client"
@@ -3118,6 +3142,14 @@ def main(app_mode: str = "internal") -> None:
                 st.session_state["active_page"] = "Client Pre-Demo"
                 st.session_state["show_guide"] = False
 
+    def choose_page(surface: str, page_key: str) -> None:
+        st.session_state["active_surface"] = surface
+        st.session_state["active_page"] = page_key
+        if surface == "client":
+            st.session_state["show_guide"] = client_page_guides.get(page_key, False)
+        else:
+            st.session_state["show_guide"] = False
+
     with st.sidebar:
         st.markdown(f"### {APP_NAME}")
         st.caption(COMPANY_NAME)
@@ -3135,58 +3167,82 @@ def main(app_mode: str = "internal") -> None:
         )
 
         if not client_only:
-            st.markdown("#### 表示モード")
-            mode_buttons = [
-                ("client", "クライアント向け"),
-                ("operational", "実務コックピット"),
-                ("internal", "社内・登壇者向け"),
-            ]
-            for surface, label in mode_buttons:
-                is_active = st.session_state.get("active_surface") == surface
-                if st.button(label, key=f"surface_nav_{surface}", width="stretch", type="primary" if is_active else "secondary"):
-                    switch_surface(surface)
+            surface_options = ["client", "operational", "internal"]
+            surface_labels = {
+                "client": "社外向けデモ",
+                "operational": "実務コックピット",
+                "internal": "社内資料",
+            }
+            active_surface = st.session_state.get("active_surface")
+            selected_surface = st.radio(
+                "表示範囲",
+                surface_options,
+                index=surface_options.index(active_surface) if active_surface in surface_options else 0,
+                format_func=lambda key: surface_labels[key],
+                key="surface_selector",
+            )
+            if selected_surface != st.session_state.get("active_surface"):
+                switch_surface(selected_surface)
 
         active_surface = st.session_state.get("active_surface")
         if active_surface == "operational":
-            st.markdown("#### コックピット画面")
-            for key, label in operational_pages:
-                is_active = st.session_state.get("active_page") == key
-                if st.button(label, key=f"operational_side_nav_{key}", width="stretch", type="primary" if is_active else "secondary"):
-                    st.session_state["active_surface"] = "operational"
-                    st.session_state["active_page"] = key
-                    st.session_state["show_guide"] = False
+            page_options = [key for key, _ in operational_pages]
+            active_page = st.session_state.get("active_page")
+            selected_page = st.radio(
+                "ページ",
+                page_options,
+                index=page_options.index(active_page) if active_page in page_options else 0,
+                format_func=lambda key: operational_page_labels[key],
+                key="operational_page_selector",
+            )
+            if selected_page != st.session_state.get("active_page"):
+                choose_page("operational", selected_page)
         elif active_surface == "internal":
-            st.markdown("#### 社内使用画面")
-            for key, label, guide in internal_pages:
-                is_active = st.session_state.get("active_page") == key
-                if st.button(label, key=f"internal_nav_{key}_{guide}", width="stretch", type="primary" if is_active else "secondary"):
-                    st.session_state["active_surface"] = "internal"
-                    st.session_state["active_page"] = key
-                    st.session_state["show_guide"] = guide
+            page_options = [key for key, _, _ in internal_pages]
+            active_page = st.session_state.get("active_page")
+            selected_page = st.radio(
+                "ページ",
+                page_options,
+                index=page_options.index(active_page) if active_page in page_options else 0,
+                format_func=lambda key: internal_page_labels[key],
+                key="internal_page_selector",
+            )
+            if selected_page != st.session_state.get("active_page"):
+                choose_page("internal", selected_page)
         else:
-            st.markdown("#### クライアント向け")
-            for key, label, guide in client_pages:
-                is_active = (
-                    st.session_state.get("active_page") == key
-                    and bool(st.session_state.get("show_guide")) == guide
-                )
-                if st.button(label, key=f"client_nav_{key}_{guide}", width="stretch", type="primary" if is_active else "secondary"):
-                    st.session_state["active_surface"] = "client"
-                    st.session_state["active_page"] = key
-                    st.session_state["show_guide"] = guide
+            page_options = [key for key, _, _ in client_pages]
+            active_page = st.session_state.get("active_page")
+            selected_page = st.radio(
+                "ページ",
+                page_options,
+                index=page_options.index(active_page) if active_page in page_options else 0,
+                format_func=lambda key: client_page_labels[key],
+                key="client_page_selector",
+            )
+            if selected_page != st.session_state.get("active_page"):
+                choose_page("client", selected_page)
 
-    if st.session_state.get("active_surface") == "operational":
-        st.markdown('<div class="section-label">実務コックピット / Operational Cockpit</div>', unsafe_allow_html=True)
-        st.caption("実際のFP&Aユーザーが日々使う分析画面です。社内使用画面やクライアント向け画面へはサイドバーの表示モードで切り替えます。")
-        cols = st.columns(4)
-        for col, (key, label) in zip(cols, operational_pages):
-            is_active = st.session_state.get("active_page") == key
-            button_label = label
-            with col:
-                if st.button(button_label, key=f"op_nav_{key}", width="stretch", type="primary" if is_active else "secondary"):
-                    st.session_state["active_surface"] = "operational"
-                    st.session_state["active_page"] = key
-                    st.session_state["show_guide"] = False
+        current_surface = st.session_state.get("active_surface")
+        current_page = st.session_state.get("active_page")
+        current_surface_label = {
+            "client": "社外向けデモ",
+            "operational": "実務コックピット",
+            "internal": "社内資料",
+        }.get(current_surface, "社外向けデモ")
+        current_page_label = {
+            **client_page_labels,
+            **operational_page_labels,
+            **internal_page_labels,
+        }.get(current_page, current_page)
+        st.markdown(
+            f"""
+            <div class="nav-current">
+                <b>現在の表示</b>
+                <span>{escape(current_surface_label)} / {escape(current_page_label)}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     page = st.session_state["active_page"]
     show_guide = bool(st.session_state.get("show_guide", False))
