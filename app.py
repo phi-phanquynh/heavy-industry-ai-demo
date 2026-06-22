@@ -14,6 +14,22 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
 
+try:
+    from yfiles_graphs_for_streamlit import (
+        Edge,
+        EdgeStyle,
+        FontWeight,
+        LabelStyle,
+        Layout,
+        Node,
+        StreamlitGraphWidget,
+        TextAlignment,
+        TextWrapping,
+    )
+except ImportError:  # pragma: no cover - fallback keeps the app usable without the optional component.
+    Edge = EdgeStyle = FontWeight = LabelStyle = Layout = Node = StreamlitGraphWidget = None
+    TextAlignment = TextWrapping = None
+
 
 APP_NAME = "AI Variance Analysis Cockpit"
 COMPANY_NAME = "Nippon Advanced Heavy Industries"
@@ -618,6 +634,78 @@ def inject_css() -> None:
             padding-top: 11px;
             color: #64748b;
             font-size: 0.86rem;
+        }
+        .presentation-graph-header {
+            min-height: auto;
+            margin-bottom: 14px;
+        }
+        .presentation-graph-notes {
+            background: rgba(9, 20, 30, 0.94);
+            border: 1px solid rgba(57,197,187,0.24);
+            border-radius: 8px;
+            margin-top: 16px;
+            padding: 20px;
+        }
+        .architecture-fallback {
+            background: rgba(9, 20, 30, 0.94);
+            border: 1px solid rgba(57,197,187,0.24);
+            border-radius: 8px;
+            padding: 18px;
+        }
+        .architecture-object-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+        .architecture-object-card {
+            background: linear-gradient(180deg, rgba(14, 29, 42, 0.92), rgba(9, 20, 30, 0.94));
+            border: 1px solid rgba(57,197,187,0.25);
+            border-radius: 8px;
+            padding: 14px;
+            min-height: 132px;
+        }
+        .architecture-object-card strong {
+            color: #39c5bb;
+            display: block;
+            font-size: 0.78rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .architecture-object-card b {
+            color: #f8fdff;
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .architecture-object-card span {
+            color: #c8dce6;
+            display: block;
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+        .architecture-edge-list {
+            display: grid;
+            gap: 8px;
+        }
+        .architecture-edge-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 12px;
+            align-items: center;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(159,178,195,0.18);
+            border-radius: 8px;
+            padding: 9px 11px;
+        }
+        .architecture-edge-row b {
+            color: #f8fdff;
+            font-size: 0.92rem;
+        }
+        .architecture-edge-row span {
+            color: #39c5bb;
+            font-size: 0.84rem;
+            font-weight: 800;
+            white-space: nowrap;
         }
         .stApp:has(#presentation-focus-mode) [data-testid="stSidebar"],
         .stApp:has(#presentation-focus-mode) [data-testid="stHeader"],
@@ -1570,6 +1658,10 @@ def inject_css() -> None:
             .foundation-quality-grid {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
             }
+            .architecture-object-grid,
+            .architecture-edge-row {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
             .foundation-flow-block:not(:last-child)::after {
                 content: "↓";
                 right: 18px;
@@ -1781,6 +1873,404 @@ def architecture_diagram_html(nodes: list[tuple[str, str, str]]) -> str:
         for layer, title, text in nodes
     )
     return f'<div class="architecture-diagram">{items}</div>'
+
+
+def architecture_graph_system_data() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    nodes = [
+        {
+            "id": "erp",
+            "label": "ERP\n実績会計",
+            "layer": "Source",
+            "detail": "売上、原価、営業利益、キャッシュフローの正本。",
+            "color": "#1f77b4",
+            "size": (150, 64),
+        },
+        {
+            "id": "epm",
+            "label": "EPM\n予算・見込",
+            "layer": "Source",
+            "detail": "予算、前回見込、最新見込、中期計画の比較軸。",
+            "color": "#1f77b4",
+            "size": (150, 64),
+        },
+        {
+            "id": "project",
+            "label": "案件管理\nEAC・工程",
+            "layer": "Source",
+            "detail": "案件EAC、設計変更、納期、PMO管理情報。",
+            "color": "#1f77b4",
+            "size": (165, 66),
+        },
+        {
+            "id": "procurement",
+            "label": "調達・外注\n契約/価格",
+            "layer": "Source",
+            "detail": "材料費、外注費、長納期部品、サプライヤ情報。",
+            "color": "#1f77b4",
+            "size": (165, 66),
+        },
+        {
+            "id": "master",
+            "label": "マスタ\n案件/勘定",
+            "layer": "Governance",
+            "detail": "案件ID、セグメント、勘定科目、顧客、組織の共通定義。",
+            "color": "#64748b",
+            "size": (150, 64),
+        },
+        {
+            "id": "integration",
+            "label": "データ連携\n品質ゲート",
+            "layer": "Data",
+            "detail": "照合、版管理、ID統合、粒度固定、リネージを確認。",
+            "color": "#f59e0b",
+            "size": (170, 70),
+        },
+        {
+            "id": "dwh",
+            "label": "DWH / Lakehouse",
+            "layer": "Data",
+            "detail": "既存の全社データ基盤。履歴、権限、リネージを保持。",
+            "color": "#0f766e",
+            "size": (170, 66),
+        },
+        {
+            "id": "fpa_mart",
+            "label": "FP&A\nData Mart",
+            "layer": "Data",
+            "detail": "実績、予算、見込、差異、案件リスクを経営説明粒度で統合。",
+            "color": "#0f766e",
+            "size": (170, 70),
+        },
+        {
+            "id": "semantic",
+            "label": "KPI / 差異\nSemantic Layer",
+            "layer": "Logic",
+            "detail": "売上、利益、CF、EAC、差異要因を同じ定義で計算。",
+            "color": "#14b8a6",
+            "size": (180, 72),
+        },
+        {
+            "id": "ai_service",
+            "label": "AI説明\nService",
+            "layer": "AI",
+            "detail": "根拠引用、プロンプト管理、出力評価、監査ログを持つ説明サービス。",
+            "color": "#8b5cf6",
+            "size": (170, 70),
+        },
+        {
+            "id": "ai_platform",
+            "label": "AI共通基盤\nLLM Gateway",
+            "layer": "AI",
+            "detail": "モデルゲートウェイ、RAG、ガードレール、利用ログを共通管理。",
+            "color": "#7c3aed",
+            "size": (185, 70),
+        },
+        {
+            "id": "cockpit",
+            "label": "FP&A\nCockpit",
+            "layer": "Experience",
+            "detail": "ダッシュボード、差異分析、案件リスク、AIコメントを表示。",
+            "color": "#06b6d4",
+            "size": (165, 70),
+        },
+        {
+            "id": "meeting",
+            "label": "経営会議\n意思決定",
+            "layer": "Business",
+            "detail": "会議資料、確認事項、承認、次アクションへ接続。",
+            "color": "#ef4444",
+            "size": (170, 70),
+        },
+        {
+            "id": "workflow",
+            "label": "承認・通知\nAction",
+            "layer": "Workflow",
+            "detail": "タスク、承認、通知、案件アクション管理に接続。",
+            "color": "#ec4899",
+            "size": (165, 66),
+        },
+        {
+            "id": "control",
+            "label": "統制\n権限・監査",
+            "layer": "Governance",
+            "detail": "権限、承認、監査ログ、品質ゲート、モデル変更管理。",
+            "color": "#64748b",
+            "size": (165, 66),
+        },
+    ]
+    edges = [
+        ("erp", "integration", "実績"),
+        ("epm", "integration", "予算/見込"),
+        ("project", "integration", "EAC/工程"),
+        ("procurement", "integration", "調達影響"),
+        ("master", "integration", "共通ID"),
+        ("integration", "dwh", "標準化"),
+        ("dwh", "fpa_mart", "FP&A粒度"),
+        ("fpa_mart", "semantic", "KPI/差異"),
+        ("semantic", "cockpit", "可視化"),
+        ("semantic", "ai_service", "根拠データ"),
+        ("ai_platform", "ai_service", "LLM/RAG"),
+        ("ai_service", "cockpit", "AIコメント"),
+        ("cockpit", "meeting", "会議説明"),
+        ("meeting", "workflow", "アクション"),
+        ("workflow", "project", "案件更新"),
+        ("control", "integration", "品質管理"),
+        ("control", "ai_service", "出力統制"),
+        ("control", "workflow", "承認ログ"),
+    ]
+    return nodes, [
+        {
+            "start": start,
+            "end": end,
+            "label": label,
+            "color": "#39c5bb" if start != "control" else "#94a3b8",
+            "thickness": 2.0 if start != "control" else 1.4,
+        }
+        for start, end, label in edges
+    ]
+
+
+def architecture_graph_current_demo_data() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    nodes = [
+        {
+            "id": "parquet",
+            "label": "Parquet\n架空データ",
+            "layer": "Data",
+            "detail": "dim_projects、fact_finance、variance_drivers、project_risk。",
+            "color": "#0f766e",
+            "size": (170, 70),
+        },
+        {
+            "id": "metadata",
+            "label": "JSON\nmetadata",
+            "layer": "Data",
+            "detail": "生成日時、行数、デモ前提を保持。",
+            "color": "#0f766e",
+            "size": (150, 64),
+        },
+        {
+            "id": "load",
+            "label": "load_data()\ncache",
+            "layer": "Process",
+            "detail": "Parquet/JSONを読み、Streamlit cacheで再利用。",
+            "color": "#f59e0b",
+            "size": (160, 68),
+        },
+        {
+            "id": "semantic",
+            "label": "KPI生成\npandas",
+            "layer": "Logic",
+            "detail": "売上、営業利益、利益率、CF、差異要因を計算。",
+            "color": "#14b8a6",
+            "size": (170, 70),
+        },
+        {
+            "id": "comment",
+            "label": "AIコメント\n決定的生成",
+            "layer": "AI",
+            "detail": "外部APIを使わず、集計済みの差異要因を日本語テンプレート化。",
+            "color": "#8b5cf6",
+            "size": (180, 72),
+        },
+        {
+            "id": "client",
+            "label": "client_app.py\n本体デモURL",
+            "layer": "Experience",
+            "detail": "クライアントが触る4画面のみを表示。",
+            "color": "#06b6d4",
+            "size": (180, 72),
+        },
+        {
+            "id": "presenter",
+            "label": "presenter_app.py\n説明者URL",
+            "layer": "Experience",
+            "detail": "社外向け説明資料と社内確認ページを表示。",
+            "color": "#06b6d4",
+            "size": (190, 72),
+        },
+        {
+            "id": "github",
+            "label": "GitHub\nmain",
+            "layer": "Ops",
+            "detail": "変更履歴と公開対象ファイルの正本。",
+            "color": "#64748b",
+            "size": (145, 64),
+        },
+        {
+            "id": "streamlit",
+            "label": "Streamlit Cloud\nDeploy",
+            "layer": "Ops",
+            "detail": "入口ファイルごとにURLを分けて公開。",
+            "color": "#ef4444",
+            "size": (185, 70),
+        },
+    ]
+    edges = [
+        ("parquet", "load", "read"),
+        ("metadata", "load", "read"),
+        ("load", "semantic", "DataFrame"),
+        ("semantic", "comment", "集計値"),
+        ("semantic", "client", "KPI/リスク"),
+        ("comment", "client", "コメント"),
+        ("semantic", "presenter", "説明材料"),
+        ("github", "streamlit", "push"),
+        ("streamlit", "client", "client URL"),
+        ("streamlit", "presenter", "presenter URL"),
+    ]
+    return nodes, [
+        {"start": start, "end": end, "label": label, "color": "#39c5bb", "thickness": 2.0}
+        for start, end, label in edges
+    ]
+
+
+def yfiles_node_label(item: dict[str, Any]) -> Any:
+    text = item.get("properties", {}).get("label", item.get("label", ""))
+    if LabelStyle is None:
+        return text
+    return LabelStyle(
+        text=text,
+        font_size=16,
+        font_weight=FontWeight.BOLD if FontWeight is not None else None,
+        color="#f8fdff",
+        maximum_width=150,
+        wrapping=TextWrapping.WORD if TextWrapping is not None else None,
+        text_alignment=TextAlignment.CENTER if TextAlignment is not None else None,
+    )
+
+
+def yfiles_edge_label(item: dict[str, Any]) -> Any:
+    text = item.get("properties", {}).get("label", item.get("label", ""))
+    if LabelStyle is None:
+        return text
+    return LabelStyle(
+        text=text,
+        font_size=12,
+        color="#d9fffb",
+        background_color="rgba(6, 15, 24, 0.82)",
+        maximum_width=120,
+        wrapping=TextWrapping.WORD if TextWrapping is not None else None,
+        text_alignment=TextAlignment.CENTER if TextAlignment is not None else None,
+    )
+
+
+def architecture_graph_fallback_html(nodes: list[dict[str, Any]], edges: list[dict[str, Any]]) -> str:
+    node_lookup = {node["id"]: node for node in nodes}
+    node_html = "".join(
+        (
+            '<div class="architecture-object-card">'
+            f'<strong>{escape(str(node.get("layer", "")))}</strong>'
+            f'<b>{escape(str(node.get("label", "")).replace(chr(10), " / "))}</b>'
+            f'<span>{escape(str(node.get("detail", "")))}</span>'
+            "</div>"
+        )
+        for node in nodes
+    )
+    edge_html = "".join(
+        (
+            '<div class="architecture-edge-row">'
+            f'<b>{escape(str(node_lookup.get(edge["start"], {}).get("label", edge["start"])).replace(chr(10), " / "))}</b>'
+            f'<span>{escape(str(edge.get("label", "")))}</span>'
+            f'<b>{escape(str(node_lookup.get(edge["end"], {}).get("label", edge["end"])).replace(chr(10), " / "))}</b>'
+            "</div>"
+        )
+        for edge in edges
+    )
+    return f"""
+    <div class="architecture-fallback">
+        <div class="architecture-object-grid">{node_html}</div>
+        <div class="presentation-section-divider"><span>Connections</span></div>
+        <div class="architecture-edge-list">{edge_html}</div>
+    </div>
+    """
+
+
+def render_yfiles_architecture_graph(
+    nodes: list[dict[str, Any]],
+    edges: list[dict[str, Any]],
+    key: str,
+) -> None:
+    if StreamlitGraphWidget is None or Node is None or Edge is None:
+        st.markdown(architecture_graph_fallback_html(nodes, edges), unsafe_allow_html=True)
+        return
+
+    graph_nodes = [
+        Node(
+            id=node["id"],
+            properties={
+                "label": node["label"],
+                "layer": node.get("layer", ""),
+                "detail": node.get("detail", ""),
+                "color": node.get("color", "#39c5bb"),
+                "size": node.get("size", (160, 68)),
+            },
+        )
+        for node in nodes
+    ]
+    graph_edges = [
+        Edge(
+            start=edge["start"],
+            end=edge["end"],
+            properties={
+                "label": edge.get("label", ""),
+                "color": edge.get("color", "#39c5bb"),
+                "thickness": edge.get("thickness", 2.0),
+            },
+        )
+        for edge in edges
+    ]
+
+    widget = StreamlitGraphWidget(
+        graph_nodes,
+        graph_edges,
+        node_label_mapping=yfiles_node_label,
+        edge_label_mapping=yfiles_edge_label,
+        node_color_mapping=lambda item: item.get("properties", {}).get("color", "#39c5bb"),
+        edge_color_mapping=lambda item: item.get("properties", {}).get("color", "#39c5bb"),
+        node_size_mapping=lambda item: tuple(item.get("properties", {}).get("size", (160, 68))),
+        node_type_mapping=lambda item: item.get("properties", {}).get("layer", ""),
+        edge_thickness_factor_mapping=lambda item: item.get("properties", {}).get("thickness", 2.0),
+    )
+    layout = Layout.HIERARCHIC if Layout is not None else None
+    widget.show(
+        directed=True,
+        graph_layout=layout,
+        sidebar={"enabled": True, "start_with": "Data"},
+        overview=True,
+        key=key,
+    )
+
+
+def render_architecture_graph_slide(
+    eyebrow: str,
+    title: str,
+    lead_html: str,
+    nodes: list[dict[str, Any]],
+    edges: list[dict[str, Any]],
+    key: str,
+    notes_html: str,
+    footer: str,
+) -> None:
+    st.markdown(
+        f"""
+        <div class="presentation-slide presentation-graph-header">
+            <div class="presentation-eyebrow">{escape(eyebrow)}</div>
+            <h2>{escape(title)}</h2>
+            {lead_html}
+            {presentation_divider_html("構成オブジェクトと接続")}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    render_yfiles_architecture_graph(nodes, edges, key)
+    st.markdown(
+        f"""
+        <div class="presentation-graph-notes">
+            {notes_html}
+            <div class="presentation-footer">{escape(footer)}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def foundation_flow_map_html() -> str:
@@ -3469,7 +3959,8 @@ def render_reference_architecture() -> None:
     )
 
     if slide == 0:
-        render_presentation_slide(
+        nodes, edges = architecture_graph_system_data()
+        render_architecture_graph_slide(
             "Reference View",
             "AI-driven FP&Aは、画面、データ、AI、統制を一体で設計する",
             """
@@ -3477,27 +3968,36 @@ def render_reference_architecture() -> None:
             最初に決めるべきことは、LLMの製品名ではありません。
             どの会議で、どのKPIを、どの根拠データに戻れる状態で説明するかを定義し、その上にAIを置きます。
             </div>
-            """
-            + architecture_diagram_html(
+            """,
+            nodes,
+            edges,
+            "reference_architecture_system_graph",
+            presentation_divider_html("読み方")
+            + presentation_cards_html(
                 [
-                    ("Business", "会議テーマ", "最初に変えたい経営説明を決める。"),
-                    ("Data", "根拠データ", "財務、案件、マスタを同じ粒度でつなぐ。"),
-                    ("AI & Control", "AIと統制", "コメント生成、権限、ログ、承認を同じ運用に入れる。"),
-                ]
+                    ("左側", "ERP、EPM、案件管理、調達、マスタなど、AIコメントの根拠になる業務データです。"),
+                    ("中央", "品質ゲート、DWH、FP&Aデータマート、KPI定義が、説明可能性を作ります。"),
+                    ("右側", "AI説明サービス、Cockpit、会議、承認・アクションが業務利用の出口です。"),
+                ],
+                columns=3,
             ),
             "このデモは画面デモですが、本番化の焦点はFP&Aデータ基盤、AI実装、統制運用をつなぐことです。",
         )
     elif slide == 1:
-        render_presentation_slide(
+        nodes, edges = architecture_graph_system_data()
+        render_architecture_graph_slide(
             "Recommended Architecture",
             "推奨構成: 全社AI基盤とつなぐFP&A構成",
-            architecture_diagram_html(
-                [
-                    ("Data", "全社データ基盤", "DWH、MDM、リネージを活用し、FP&Aデータマートへ渡す。"),
-                    ("AI", "AI共通基盤", "モデルゲートウェイ、RAG、評価、監査ログを共通化する。"),
-                    ("Workflow", "業務ポータル", "FP&A Cockpitを入口に、承認、通知、会議アクションへつなぐ。"),
-                ]
-            )
+            """
+            <div class="presentation-lead">
+            FP&amp;Aだけで閉じる構成ではなく、全社データ基盤、AI共通基盤、業務ワークフローへ接続できる形で設計します。
+            短期PoCでも、この将来構成に接続できるようにKPI定義、データ粒度、出力統制を先に決めます。
+            </div>
+            """,
+            nodes,
+            edges,
+            "reference_architecture_recommended_graph",
+            presentation_divider_html("設計上のポイント")
             + presentation_cards_html(
                 [
                     ("設計の考え方", "FP&Aだけで閉じず、全社データ基盤とAI共通基盤に接続できる形で作る。"),
@@ -3508,15 +4008,20 @@ def render_reference_architecture() -> None:
             "短期PoCでも、この将来構成に接続できる形でKPI定義とデータ粒度を決めます。",
         )
     elif slide == 2:
-        render_presentation_slide(
+        nodes, edges = architecture_graph_system_data()
+        render_architecture_graph_slide(
             "Building Blocks",
             "主要な構成要素",
             """
             <div class="presentation-lead">
-            構成要素は多く見えますが、説明するときは三層で十分です。
-            根拠データを整え、AIがその根拠を読めるようにし、会議とアクションに戻す。
+            構成要素は多く見えますが、説明するときは「根拠データ」「AI説明サービス」「業務出口」の三層で十分です。
+            図のノードを選択すると、各オブジェクトの役割を確認できます。
             </div>
-            """
+            """,
+            nodes,
+            edges,
+            "reference_architecture_building_blocks_graph",
+            presentation_divider_html("三層で説明する")
             + presentation_cards_html(
                 [
                     ("Data foundation", "ERP、EPM、案件EAC、調達、工程、マスタを、FP&Aデータマートで同じ説明粒度にそろえる。"),
@@ -3613,21 +4118,27 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
             "このデモではファイル配布を優先し、本番ではERP/EPM/案件管理システムからの連携に置き換えます。",
         )
     elif slide == 3:
-        render_presentation_slide(
+        nodes, edges = architecture_graph_current_demo_data()
+        render_architecture_graph_slide(
             "Architecture / 04",
-            "分析処理は、読み込み、KPI生成、フィルタ、可視化に分けています",
+            "現在のデモ実装は、ファイル、処理、入口URLが分かれています",
             """
             <div class="presentation-lead">
-            実装上は多くの関数に分かれていますが、説明としては「読み込む」「意味づける」「見せる」の三段階です。
-            本番化する場合は、読み込みと意味づけの部分を外部のデータ基盤やセマンティックレイヤーへ寄せます。
+            現在は、架空データをParquet/JSONで読み込み、pandasでKPIを意味づけし、Streamlitの入口ファイルでURLごとの体験を分けています。
+            本番化する場合は、Parquet部分をDWH/データマートへ、AIコメント部分を統制されたAIサービスへ置き換えます。
             </div>
-            """
-            + architecture_diagram_html(
+            """,
+            nodes,
+            edges,
+            "tech_architecture_current_demo_graph",
+            presentation_divider_html("実装上の読み方")
+            + presentation_cards_html(
                 [
-                    ("Load", "読み込む", "Parquet/JSONを読み、キャッシュで画面操作を軽くする。"),
-                    ("Semantic", "意味づける", "売上、利益、CF、差異、案件リスクを同じ定義で計算する。"),
-                    ("Experience", "見せる", "PlotlyとStreamlitで、会議中に論点を切り替えられるようにする。"),
-                ]
+                    ("Data", "Parquet/JSONを読み、守秘情報を含まない公開デモとして安定させています。"),
+                    ("Logic", "pandasでKPI、差異、案件リスク、コメント用の入力を生成しています。"),
+                    ("Deploy", "client_app.pyとpresenter_app.pyで、公開URLごとの表示範囲を分けています。"),
+                ],
+                columns=3,
             ),
             "StreamlitはMVPの画面実装に適しており、本番ではデータ処理と権限制御を外部基盤に寄せます。",
         )
