@@ -1422,6 +1422,121 @@ def inject_css() -> None:
             padding-top: 12px;
             margin-top: 30px;
         }
+        .presentation-slide.architecture-slide {
+            min-height: auto;
+            padding: clamp(22px, 2.2vw, 34px);
+        }
+        .architecture-slide .presentation-lead {
+            max-width: none;
+            font-size: 0.98rem;
+            line-height: 1.62;
+        }
+        .architecture-slide .presentation-section-divider {
+            margin: 18px 0 12px 0;
+        }
+        .architecture-lane-map {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr) 34px minmax(0, 1fr);
+            gap: 10px;
+            align-items: stretch;
+            margin-top: 10px;
+        }
+        .architecture-lane {
+            background: rgba(9, 20, 30, 0.82);
+            border: 1px solid rgba(57,197,187,0.25);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 330px;
+        }
+        .architecture-lane-title {
+            border-bottom: 1px solid rgba(57,197,187,0.18);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+        }
+        .architecture-lane-title em {
+            color: #39c5bb;
+            display: block;
+            font-size: 0.68rem;
+            font-style: normal;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+        .architecture-lane-title b {
+            color: #f8fdff;
+            display: block;
+            font-size: 0.95rem;
+            margin-top: 3px;
+        }
+        .architecture-lane-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+        .architecture-node-chip {
+            background: linear-gradient(180deg, rgba(14, 29, 42, 0.94), rgba(7, 18, 28, 0.98));
+            border: 1px solid rgba(159,178,195,0.18);
+            border-left: 4px solid var(--accent, #39c5bb);
+            border-radius: 8px;
+            min-height: 74px;
+            padding: 9px 10px;
+        }
+        .architecture-node-chip strong {
+            color: #9ff7ef;
+            display: block;
+            font-size: 0.66rem;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        .architecture-node-chip b {
+            color: #f8fdff;
+            display: block;
+            font-size: 0.86rem;
+            line-height: 1.25;
+            margin-bottom: 5px;
+        }
+        .architecture-node-chip span {
+            color: #c8dce6;
+            display: -webkit-box;
+            font-size: 0.75rem;
+            line-height: 1.35;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+        .architecture-lane-arrow {
+            align-items: center;
+            color: #39c5bb;
+            display: flex;
+            font-size: 1.6rem;
+            font-weight: 900;
+            justify-content: center;
+        }
+        .architecture-key-routes {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .architecture-route-chip {
+            background: rgba(57,197,187,0.08);
+            border: 1px solid rgba(57,197,187,0.22);
+            border-radius: 8px;
+            color: #d6e7ee;
+            font-size: 0.74rem;
+            line-height: 1.35;
+            padding: 8px 9px;
+        }
+        .architecture-route-chip b {
+            color: #f8fdff;
+            display: block;
+            font-size: 0.76rem;
+            margin-bottom: 3px;
+        }
+        .architecture-route-chip span {
+            color: #39c5bb;
+            font-weight: 800;
+        }
         .briefing-hero,
         .briefing-card,
         .briefing-step,
@@ -1605,6 +1720,18 @@ def inject_css() -> None:
             }
             .architecture-diagram {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .architecture-lane-map,
+            .architecture-lane-grid,
+            .architecture-key-routes {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .architecture-lane {
+                min-height: auto;
+            }
+            .architecture-lane-arrow {
+                min-height: 26px;
+                transform: rotate(90deg);
             }
             .architecture-node:not(:last-child)::after {
                 content: "↓";
@@ -2128,6 +2255,81 @@ def html_fragment(html: str) -> str:
     return "\n".join(line.strip() for line in dedent(html).strip().splitlines())
 
 
+def safe_hex_color(value: Any, fallback: str = "#39c5bb") -> str:
+    text = str(value)
+    if len(text) in {4, 7} and text.startswith("#") and all(char in "0123456789abcdefABCDEF" for char in text[1:]):
+        return text
+    return fallback
+
+
+def architecture_lane_map_html(nodes: list[dict[str, Any]], edges: list[dict[str, Any]]) -> str:
+    lanes = [
+        ("Data sources", "根拠データ"),
+        ("Foundation + AI", "説明基盤・AI"),
+        ("Business use", "業務出口"),
+    ]
+    lane_for_layer = {
+        "Source": 0,
+        "Governance": 0,
+        "Data": 1,
+        "Process": 1,
+        "Logic": 1,
+        "AI": 1,
+        "Experience": 2,
+        "Business": 2,
+        "Workflow": 2,
+        "Ops": 2,
+    }
+    buckets: list[list[dict[str, Any]]] = [[], [], []]
+    for node in nodes:
+        layer = str(node.get("layer", ""))
+        buckets[lane_for_layer.get(layer, 1)].append(node)
+
+    lane_parts = []
+    for index, (eyebrow, title) in enumerate(lanes):
+        card_html = "".join(
+            (
+                f'<div class="architecture-node-chip" style="--accent:{safe_hex_color(node.get("color"))}">'
+                f'<strong>{escape(str(node.get("layer", "")))}</strong>'
+                f'<b>{escape(str(node.get("label", "")).replace(chr(10), " / "))}</b>'
+                f'<span>{escape(str(node.get("detail", "")))}</span>'
+                "</div>"
+            )
+            for node in buckets[index]
+        )
+        lane_parts.append(
+            f"""
+            <div class="architecture-lane">
+                <div class="architecture-lane-title">
+                    <em>{escape(eyebrow)}</em>
+                    <b>{escape(title)}</b>
+                </div>
+                <div class="architecture-lane-grid">{card_html}</div>
+            </div>
+            """
+        )
+        if index < len(lanes) - 1:
+            lane_parts.append('<div class="architecture-lane-arrow">→</div>')
+
+    node_lookup = {node["id"]: node for node in nodes}
+    route_html = "".join(
+        (
+            '<div class="architecture-route-chip">'
+            f'<b>{escape(str(node_lookup.get(edge["start"], {}).get("label", edge["start"])).replace(chr(10), " / "))}</b>'
+            f'<span>{escape(str(edge.get("label", "")))}</span> '
+            f'{escape(str(node_lookup.get(edge["end"], {}).get("label", edge["end"])).replace(chr(10), " / "))}'
+            "</div>"
+        )
+        for edge in edges[:4]
+    )
+    return html_fragment(
+        f"""
+        <div class="architecture-lane-map">{"".join(lane_parts)}</div>
+        <div class="architecture-key-routes">{route_html}</div>
+        """
+    )
+
+
 def architecture_graph_fallback_html(nodes: list[dict[str, Any]], edges: list[dict[str, Any]]) -> str:
     node_lookup = {node["id"]: node for node in nodes}
     node_html = "".join(
@@ -2233,21 +2435,22 @@ def render_architecture_graph_slide(
 ) -> None:
     lead = html_fragment(lead_html)
     notes = html_fragment(notes_html)
+    diagram = architecture_lane_map_html(nodes, edges)
 
     st.markdown(
         html_fragment(
             f"""
-        <div class="presentation-slide presentation-graph-header">
+        <div class="presentation-slide architecture-slide">
             <div class="presentation-eyebrow">{escape(eyebrow)}</div>
             <h2>{escape(title)}</h2>
             {lead}
             {presentation_divider_html("構成オブジェクトと接続")}
+            {diagram}
         </div>
         """
         ),
         unsafe_allow_html=True,
     )
-    st.markdown(architecture_graph_fallback_html(nodes, edges), unsafe_allow_html=True)
     st.markdown(
         html_fragment(
             f"""
@@ -3276,50 +3479,7 @@ def render_dashboard(
 
     left, right = st.columns([1.25, 1.0])
     with left:
-        segment_base = (
-            trend_df[trend_df["scenario"] == "Budget"]
-            .groupby(["segment_ja", "segment_en"], observed=True)[["revenue_jpy_mn", "operating_profit_jpy_mn", "cash_flow_jpy_mn"]]
-            .sum()
-            .reset_index()
-        )
-        segment_actual = (
-            trend_df[trend_df["scenario"] == "Actual"]
-            .groupby(["segment_ja", "segment_en"], observed=True)[["revenue_jpy_mn", "operating_profit_jpy_mn", "cash_flow_jpy_mn"]]
-            .sum()
-            .reset_index()
-        )
-        segment_var = segment_actual.merge(segment_base, on=["segment_ja", "segment_en"], suffixes=("_actual", "_budget"))
-        for col in ["revenue_jpy_mn", "operating_profit_jpy_mn", "cash_flow_jpy_mn"]:
-            segment_var[f"{col}_variance"] = segment_var[f"{col}_actual"] - segment_var[f"{col}_budget"]
-        melted = segment_var.melt(
-            id_vars=["segment_ja"],
-            value_vars=[
-                "revenue_jpy_mn_variance",
-                "operating_profit_jpy_mn_variance",
-                "cash_flow_jpy_mn_variance",
-            ],
-            var_name="KPI",
-            value_name="variance_jpy_mn",
-        )
-        melted["KPI"] = melted["KPI"].map(
-            {
-                "revenue_jpy_mn_variance": "売上",
-                "operating_profit_jpy_mn_variance": "営業利益",
-                "cash_flow_jpy_mn_variance": "キャッシュフロー",
-            }
-        )
-        melted["variance_jpy_bn"] = melted["variance_jpy_mn"] / 1_000
-        fig = px.bar(
-            melted,
-            x="segment_ja",
-            y="variance_jpy_bn",
-            color="KPI",
-            barmode="group",
-            color_discrete_map={"売上": "#39c5bb", "営業利益": "#ffb000", "キャッシュフロー": "#ff647c"},
-            title="セグメント別差異 / Segment Variance vs Budget",
-            labels={"segment_ja": "", "variance_jpy_bn": "Variance (JPY bn)"},
-        )
-        st.plotly_chart(style_fig(fig, 420), width="stretch")
+        st.plotly_chart(render_segment_kpi_heatmap(kpis, risk, selected_period), width="stretch")
 
     with right:
         drv = filter_drivers(drivers, selected_period, "Budget vs Actual")
