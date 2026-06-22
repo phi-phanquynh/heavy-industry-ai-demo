@@ -2,7 +2,12 @@
 
 Fictional FP&A variance analysis demo for **Nippon Advanced Heavy Industries**.
 
-[Live app](https://heavy-industry-ai-demo-6apcskxwufgremlq9bivhk.streamlit.app/)
+[Full app](https://heavy-industry-ai-demo-6apcskxwufgremlq9bivhk.streamlit.app/)
+
+Deploy targets:
+
+- Internal/full app: `app.py`
+- External/client app: `client_app.py`
 
 - Demo data only
 - All figures are fictional

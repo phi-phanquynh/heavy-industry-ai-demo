@@ -3029,7 +3029,7 @@ def render_missing_data(missing: list[str]) -> None:
         st.write(f"- {path}")
 
 
-def main() -> None:
+def main(app_mode: str = "internal") -> None:
     inject_css()
     data = load_data()
     if "missing" in data:
@@ -3061,8 +3061,10 @@ def main() -> None:
         ("Data Explorer", "データ確認", False),
     ]
     client_page_keys = {key for key, _, _ in client_pages}
+    client_page_guides = {key: guide for key, _, guide in client_pages}
     internal_page_keys = {key for key, _, _ in internal_pages}
     operational_page_keys = {key for key, _ in operational_pages}
+    client_only = app_mode == "client"
 
     if "active_page" not in st.session_state:
         st.session_state["active_page"] = "Client Pre-Demo"
@@ -3074,7 +3076,14 @@ def main() -> None:
             "internal" if st.session_state.get("active_page") in internal_page_keys else "client"
         )
 
-    if st.session_state.get("active_surface") not in {"client", "operational", "internal"}:
+    if client_only:
+        active_page = st.session_state.get("active_page")
+        if active_page not in client_page_keys:
+            active_page = "Client Pre-Demo"
+        st.session_state["active_surface"] = "client"
+        st.session_state["active_page"] = active_page
+        st.session_state["show_guide"] = client_page_guides.get(active_page, False)
+    elif st.session_state.get("active_surface") not in {"client", "operational", "internal"}:
         st.session_state["active_surface"] = "client"
 
     active_surface = st.session_state.get("active_surface")
@@ -3125,16 +3134,17 @@ def main() -> None:
             unsafe_allow_html=True,
         )
 
-        st.markdown("#### 表示モード")
-        mode_buttons = [
-            ("client", "クライアント向け"),
-            ("operational", "実務コックピット"),
-            ("internal", "社内・登壇者向け"),
-        ]
-        for surface, label in mode_buttons:
-            is_active = st.session_state.get("active_surface") == surface
-            if st.button(label, key=f"surface_nav_{surface}", width="stretch", type="primary" if is_active else "secondary"):
-                switch_surface(surface)
+        if not client_only:
+            st.markdown("#### 表示モード")
+            mode_buttons = [
+                ("client", "クライアント向け"),
+                ("operational", "実務コックピット"),
+                ("internal", "社内・登壇者向け"),
+            ]
+            for surface, label in mode_buttons:
+                is_active = st.session_state.get("active_surface") == surface
+                if st.button(label, key=f"surface_nav_{surface}", width="stretch", type="primary" if is_active else "secondary"):
+                    switch_surface(surface)
 
         active_surface = st.session_state.get("active_surface")
         if active_surface == "operational":
