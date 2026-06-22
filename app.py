@@ -547,7 +547,7 @@ def inject_css() -> None:
             min-height: 144px;
         }
         .architecture-node:not(:last-child)::after {
-            content: "→";
+            content: "\2192";
             position: absolute;
             right: -15px;
             top: 50%;
@@ -1679,6 +1679,392 @@ def inject_css() -> None:
             font-weight: 800;
             margin-bottom: 5px;
         }
+        .proposal-slide {
+            min-height: calc(100vh - 92px);
+            padding: clamp(26px, 2.55vw, 42px);
+            background:
+                linear-gradient(135deg, rgba(9, 18, 29, 0.99), rgba(5, 12, 20, 0.99) 58%, rgba(18, 26, 37, 0.99)),
+                repeating-linear-gradient(90deg, rgba(57,197,187,0.07) 0 1px, transparent 1px 112px);
+        }
+        .proposal-slide::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #39c5bb, #60a5fa, #ffb000, #ff647c);
+        }
+        .proposal-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 14px;
+        }
+        .proposal-kicker {
+            color: #9fb2c3;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+        .proposal-kicker b {
+            color: #39c5bb;
+            margin-right: 8px;
+        }
+        .proposal-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .proposal-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: rgba(159, 178, 195, 0.32);
+        }
+        .proposal-dot.active {
+            width: 24px;
+            background: #39c5bb;
+            box-shadow: 0 0 18px rgba(57,197,187,0.55);
+        }
+        .proposal-slide h2 {
+            max-width: 1180px;
+            font-size: clamp(2.1rem, 3.05vw, 3.35rem);
+            line-height: 1.08;
+            margin-bottom: 11px;
+        }
+        .proposal-lead {
+            color: #d6e7ee;
+            font-size: clamp(1.02rem, 1.12vw, 1.2rem);
+            line-height: 1.62;
+            max-width: 1120px;
+        }
+        .proposal-grid-2 {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(360px, 0.88fr);
+            gap: 22px;
+            align-items: stretch;
+            margin-top: 22px;
+        }
+        .proposal-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .proposal-panel {
+            background: linear-gradient(180deg, rgba(14,29,42,0.90), rgba(7,18,28,0.96));
+            border: 1px solid rgba(159,178,195,0.20);
+            border-radius: 8px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+            padding: 18px;
+        }
+        .proposal-panel.accent-cyan { border-left: 4px solid #39c5bb; }
+        .proposal-panel.accent-amber { border-left: 4px solid #ffb000; }
+        .proposal-panel.accent-red { border-left: 4px solid #ff647c; }
+        .proposal-panel.accent-blue { border-left: 4px solid #60a5fa; }
+        .proposal-panel b {
+            color: #f8fdff;
+            display: block;
+            font-size: 1.02rem;
+            line-height: 1.35;
+            margin-bottom: 7px;
+        }
+        .proposal-panel span,
+        .proposal-panel li {
+            color: #c8dce6;
+            font-size: 0.95rem;
+            line-height: 1.56;
+        }
+        .proposal-panel ul {
+            margin: 8px 0 0 1.05rem;
+            padding: 0;
+        }
+        .fragment-stage {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 22px;
+        }
+        .fragment-card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(159,178,195,0.20);
+            border-radius: 8px;
+            min-height: 132px;
+            padding: 15px;
+            position: relative;
+        }
+        .fragment-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            border-radius: 8px 0 0 8px;
+            background: var(--accent, #39c5bb);
+        }
+        .fragment-card em {
+            color: var(--accent, #39c5bb);
+            display: block;
+            font-size: 0.72rem;
+            font-style: normal;
+            font-weight: 850;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+        }
+        .fragment-card b {
+            color: #f8fdff;
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .fragment-card span {
+            color: #c8dce6;
+            font-size: 0.88rem;
+            line-height: 1.48;
+        }
+        .executive-question {
+            background: rgba(255, 176, 0, 0.10);
+            border: 1px solid rgba(255, 176, 0, 0.32);
+            border-radius: 8px;
+            color: #fff2c2;
+            font-size: 1.05rem;
+            font-weight: 750;
+            line-height: 1.55;
+            margin-top: 18px;
+            padding: 16px 18px;
+        }
+        .flow-ribbon {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 30px;
+        }
+        .flow-node {
+            background: linear-gradient(180deg, rgba(14,29,42,0.95), rgba(8,20,31,0.98));
+            border: 1px solid rgba(57,197,187,0.26);
+            border-radius: 8px;
+            min-height: 158px;
+            padding: 16px;
+            position: relative;
+        }
+        .flow-node:not(:last-child)::after {
+            content: "\2192";
+            color: #39c5bb;
+            font-size: 1.45rem;
+            font-weight: 900;
+            position: absolute;
+            right: -19px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 3;
+        }
+        .flow-node em {
+            color: #39c5bb;
+            display: block;
+            font-size: 0.72rem;
+            font-style: normal;
+            font-weight: 850;
+            margin-bottom: 8px;
+        }
+        .flow-node b {
+            color: #f8fdff;
+            display: block;
+            font-size: 1.04rem;
+            margin-bottom: 8px;
+        }
+        .flow-node span {
+            color: #c8dce6;
+            font-size: 0.9rem;
+            line-height: 1.48;
+        }
+        .foundation-quadrant {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 28px;
+        }
+        .foundation-core {
+            align-items: center;
+            background: rgba(57,197,187,0.13);
+            border: 1px solid rgba(57,197,187,0.36);
+            border-radius: 8px;
+            color: #d9fffb;
+            display: flex;
+            font-size: 1.05rem;
+            font-weight: 850;
+            justify-content: center;
+            min-height: 72px;
+            margin: 18px auto 0 auto;
+            max-width: 520px;
+            text-align: center;
+        }
+        .tech-architecture {
+            display: grid;
+            grid-template-columns: 1.1fr 0.28fr 1.1fr 0.28fr 1.1fr 0.28fr 1.05fr 0.28fr 1.05fr;
+            gap: 8px;
+            align-items: stretch;
+            margin-top: 18px;
+        }
+        .tech-layer {
+            background: linear-gradient(180deg, rgba(14,29,42,0.94), rgba(8,20,31,0.98));
+            border: 1px solid rgba(159,178,195,0.22);
+            border-top: 4px solid var(--accent, #39c5bb);
+            border-radius: 8px;
+            min-height: 254px;
+            padding: 10px;
+        }
+        .tech-layer em {
+            color: var(--accent, #39c5bb);
+            display: block;
+            font-size: 0.68rem;
+            font-style: normal;
+            font-weight: 850;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .tech-layer b {
+            color: #f8fdff;
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .tech-pill {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(159,178,195,0.18);
+            border-radius: 6px;
+            color: #d6e7ee;
+            font-size: 0.72rem;
+            line-height: 1.18;
+            margin-top: 5px;
+            padding: 5px 6px;
+        }
+        .tech-arrow {
+            align-items: center;
+            color: #39c5bb;
+            display: flex;
+            font-size: 1.35rem;
+            font-weight: 900;
+            justify-content: center;
+        }
+        .tech-footnote {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .tech-footnote div {
+            background: rgba(57,197,187,0.07);
+            border: 1px solid rgba(57,197,187,0.20);
+            border-radius: 8px;
+            color: #c8dce6;
+            font-size: 0.71rem;
+            line-height: 1.24;
+            padding: 6px 7px;
+        }
+        .option-card,
+        .roadmap-phase,
+        .assessment-item {
+            background: linear-gradient(180deg, rgba(14,29,42,0.95), rgba(8,20,31,0.98));
+            border: 1px solid rgba(159,178,195,0.22);
+            border-radius: 8px;
+            position: relative;
+        }
+        .option-card {
+            min-height: 292px;
+            padding: 18px;
+        }
+        .option-card::before,
+        .roadmap-phase::after {
+            content: "";
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            top: 0;
+            height: 4px;
+            background: var(--accent, #39c5bb);
+            border-radius: 0 0 6px 6px;
+        }
+        .option-card em,
+        .roadmap-phase em,
+        .assessment-item em {
+            color: var(--accent, #39c5bb);
+            display: block;
+            font-size: 0.72rem;
+            font-style: normal;
+            font-weight: 850;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .option-card b,
+        .roadmap-phase b,
+        .assessment-item b {
+            color: #f8fdff;
+            display: block;
+            font-size: 1.08rem;
+            margin-bottom: 10px;
+        }
+        .option-card span,
+        .roadmap-phase span,
+        .assessment-item span {
+            color: #c8dce6;
+            display: block;
+            font-size: 0.91rem;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .option-meta {
+            border-top: 1px solid rgba(159,178,195,0.18);
+            color: #d6e7ee;
+            display: grid;
+            gap: 7px;
+            font-size: 0.85rem;
+            padding-top: 12px;
+        }
+        .option-meta strong {
+            color: #9ff7ef;
+        }
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 28px;
+        }
+        .roadmap-phase {
+            min-height: 318px;
+            padding: 18px;
+        }
+        .roadmap-gate {
+            background: rgba(255,176,0,0.09);
+            border: 1px solid rgba(255,176,0,0.26);
+            border-radius: 7px;
+            color: #fff2c2;
+            font-size: 0.87rem;
+            line-height: 1.42;
+            padding: 10px;
+        }
+        .assessment-canvas {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 25px;
+        }
+        .assessment-item {
+            min-height: 145px;
+            padding: 16px;
+        }
+        .proposal-close {
+            background: rgba(57,197,187,0.10);
+            border: 1px solid rgba(57,197,187,0.30);
+            border-left: 4px solid #39c5bb;
+            border-radius: 8px;
+            color: #d9fffb;
+            font-size: 1.05rem;
+            font-weight: 760;
+            line-height: 1.52;
+            margin-top: 15px;
+            padding: 13px 16px;
+        }
         @media (max-width: 900px) {
             .cockpit-title {
                 align-items: flex-start;
@@ -1734,7 +2120,7 @@ def inject_css() -> None:
                 transform: rotate(90deg);
             }
             .architecture-node:not(:last-child)::after {
-                content: "↓";
+                content: "\2193";
                 right: 16px;
                 top: auto;
                 bottom: -19px;
@@ -1772,6 +2158,46 @@ def inject_css() -> None:
             }
             .snapshot-grid {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .proposal-topline {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            .proposal-grid-2,
+            .proposal-grid-3,
+            .fragment-stage,
+            .flow-ribbon,
+            .foundation-quadrant,
+            .roadmap,
+            .assessment-canvas,
+            .tech-footnote {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .proposal-slide {
+                min-height: auto;
+                padding: 24px 18px;
+            }
+            .proposal-slide h2 {
+                font-size: 1.75rem;
+            }
+            .proposal-lead {
+                font-size: 0.98rem;
+            }
+            .flow-node:not(:last-child)::after {
+                bottom: -22px;
+                right: 18px;
+                top: auto;
+                transform: rotate(90deg);
+            }
+            .tech-architecture {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .tech-arrow {
+                min-height: 24px;
+                transform: rotate(90deg);
+            }
+            .tech-layer {
+                min-height: auto;
             }
         }
         </style>
@@ -2571,6 +2997,367 @@ def render_presentation_slide(eyebrow: str, title: str, body_html: str, footer: 
         "</div>"
     )
     st.markdown(html, unsafe_allow_html=True)
+
+
+def proposal_dots_html(active: int, total: int = 7) -> str:
+    return "".join(
+        f'<span class="proposal-dot{" active" if index == active else ""}"></span>'
+        for index in range(1, total + 1)
+    )
+
+
+def render_proposal_slide(page_no: int, label: str, title: str, lead_html: str, body_html: str) -> None:
+    st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
+    st.markdown(
+        html_fragment(
+            f"""
+            <div class="presentation-slide proposal-slide">
+                <div class="proposal-topline">
+                    <div class="proposal-kicker"><b>{page_no:02d}/07</b>AI時代のFP&amp;Aデータ基盤リファレンス構成 / {escape(label)}</div>
+                    <div class="proposal-dots">{proposal_dots_html(page_no)}</div>
+                </div>
+                <h2>{escape(title)}</h2>
+                <div class="proposal-lead">{lead_html}</div>
+                {body_html}
+            </div>
+            """
+        ),
+        unsafe_allow_html=True,
+    )
+
+
+def render_proposal_problem_statement() -> None:
+    render_proposal_slide(
+        1,
+        "導入・問題提起",
+        "売上は見えても、利益悪化と打ち手まで説明しきれない",
+        """
+        重工業では、売上が上振れていても、EAC悪化、設計変更、調達費高騰、工程遅延によって
+        利益・キャッシュフローが悪化します。財務、案件、調達、工程が分断されていると、
+        経営会議で「なぜ悪化したか」「どの案件に手を打つか」を即答しづらくなります。
+        """,
+        """
+        <div class="proposal-grid-2">
+            <div>
+                <div class="fragment-stage">
+                    <div class="fragment-card" style="--accent:#60a5fa">
+                        <em>Financials</em>
+                        <b>数字はある</b>
+                        <span>売上、営業利益、利益率、CFは見えるが、変動理由の説明が別資料に散らばる。</span>
+                    </div>
+                    <div class="fragment-card" style="--accent:#ff647c">
+                        <em>Projects</em>
+                        <b>案件がつながらない</b>
+                        <span>EAC悪化、設計変更、追加原価が財務KPIと結びつきにくい。</span>
+                    </div>
+                    <div class="fragment-card" style="--accent:#ffb000">
+                        <em>Supply chain</em>
+                        <b>調達影響が遅れる</b>
+                        <span>材料費、外注費、長納期部品の変化が月次説明に乗るまで時間がかかる。</span>
+                    </div>
+                    <div class="fragment-card" style="--accent:#39c5bb">
+                        <em>Commentary</em>
+                        <b>説明が属人的</b>
+                        <span>会議コメントの作成、根拠確認、手戻りが担当者の経験に依存する。</span>
+                    </div>
+                </div>
+            </div>
+            <div class="proposal-panel accent-amber">
+                <b>経営会議で問われること</b>
+                <ul>
+                    <li>売上が伸びているのに、なぜ利益・CFが悪化しているのか</li>
+                    <li>どの案件、どの要因が悪化の主因なのか</li>
+                    <li>次月までに誰が、どの打ち手を実行するのか</li>
+                </ul>
+                <div class="executive-question">
+                    AIでコメントを速く作る前に、コメントが戻るべき根拠をつなぐ必要があります。
+                </div>
+            </div>
+        </div>
+        """,
+    )
+
+
+def render_proposal_target_operating_model() -> None:
+    render_proposal_slide(
+        2,
+        "目指す業務像",
+        "KPI変動から原因・影響・打ち手まで一気通貫で説明する",
+        """
+        目指すのは、AIが文章を書くことではありません。経営会議前に、KPI変動、差異要因、
+        重点案件、説明コメント案、意思決定・アクションが同じ根拠で揃っている状態です。
+        """,
+        """
+        <div class="flow-ribbon">
+            <div class="flow-node">
+                <em>01</em>
+                <b>KPI変動</b>
+                <span>売上、営業利益、利益率、CFの変化を、期間・事業・案件粒度で把握する。</span>
+            </div>
+            <div class="flow-node">
+                <em>02</em>
+                <b>差異要因</b>
+                <span>価格、数量、EAC、調達費、工程遅延など、説明すべき主因を絞る。</span>
+            </div>
+            <div class="flow-node">
+                <em>03</em>
+                <b>重点案件</b>
+                <span>財務影響が大きい案件、赤字化リスク、追加原価の発生源へ落とす。</span>
+            </div>
+            <div class="flow-node">
+                <em>04</em>
+                <b>AIコメント案</b>
+                <span>根拠データに戻れる形で、経営会議向けの説明文を生成する。</span>
+            </div>
+            <div class="flow-node">
+                <em>05</em>
+                <b>判断・アクション</b>
+                <span>承認、追加分析、案件アクション、次回フォローへ接続する。</span>
+            </div>
+        </div>
+        <div class="proposal-close">
+            経営会議の前に「何が起きたか」「なぜ起きたか」「どこに手を打つか」が揃う業務状態を作ります。
+        </div>
+        """,
+    )
+
+
+def render_proposal_data_foundation() -> None:
+    render_proposal_slide(
+        3,
+        "FP&Aデータ基盤",
+        "説明に耐えるには、定義・版・粒度・根拠を揃える必要がある",
+        """
+        データを集めるだけでは、経営会議で使える説明にはなりません。
+        コメントから差異、案件、元データへ戻れるように、説明責任を支える4つの能力を揃えます。
+        """,
+        """
+        <div class="foundation-quadrant">
+            <div class="proposal-panel accent-cyan">
+                <b>定義</b>
+                <span>KPI、勘定科目、案件、セグメントの意味を揃え、会議ごとに数字の解釈が変わらない状態にする。</span>
+            </div>
+            <div class="proposal-panel accent-blue">
+                <b>版</b>
+                <span>予算、前回見込、最新見込、実績の締め時点を管理し、比較軸を固定する。</span>
+            </div>
+            <div class="proposal-panel accent-amber">
+                <b>粒度</b>
+                <span>月次、事業、案件、顧客、勘定科目を接続し、全社KPIから案件まで降りられる状態にする。</span>
+            </div>
+            <div class="proposal-panel accent-red">
+                <b>根拠</b>
+                <span>コメント、差異、案件、元データのリネージを保持し、説明内容を検証できるようにする。</span>
+            </div>
+        </div>
+        <div class="foundation-core">
+            価値は「データを集めること」ではなく、説明から根拠へ戻れることです。
+        </div>
+        """,
+    )
+
+
+def render_proposal_system_architecture() -> None:
+    render_proposal_slide(
+        4,
+        "システムアーキテクチャ",
+        "既存システムの上に、FP&AデータマートとAI説明サービスを配置する",
+        """
+        既存のERP、EPM、案件管理、調達、工程、マスタを置き換えるのではなく、
+        上位にFP&A説明用のデータマート、KPI・差異ロジック、AI説明サービスを重ねます。
+        このページだけは技術構成を明示し、本番化に耐える設計論点を見せます。
+        """,
+        """
+        <div class="tech-architecture">
+            <div class="tech-layer" style="--accent:#60a5fa">
+                <em>Source systems</em>
+                <b>業務システム群</b>
+                <div class="tech-pill">ERP / GL actuals</div>
+                <div class="tech-pill">EPM budget / forecast</div>
+                <div class="tech-pill">Project EAC / PMO</div>
+                <div class="tech-pill">Procurement / schedule</div>
+                <div class="tech-pill">Master data</div>
+            </div>
+            <div class="tech-arrow">&rarr;</div>
+            <div class="tech-layer" style="--accent:#ffb000">
+                <em>Integration</em>
+                <b>連携・品質管理</b>
+                <div class="tech-pill">照合 / reconciliation</div>
+                <div class="tech-pill">シナリオ版管理</div>
+                <div class="tech-pill">案件ID・勘定マッピング</div>
+                <div class="tech-pill">履歴・リネージ</div>
+            </div>
+            <div class="tech-arrow">&rarr;</div>
+            <div class="tech-layer" style="--accent:#39c5bb">
+                <em>FP&amp;A mart</em>
+                <b>説明用データ層</b>
+                <div class="tech-pill">実績 / 予算 / 見込</div>
+                <div class="tech-pill">差異要因テーブル</div>
+                <div class="tech-pill">案件リスクレイヤー</div>
+                <div class="tech-pill">KPI semantic layer</div>
+            </div>
+            <div class="tech-arrow">&rarr;</div>
+            <div class="tech-layer" style="--accent:#b794f4">
+                <em>AI service</em>
+                <b>AI説明サービス</b>
+                <div class="tech-pill">根拠引用 / RAG</div>
+                <div class="tech-pill">プロンプト管理</div>
+                <div class="tech-pill">出力評価・監査ログ</div>
+                <div class="tech-pill">権限・ガードレール</div>
+            </div>
+            <div class="tech-arrow">&rarr;</div>
+            <div class="tech-layer" style="--accent:#ff647c">
+                <em>Experience</em>
+                <b>業務利用</b>
+                <div class="tech-pill">FP&amp;A Cockpit</div>
+                <div class="tech-pill">会議資料 / コメント</div>
+                <div class="tech-pill">承認・通知</div>
+                <div class="tech-pill">案件アクション管理</div>
+            </div>
+        </div>
+        <div class="tech-footnote">
+            <div>既存DWHやLakehouseがある場合は、その上にFP&amp;Aデータマートを設計します。</div>
+            <div>AIは自由回答ではなく、根拠引用・出力評価・監査ログを持つ説明サービスとして扱います。</div>
+            <div>KPI・差異ロジックはBI画面とAIコメントで共通化し、数字のズレを防ぎます。</div>
+            <div>権限、承認、プロンプト変更、モデル変更は本番運用時の統制対象です。</div>
+        </div>
+        """,
+    )
+
+
+def render_proposal_approach_options() -> None:
+    render_proposal_slide(
+        5,
+        "進め方の選択肢",
+        "先に解消すべき不確実性から、着手方法を選ぶ",
+        """
+        進め方は作業メニューではありません。経営層の完成像、実データでの効果、統制・承認運用のうち、
+        どの不確実性を先に潰すかで選びます。
+        """,
+        """
+        <div class="proposal-grid-3">
+            <div class="option-card" style="--accent:#39c5bb">
+                <em>Option 1</em>
+                <b>完成イメージ合意型</b>
+                <span>経営層・関係者が、同じ完成像を持てるかを先に確認する。</span>
+                <div class="option-meta">
+                    <div><strong>成果物:</strong> 画面イメージ、説明ストーリー、AIコメント例</div>
+                    <div><strong>負荷:</strong> 低〜中</div>
+                    <div><strong>向く状況:</strong> まず合意形成したい</div>
+                </div>
+            </div>
+            <div class="option-card" style="--accent:#ffb000">
+                <em>Option 2</em>
+                <b>重点KPI実証型</b>
+                <span>代表KPI・重点案件に絞り、実データで業務効果が出るかを確認する。</span>
+                <div class="option-meta">
+                    <div><strong>成果物:</strong> KPI連携PoC、差異分析、案件リスク分析</div>
+                    <div><strong>負荷:</strong> 中</div>
+                    <div><strong>向く状況:</strong> 実現性を確認したい</div>
+                </div>
+            </div>
+            <div class="option-card" style="--accent:#ff647c">
+                <em>Option 3</em>
+                <b>本番運用設計型</b>
+                <span>統制、承認、運用体制まで含めて、本番導入判断に進めるかを確認する。</span>
+                <div class="option-meta">
+                    <div><strong>成果物:</strong> 接続方針、品質ゲート、承認プロセス</div>
+                    <div><strong>負荷:</strong> 高</div>
+                    <div><strong>向く状況:</strong> 導入判断に進みたい</div>
+                </div>
+            </div>
+        </div>
+        <div class="proposal-close">
+            初期段階では、合意形成・効果検証・本番運用のどれを先に確かめるかを明確にすることが重要です。
+        </div>
+        """,
+    )
+
+
+def render_proposal_recommended_roadmap() -> None:
+    render_proposal_slide(
+        6,
+        "推奨ロードマップ",
+        "完成像の合意から始め、実証結果を本番化判断につなげる",
+        """
+        いきなり本番設計に入ると重く、PoCだけでは経営価値が曖昧になりやすい。
+        まず経営会議での完成像を合わせ、その後に重点KPIで有効性を確認し、実証結果をもとに本番化判断へ進めます。
+        """,
+        """
+        <div class="roadmap">
+            <div class="roadmap-phase" style="--accent:#39c5bb">
+                <em>Phase 1 / 2-4 weeks</em>
+                <b>完成像合意</b>
+                <span>対象会議を一つ選び、画面イメージ、説明ストーリー、AIコメント例を作る。</span>
+                <div class="roadmap-gate">判断ポイント: 経営層・FP&amp;A・ITが同じ完成像を持てるか</div>
+            </div>
+            <div class="roadmap-phase" style="--accent:#ffb000">
+                <em>Phase 2 / 6-8 weeks</em>
+                <b>重点KPI実証</b>
+                <span>営業利益、CF、重点案件などに絞り、実データに近い形で差異分析とコメント生成を検証する。</span>
+                <div class="roadmap-gate">判断ポイント: 業務効果、データ接続難度、説明品質が見えるか</div>
+            </div>
+            <div class="roadmap-phase" style="--accent:#ff647c">
+                <em>Phase 3 / 8-12 weeks</em>
+                <b>本番運用設計</b>
+                <span>品質ゲート、レビュー、承認、権限、監査ログ、運用体制を設計する。</span>
+                <div class="roadmap-gate">判断ポイント: 月次FP&amp;Aプロセスへ組み込めるか</div>
+            </div>
+        </div>
+        <div class="proposal-close">
+            推奨は、完成イメージ合意型 → 重点KPI実証型 → 本番運用設計型の段階導入です。
+        </div>
+        """,
+    )
+
+
+def render_proposal_assessment() -> None:
+    render_proposal_slide(
+        7,
+        "アセスメント提案",
+        "次フェーズで、PoCの対象と判断材料を具体化する",
+        """
+        次フェーズは、現状診断だけで終わらせません。短期に何を作り、何を検証し、
+        本番化判断に何が必要かを決める場として設計します。
+        """,
+        """
+        <div class="assessment-canvas">
+            <div class="assessment-item">
+                <em>Agenda 1</em>
+                <b>対象会議</b>
+                <span>月次経営会議、予実会議、見込更新会議のどこから変えるか。</span>
+            </div>
+            <div class="assessment-item">
+                <em>Agenda 2</em>
+                <b>対象KPI</b>
+                <span>売上、営業利益、利益率、CFのどこを説明可能にするか。</span>
+            </div>
+            <div class="assessment-item">
+                <em>Agenda 3</em>
+                <b>利用可能データ</b>
+                <span>ERP、EPM、案件EAC、調達、工程、マスタの所在と品質を確認する。</span>
+            </div>
+            <div class="assessment-item">
+                <em>Agenda 4</em>
+                <b>重点案件</b>
+                <span>赤字化リスク、EAC悪化、調達影響が大きい案件群を選ぶ。</span>
+            </div>
+            <div class="assessment-item">
+                <em>Agenda 5</em>
+                <b>品質課題</b>
+                <span>定義、版、粒度、ID、リネージ、承認のどこが詰まるかを見極める。</span>
+            </div>
+            <div class="assessment-item">
+                <em>Agenda 6</em>
+                <b>PoC範囲</b>
+                <span>完成イメージ、接続範囲、成果物、判断基準を具体化する。</span>
+            </div>
+        </div>
+        <div class="proposal-close">
+            目的は「診断」ではなく、PoC対象と本番化判断に必要な材料を短期で揃えることです。
+        </div>
+        """,
+    )
 
 
 def presentation_snapshot_html(
@@ -4550,10 +5337,13 @@ def main(app_mode: str = "internal") -> None:
         ("AI Commentary", "AIコメント", False),
     ]
     presentation_pages = [
-        ("Client Pre-Demo", "導入・問題提起", False),
-        ("Data Foundation", "FP&Aデータ基盤", False),
-        ("Reference Architecture", "構成・進め方", False),
-        ("Client Post-Demo", "アセスメント提案", False),
+        ("Problem Statement", "導入・問題提起", False),
+        ("Target Operating Model", "目指す業務像", False),
+        ("FPA Data Foundation", "FP&Aデータ基盤", False),
+        ("System Architecture", "システムアーキテクチャ", False),
+        ("Approach Options", "進め方の選択肢", False),
+        ("Recommended Roadmap", "推奨ロードマップ", False),
+        ("Assessment Proposal", "アセスメント提案", False),
     ]
     operational_pages = [
         ("Dashboard", "全社ダッシュボード"),
@@ -4566,7 +5356,7 @@ def main(app_mode: str = "internal") -> None:
         ("Tech Architecture", "技術構成", False),
         ("Data Explorer", "データ確認", False),
     ]
-    presenter_pages = presentation_pages + internal_pages
+    presenter_pages = presentation_pages
     client_page_keys = {key for key, _, _ in client_pages}
     client_page_guides = {key: guide for key, _, guide in client_pages}
     client_page_labels = {key: label for key, label, _ in client_pages}
@@ -4584,7 +5374,7 @@ def main(app_mode: str = "internal") -> None:
     presenter_only = app_mode == "presenter"
 
     if "active_page" not in st.session_state:
-        st.session_state["active_page"] = "Dashboard" if client_only else "Client Pre-Demo"
+        st.session_state["active_page"] = "Dashboard" if client_only else "Problem Statement"
         st.session_state["active_surface"] = "client" if client_only else "presenter"
         st.session_state["show_guide"] = False
 
@@ -4603,7 +5393,7 @@ def main(app_mode: str = "internal") -> None:
     elif presenter_only:
         active_page = st.session_state.get("active_page")
         if active_page not in presenter_page_keys:
-            active_page = "Client Pre-Demo"
+            active_page = "Problem Statement"
         st.session_state["active_surface"] = "presenter"
         st.session_state["active_page"] = active_page
         st.session_state["show_guide"] = presenter_page_guides.get(active_page, False)
@@ -4621,7 +5411,7 @@ def main(app_mode: str = "internal") -> None:
             st.session_state["active_surface"] = "internal"
             st.session_state["show_guide"] = False
         elif active_page not in valid_presenter_keys:
-            st.session_state["active_page"] = "Client Pre-Demo"
+            st.session_state["active_page"] = "Problem Statement"
             st.session_state["show_guide"] = False
     elif active_surface == "operational" and active_page not in operational_page_keys:
         st.session_state["active_page"] = "Dashboard"
@@ -4641,7 +5431,7 @@ def main(app_mode: str = "internal") -> None:
             st.session_state["show_guide"] = False
         elif surface == "presenter":
             valid_pages = presenter_page_keys if presenter_only else presentation_page_keys
-            st.session_state["active_page"] = current_page if current_page in valid_pages else "Client Pre-Demo"
+            st.session_state["active_page"] = current_page if current_page in valid_pages else "Problem Statement"
             st.session_state["show_guide"] = False
         else:
             st.session_state["active_page"] = current_page if current_page in client_page_keys else "Dashboard"
@@ -4660,20 +5450,25 @@ def main(app_mode: str = "internal") -> None:
             st.session_state["show_guide"] = False
 
     with st.sidebar:
-        st.markdown(f"### {APP_NAME}")
-        st.caption(COMPANY_NAME)
-        row_total = metadata.get("row_counts", {}).get("total")
-        row_total_text = f"{int(row_total):,}" if row_total is not None else "N/A"
-        st.markdown(
-            f"""
-            <div class="sidebar-meta">
-                <b>Current data</b><br>
-                Generated:&nbsp;{escape(format_generated_at(metadata))}<br>
-                Records:&nbsp;{escape(row_total_text)}
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        proposal_sidebar = presenter_only or st.session_state.get("active_surface") == "presenter"
+        if proposal_sidebar:
+            st.markdown("### AI時代のFP&Aデータ基盤")
+            st.caption("経営向けリファレンス構成")
+        else:
+            st.markdown(f"### {APP_NAME}")
+            st.caption("AI時代のFP&Aデータ基盤")
+            row_total = metadata.get("row_counts", {}).get("total")
+            row_total_text = f"{int(row_total):,}" if row_total is not None else "N/A"
+            st.markdown(
+                f"""
+                <div class="sidebar-meta">
+                    <b>Current data</b><br>
+                    Generated:&nbsp;{escape(format_generated_at(metadata))}<br>
+                    Records:&nbsp;{escape(row_total_text)}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
         if not client_only and not presenter_only:
             surface_options = ["presenter", "internal"]
@@ -4798,12 +5593,22 @@ def main(app_mode: str = "internal") -> None:
         surface_note = "社内・登壇者向けの台本です。公開デモでは確認用ページとして表示しています。"
     elif page in {"Dashboard", "Variance Analysis", "Project Risk", "AI Commentary"}:
         surface_note = "分析画面は、サイドバーからデモ用ガイド付き表示にも切り替えられます。"
-    if page == "Client Pre-Demo":
-        render_client_pre_demo(kpis, data["project_risk"], metadata)
+    if page == "Problem Statement":
+        render_proposal_problem_statement()
+    elif page == "Target Operating Model":
+        render_proposal_target_operating_model()
+    elif page == "FPA Data Foundation":
+        render_proposal_data_foundation()
+    elif page == "System Architecture":
+        render_proposal_system_architecture()
+    elif page == "Approach Options":
+        render_proposal_approach_options()
+    elif page == "Recommended Roadmap":
+        render_proposal_recommended_roadmap()
+    elif page == "Assessment Proposal":
+        render_proposal_assessment()
     elif page == "Internal Demo Guide":
         render_internal_demo_guide()
-    elif page == "Client Post-Demo":
-        render_client_post_demo()
     elif page == "Dashboard":
         render_dashboard(
             kpis,
@@ -4818,10 +5623,6 @@ def main(app_mode: str = "internal") -> None:
         render_project_risk(data["project_risk"], show_guide=show_guide)
     elif page == "AI Commentary":
         render_ai_commentary(kpis, data["fact_variance_drivers"], data["project_risk"], show_guide=show_guide)
-    elif page == "Data Foundation":
-        render_data_foundation(data)
-    elif page == "Reference Architecture":
-        render_reference_architecture()
     elif page == "Data Explorer":
         render_data_explorer(data)
     else:
