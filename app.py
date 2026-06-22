@@ -3357,10 +3357,10 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
                     ],
                     [
                         "app.py",
-                        "フルアプリURL",
-                        "開発・QA担当",
-                        "全ページ",
-                        "動作確認、保守、公開前チェック用。",
+                        "社内情報URL",
+                        "当社側の説明者・管理者",
+                        "プレゼンテーション資料、当デモに関する情報",
+                        "社内説明、技術説明、データ確認用。",
                     ],
                 ],
             )
@@ -3372,7 +3372,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
                 ],
                 columns=3,
             ),
-            "クライアント向けURLはダッシュボード専用、社内向けURLは説明資料専用、フルアプリは保守用です。",
+            "クライアント向けURLはダッシュボード専用、社内情報URLはプレゼンテーション資料と当デモ情報に絞っています。",
         )
     elif slide == 2:
         render_presentation_slide(
@@ -3491,7 +3491,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
     elif slide == 5:
         render_presentation_slide(
             "Architecture / 06",
-            "画面は、クライアント操作用と説明者支援用に分けています",
+            "画面は、本体デモ、プレゼンテーション資料、当デモ情報に分けています",
             presentation_table_html(
                 ["区分", "ページ", "目的", "クライアント向けURLでの表示"],
                 [
@@ -3499,10 +3499,10 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
                     ["本体デモ", "Variance Analysis", "差異要因をドリルダウンし、説明可能な粒度に分解する。", "表示する"],
                     ["本体デモ", "Project Risk", "利益悪化や納期遅延につながる案件を特定する。", "表示する"],
                     ["本体デモ", "AI Commentary", "会議資料に使う日本語コメントを生成する。", "表示する"],
-                    ["説明者支援", "Client Pre/Post Demo", "デモ前後の説明、期待値調整、次アクション整理。", "表示しない"],
-                    ["説明者支援", "Data Foundation", "AI活用に必要なデータ基盤の論点を説明する。", "表示しない"],
-                    ["説明者支援", "Tech Architecture", "この技術構成資料。実装と運用を説明する。", "表示しない"],
-                    ["内部確認", "Data Explorer", "架空データの列、件数、サンプルを検証する。", "表示しない"],
+                    ["プレゼンテーション資料", "Client Pre/Post Demo", "デモ前後の説明、期待値調整、次アクション整理。", "表示しない"],
+                    ["プレゼンテーション資料", "Data Foundation", "AI活用に必要なデータ基盤の論点を説明する。", "表示しない"],
+                    ["当デモに関する情報", "Tech Architecture", "この技術構成資料。実装と運用を説明する。", "表示しない"],
+                    ["当デモに関する情報", "Data Explorer", "架空データの列、件数、サンプルを検証する。", "表示しない"],
                 ],
             ),
             "『相手に触ってもらう画面』と『こちらが説明する画面』を分けることで、デモ体験が混ざらないようにしています。",
@@ -3605,6 +3605,9 @@ def main(app_mode: str = "internal") -> None:
     client_page_keys = {key for key, _, _ in client_pages}
     client_page_guides = {key: guide for key, _, guide in client_pages}
     client_page_labels = {key: label for key, label, _ in client_pages}
+    presentation_page_keys = {key for key, _, _ in presentation_pages}
+    presentation_page_guides = {key: guide for key, _, guide in presentation_pages}
+    presentation_page_labels = {key: label for key, label, _ in presentation_pages}
     presenter_page_keys = {key for key, _, _ in presenter_pages}
     presenter_page_guides = {key: guide for key, _, guide in presenter_pages}
     presenter_page_labels = {key: label for key, label, _ in presenter_pages}
@@ -3617,12 +3620,12 @@ def main(app_mode: str = "internal") -> None:
 
     if "active_page" not in st.session_state:
         st.session_state["active_page"] = "Dashboard" if client_only else "Client Pre-Demo"
-        st.session_state["active_surface"] = "client"
+        st.session_state["active_surface"] = "client" if client_only else "presenter"
         st.session_state["show_guide"] = False
 
     if st.session_state.get("active_surface") == "demo":
         st.session_state["active_surface"] = (
-            "internal" if st.session_state.get("active_page") in internal_page_keys else "client"
+            "internal" if st.session_state.get("active_page") in internal_page_keys else "presenter"
         )
 
     if client_only:
@@ -3639,17 +3642,22 @@ def main(app_mode: str = "internal") -> None:
         st.session_state["active_surface"] = "presenter"
         st.session_state["active_page"] = active_page
         st.session_state["show_guide"] = presenter_page_guides.get(active_page, False)
-    elif st.session_state.get("active_surface") not in {"client", "presenter", "operational", "internal"}:
-        st.session_state["active_surface"] = "client"
+    elif st.session_state.get("active_surface") not in {"presenter", "internal"}:
+        st.session_state["active_surface"] = "internal" if st.session_state.get("active_page") in internal_page_keys else "presenter"
 
     active_surface = st.session_state.get("active_surface")
     active_page = st.session_state.get("active_page")
     if active_surface == "client" and active_page not in client_page_keys:
         st.session_state["active_page"] = "Dashboard"
         st.session_state["show_guide"] = False
-    elif active_surface == "presenter" and active_page not in presenter_page_keys:
-        st.session_state["active_page"] = "Client Pre-Demo"
-        st.session_state["show_guide"] = False
+    elif active_surface == "presenter":
+        valid_presenter_keys = presenter_page_keys if presenter_only else presentation_page_keys
+        if active_page in internal_page_keys and not presenter_only:
+            st.session_state["active_surface"] = "internal"
+            st.session_state["show_guide"] = False
+        elif active_page not in valid_presenter_keys:
+            st.session_state["active_page"] = "Client Pre-Demo"
+            st.session_state["show_guide"] = False
     elif active_surface == "operational" and active_page not in operational_page_keys:
         st.session_state["active_page"] = "Dashboard"
         st.session_state["show_guide"] = False
@@ -3667,7 +3675,8 @@ def main(app_mode: str = "internal") -> None:
             st.session_state["active_page"] = current_page if current_page in internal_page_keys else "Internal Demo Guide"
             st.session_state["show_guide"] = False
         elif surface == "presenter":
-            st.session_state["active_page"] = current_page if current_page in presenter_page_keys else "Client Pre-Demo"
+            valid_pages = presenter_page_keys if presenter_only else presentation_page_keys
+            st.session_state["active_page"] = current_page if current_page in valid_pages else "Client Pre-Demo"
             st.session_state["show_guide"] = False
         else:
             st.session_state["active_page"] = current_page if current_page in client_page_keys else "Dashboard"
@@ -3679,7 +3688,9 @@ def main(app_mode: str = "internal") -> None:
         if surface == "client":
             st.session_state["show_guide"] = client_page_guides.get(page_key, False)
         elif surface == "presenter":
-            st.session_state["show_guide"] = presenter_page_guides.get(page_key, False)
+            st.session_state["show_guide"] = (
+                presenter_page_guides if presenter_only else presentation_page_guides
+            ).get(page_key, False)
         else:
             st.session_state["show_guide"] = False
 
@@ -3700,12 +3711,10 @@ def main(app_mode: str = "internal") -> None:
         )
 
         if not client_only and not presenter_only:
-            surface_options = ["client", "presenter", "operational", "internal"]
+            surface_options = ["presenter", "internal"]
             surface_labels = {
-                "client": "クライアント操作用",
-                "presenter": "説明者用",
-                "operational": "実務コックピット",
-                "internal": "社内資料",
+                "presenter": "プレゼンテーション資料",
+                "internal": "当デモに関する情報",
             }
             active_surface = st.session_state.get("active_surface")
             selected_surface = st.radio(
@@ -3732,13 +3741,15 @@ def main(app_mode: str = "internal") -> None:
             if selected_page != st.session_state.get("active_page"):
                 choose_page("operational", selected_page)
         elif active_surface == "presenter":
-            page_options = [key for key, _, _ in presenter_pages]
+            surface_pages = presenter_pages if presenter_only else presentation_pages
+            surface_page_labels = presenter_page_labels if presenter_only else presentation_page_labels
+            page_options = [key for key, _, _ in surface_pages]
             active_page = st.session_state.get("active_page")
             selected_page = st.radio(
                 "ページ",
                 page_options,
                 index=page_options.index(active_page) if active_page in page_options else 0,
-                format_func=lambda key: presenter_page_labels[key],
+                format_func=lambda key: surface_page_labels[key],
                 key="presenter_page_selector",
             )
             if selected_page != st.session_state.get("active_page"):
@@ -3771,11 +3782,11 @@ def main(app_mode: str = "internal") -> None:
         current_surface = st.session_state.get("active_surface")
         current_page = st.session_state.get("active_page")
         current_surface_label = {
-            "client": "クライアント操作用",
-            "presenter": "説明者用",
-            "operational": "実務コックピット",
-            "internal": "社内資料",
-        }.get(current_surface, "クライアント操作用")
+            "client": "本体デモ",
+            "presenter": "プレゼンテーション資料",
+            "operational": "本体デモ確認",
+            "internal": "当デモに関する情報",
+        }.get(current_surface, "プレゼンテーション資料")
         current_page_label = {
             **client_page_labels,
             **presenter_page_labels,
@@ -3803,10 +3814,10 @@ def main(app_mode: str = "internal") -> None:
             "AI Commentary": "AIコメント",
         }
         current_label = demo_label_map.get(page, page)
-        mode_label = "クライアント操作用"
+        mode_label = "本体デモ"
     elif st.session_state.get("active_surface") == "presenter":
         current_label = presenter_page_labels.get(page, page)
-        mode_label = "説明者用"
+        mode_label = "プレゼンテーション資料"
     elif st.session_state.get("active_surface") == "internal":
         internal_label_map = {
             "Internal Demo Guide": "説明者向けガイド",
@@ -3814,9 +3825,9 @@ def main(app_mode: str = "internal") -> None:
             "Data Explorer": "データ確認",
         }
         current_label = internal_label_map.get(page, page)
-        mode_label = "社内使用モード"
+        mode_label = "当デモに関する情報"
     else:
-        mode_label = "実務コックピット"
+        mode_label = "本体デモ確認"
     surface_note = "このページは、共有・説明の目的に合わせた補助ページです。"
     if page == "Internal Demo Guide":
         surface_note = "社内・登壇者向けの台本です。公開デモでは確認用ページとして表示しています。"

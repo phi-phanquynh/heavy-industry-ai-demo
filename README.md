@@ -10,7 +10,7 @@ Deploy targets:
 
 - Dashboard/client app: `client_app.py`
 - Presenter/support app: `presenter_app.py`
-- Internal/full app: `app.py`
+- Internal information app: `app.py`
 
 - Demo data only
 - All figures are fictional
@@ -39,11 +39,11 @@ http://localhost:8501
 
 ## Demo Flow
 
-The app separates three usage modes:
+The app separates usage modes by deployment target:
 
 - **Dashboard/client app**: only the cockpit screens a client can display and touch.
 - **Presenter/support app**: briefing, data foundation, reference architecture, follow-up, and support pages shown by us.
-- **Internal/full app**: all modes in one app for maintenance and QA.
+- **Internal information app**: presentation materials and demo information; it does not show the client cockpit pages.
 
 Dashboard/client app:
 
