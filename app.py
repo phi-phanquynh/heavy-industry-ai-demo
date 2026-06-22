@@ -492,6 +492,9 @@ def inject_css() -> None:
             gap: 10px;
             margin-top: 18px;
         }
+        .presentation-flow.is-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .presentation-flow.is-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .presentation-flow.is-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
         .presentation-step {
             background: #ffffff;
             border: 1px solid rgba(15, 23, 42, 0.12);
@@ -1395,8 +1398,10 @@ def render_client_pre_demo(kpis: pd.DataFrame, risk: pd.DataFrame, metadata: dic
                     ("2. Variance Analysis", "予算、見込、前年などの比較軸で、差異の主要因を分解します。"),
                     ("3. Project Risk", "利益悪化につながるCritical/High案件を特定します。"),
                     ("4. AI Commentary", "分析結果を経営会議で使える日本語コメントに変換します。"),
-                    ("5. Data Foundation", "自社で実現するために必要なデータ、品質管理、導入ステップを確認します。"),
-                ]
+                    ("5. Data Foundation", "AI活用に必要なデータ、品質管理、導入ステップを確認します。"),
+                    ("6. Reference Architecture", "複数の構築案と、本番化に向けた導入アプローチを確認します。"),
+                ],
+                columns=3,
             ),
             "画面を個別機能としてではなく、経営説明の一連の流れとして確認します。",
         )
@@ -1647,7 +1652,7 @@ def render_client_post_demo() -> None:
                     ("2. 必要データ", "ERP、EPM、案件EAC、調達、工程、マスタの所在と粒度を確認します。"),
                     ("3. KPI定義", "比較軸、計算式、更新頻度、責任部門を揃えます。"),
                     ("4. 品質課題", "欠損、版ずれ、案件ID不一致、勘定科目マッピングの課題を整理します。"),
-                    ("5. 成功条件", "PoCで何が確認できれば次に進むかを定義します。"),
+                    ("5. アーキテクチャ案", "Quick MVP、Governed FP&A、Enterprise AI、Vendor-ledのどれを軸にするかを決めます。"),
                 ],
                 columns=5,
             ),
@@ -2977,6 +2982,188 @@ def render_data_foundation(data: dict[str, Any]) -> None:
         )
 
 
+def render_reference_architecture() -> None:
+    st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
+    render_header(
+        "リファレンスアーキテクチャ / Reference Architecture",
+        "AI-enabled FP&Aの構築案と導入アプローチ",
+    )
+
+    slide = render_presentation_controls(
+        "reference_architecture",
+        [
+            "全体像",
+            "案A: Quick MVP",
+            "案B: Governed FP&A",
+            "案C: Enterprise AI",
+            "案D: Vendor-led",
+            "選び方",
+            "導入アプローチ",
+        ],
+    )
+
+    if slide == 0:
+        render_presentation_slide(
+            "Architecture Options",
+            "AI入りFP&Aに唯一の正解はない。目的、データ成熟度、統制要件で構成を選ぶ。",
+            """
+            <div class="presentation-lead">
+            クライアントがこのデモのようなAI入りFP&amp;Aを構築する場合、最初に決めるべきことは「どのLLMを使うか」ではありません。
+            どの会議で、どのKPIを、どの根拠データに戻れる状態で説明するかを決め、その成熟度に合うアーキテクチャを選びます。
+            </div>
+            """
+            + presentation_cards_html(
+                [
+                    ("案A: Quick MVP", "既存Excel、EPM出力、BIデータを使い、短期間で画面とAIコメントの業務価値を検証する。"),
+                    ("案B: Governed FP&A", "FP&Aデータマートと品質ゲートを整備し、説明責任を持てるAIコメント基盤を作る。"),
+                    ("案C: Enterprise AI", "全社データ基盤、セマンティック層、AIエージェントを組み合わせ、複数業務へ拡張する。"),
+                    ("案D: Vendor-led", "ERP/EPM/BIベンダーのAI機能を起点にし、構築負荷を下げながら標準機能を活用する。"),
+                ],
+                columns=4,
+            ),
+            "多くの場合は、案Aで業務仮説を検証し、案Bを本命アーキテクチャとして設計するのが現実的です。",
+        )
+    elif slide == 1:
+        render_presentation_slide(
+            "Option A",
+            "案A: Quick MVP / 既存データを使った短期検証型",
+            presentation_table_html(
+                ["Layer", "Reference design", "Key point"],
+                [
+                    ["Data sources", "EPM出力、Excel、既存BIデータ、案件リスト", "まずは代表KPIと代表案件に絞る"],
+                    ["Data processing", "Python / SQL / lightweight data mart", "再現可能な集計ロジックだけは固定する"],
+                    ["AI commentary", "ルール + プロンプトテンプレート + 人のレビュー", "AIの自由回答より、根拠付き定型コメントを優先する"],
+                    ["Experience", "Streamlit / Power BI prototype", "経営会議の説明順で画面を作る"],
+                ],
+            )
+            + presentation_cards_html(
+                [
+                    ("向いているケース", "4〜8週間で価値仮説を見せたい。現行データ基盤の整備を待たず、業務側の反応を取りたい。"),
+                    ("主なリスク", "Excel依存のままだと、データの版、根拠、更新責任が曖昧になり、本番運用へ移行しにくい。"),
+                    ("成功条件", "PoCでもKPI定義、比較軸、データ更新日、AIコメントの根拠を明記する。"),
+                ],
+                columns=3,
+            ),
+            "この案は本番アーキテクチャではなく、何を作るべきかを決めるための検証アーキテクチャです。",
+        )
+    elif slide == 2:
+        render_presentation_slide(
+            "Option B",
+            "案B: Governed FP&A Data Mart + AI Commentary Service",
+            presentation_table_html(
+                ["Layer", "Reference design", "Key point"],
+                [
+                    ["Source systems", "ERP、EPM、Project EAC、調達、工程、マスタ", "会計、計画、案件を同じ粒度でつなぐ"],
+                    ["Data foundation", "FP&Aデータマート、品質ゲート、シナリオ版管理", "実績照合、案件ID、勘定科目、比較軸を統制する"],
+                    ["Semantic layer", "KPI定義、差異要因定義、権限付きメトリクス", "AIが読む前に、業務定義を固定する"],
+                    ["AI layer", "コメント生成API、根拠引用、プロンプト管理、出力ログ", "説明文と根拠データをセットで管理する"],
+                    ["Experience", "FP&A Cockpit、BI、Teams/Slack通知、会議資料出力", "会議前確認、会議中説明、会議後アクションに使う"],
+                ],
+            )
+            + presentation_cards_html(
+                [
+                    ("標準推奨", "このデモの本番化に最も近い構成。FP&Aの説明責任とAI活用を両立しやすい。"),
+                    ("主なリスク", "データ統制を軽く見ると、AIの品質ではなく基礎データの不整合が問題になる。"),
+                    ("成功条件", "最初から全社ではなく、代表KPI、代表セグメント、代表会議で始める。"),
+                ],
+                columns=3,
+            ),
+            "クライアントに提案する本命案としては、この構成を基準に置くのが最も説明しやすいです。",
+        )
+    elif slide == 3:
+        render_presentation_slide(
+            "Option C",
+            "案C: Enterprise Lakehouse + Agentic FP&A Assistant",
+            presentation_table_html(
+                ["Layer", "Reference design", "Key point"],
+                [
+                    ["Enterprise data", "Lakehouse / warehouse、MDM、data catalog、lineage", "FP&A以外の業務データにも広げる前提"],
+                    ["Analytics", "Feature store、semantic model、forecasting、scenario simulation", "予測、シナリオ、異常検知を組み込む"],
+                    ["AI assistant", "RAG、tool calling、agent workflow、approval workflow", "AIが集計、要因探索、コメント草案、アクション提示を支援する"],
+                    ["Governance", "RBAC、監査ログ、model gateway、prompt/output evaluation", "権限、監査、評価を全社標準で管理する"],
+                    ["Experience", "FP&A portal、chat UI、BI embedded、workflow integration", "会話UIだけでなく業務ワークフローに埋め込む"],
+                ],
+            )
+            + presentation_cards_html(
+                [
+                    ("向いているケース", "全社データ基盤があり、FP&A以外にもAI分析基盤を横展開したい。"),
+                    ("主なリスク", "初期投資と設計範囲が大きい。業務ユースケースが曖昧だと大規模基盤だけが先行する。"),
+                    ("成功条件", "案B相当のFP&Aデータ定義を先に固め、その上にエージェントを載せる。"),
+                ],
+                columns=3,
+            ),
+            "大企業向けの将来像として有効ですが、最初のPoCからこの構成を全部作る必要はありません。",
+        )
+    elif slide == 4:
+        render_presentation_slide(
+            "Option D",
+            "案D: Vendor-led / ERP・EPM・BIベンダー機能を起点にする",
+            presentation_table_html(
+                ["Layer", "Reference design", "Key point"],
+                [
+                    ["Core platforms", "既存ERP、EPM、BI、planning toolのAI機能", "標準機能でできる範囲を先に使う"],
+                    ["Data model", "ベンダー標準データモデル + 必要最小限の拡張", "独自実装を増やしすぎない"],
+                    ["AI capability", "説明文生成、異常検知、ドリルダウン、レポート作成支援", "ベンダー機能の透明性と監査性を確認する"],
+                    ["Integration", "既存認証、権限、ワークフロー、レポート配布", "運用負荷と変更管理を抑える"],
+                ],
+            )
+            + presentation_cards_html(
+                [
+                    ("向いているケース", "既存EPM/BIへの投資が大きく、標準機能を優先して活用したい。"),
+                    ("主なリスク", "ベンダー標準に寄るため、重工業固有の案件EAC、工程、調達の説明が弱くなる場合がある。"),
+                    ("成功条件", "標準機能で足りる領域と、独自データ基盤が必要な領域を切り分ける。"),
+                ],
+                columns=3,
+            ),
+            "構築負荷を下げる選択肢ですが、説明責任に必要なデータ連携が標準機能だけで足りるかを確認します。",
+        )
+    elif slide == 5:
+        render_presentation_slide(
+            "Decision Criteria",
+            "どの案を選ぶべきか",
+            presentation_table_html(
+                ["観点", "案A: Quick MVP", "案B: Governed FP&A", "案C: Enterprise AI", "案D: Vendor-led"],
+                [
+                    ["初期スピード", "最速。短期デモ向き", "中。基礎設計が必要", "遅い。全社設計が必要", "中。標準機能次第"],
+                    ["説明責任", "弱い。人の補完が必要", "強い。根拠管理しやすい", "強いが設計が重い", "機能とログの透明性次第"],
+                    ["拡張性", "限定的", "FP&A領域で高い", "全社横展開に強い", "ベンダー範囲に依存"],
+                    ["技術負荷", "低〜中", "中", "高", "低〜中"],
+                    ["向いている場面", "価値仮説検証", "本番化の標準案", "全社AI基盤化", "既存投資活用"],
+                ],
+            )
+            + """
+            <div class="presentation-note">
+            推奨判断: 短期では案Aで経営・FP&amp;A部門の反応を確認し、本番化は案Bを軸にする。
+            全社AI基盤が既にある企業では案Cへ拡張し、既存EPM投資が大きい企業では案Dとの併用を検討します。
+            </div>
+            """,
+            "選択肢を1つに固定せず、PoC、本番化、全社展開で段階的に組み合わせます。",
+        )
+    else:
+        render_presentation_slide(
+            "Implementation Approach",
+            "導入アプローチ: 会議テーマを起点に、データ基盤とAIを段階的に広げる",
+            presentation_flow_html(
+                [
+                    ("0. 課題選定", "対象会議、KPI、説明したい差異、代表セグメントを決める。"),
+                    ("1. データ棚卸し", "ERP、EPM、EAC、調達、工程、マスタの所在、粒度、責任者を確認する。"),
+                    ("2. MVP構築", "代表KPIと代表案件に絞り、ダッシュボード、差異分解、AIコメントを作る。"),
+                    ("3. 統制設計", "KPI定義、品質ゲート、権限、ログ、承認フロー、根拠追跡を設計する。"),
+                    ("4. 本番化", "データ連携を自動化し、月次FP&Aプロセスと会議運営に組み込む。"),
+                ]
+            )
+            + presentation_cards_html(
+                [
+                    ("成果物", "KPI定義書、データソース棚卸し、To-Beアーキテクチャ、PoC画面、AIコメント評価観点、運用設計。"),
+                    ("ガバナンス", "権限、監査ログ、プロンプト管理、出力レビュー、根拠リンク、モデル変更管理を初期から設計する。"),
+                    ("次の一手", "クライアントの代表ユースケースを1つ選び、案Aで検証しながら案Bの本番設計を並行して進める。"),
+                ],
+                columns=3,
+            ),
+            "AI FP&Aはツール導入ではなく、経営説明プロセスとデータ基盤を再設計する取り組みです。",
+        )
+
+
 def render_tech_architecture(data: dict[str, Any]) -> None:
     render_header("Tech Architecture", "How this Streamlit demo is built and what to do next")
     render_page_guide(
@@ -3161,7 +3348,8 @@ def main(app_mode: str = "internal") -> None:
         ("Project Risk", "3. 案件リスク", True),
         ("AI Commentary", "4. AIコメント", True),
         ("Data Foundation", "5. データ基盤", False),
-        ("Client Post-Demo", "6. デモ閲覧後", False),
+        ("Reference Architecture", "6. リファレンス構成", False),
+        ("Client Post-Demo", "7. デモ閲覧後", False),
     ]
     operational_pages = [
         ("Dashboard", "全社ダッシュボード"),
@@ -3350,6 +3538,7 @@ def main(app_mode: str = "internal") -> None:
             "Project Risk": "デモ用案件リスク",
             "AI Commentary": "デモ用AIコメント",
             "Data Foundation": "データ基盤",
+            "Reference Architecture": "リファレンス構成",
             "Tech Architecture": "技術構成",
             "Data Explorer": "データ確認",
         }
@@ -3392,6 +3581,8 @@ def main(app_mode: str = "internal") -> None:
         render_ai_commentary(kpis, data["fact_variance_drivers"], data["project_risk"], show_guide=show_guide)
     elif page == "Data Foundation":
         render_data_foundation(data)
+    elif page == "Reference Architecture":
+        render_reference_architecture()
     elif page == "Data Explorer":
         render_data_explorer(data)
     else:
