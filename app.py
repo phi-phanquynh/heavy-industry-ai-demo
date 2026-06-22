@@ -1502,8 +1502,12 @@ def inject_css() -> None:
         }
         .foundation-flow-map {
             display: grid;
-            grid-template-columns: repeat(4, minmax(220px, 1fr));
-            gap: 14px;
+            grid-template-columns:
+                minmax(220px, 1fr) 42px
+                minmax(220px, 1fr) 42px
+                minmax(220px, 1fr) 42px
+                minmax(220px, 1fr);
+            gap: 10px;
             align-items: stretch;
             margin-top: 14px;
         }
@@ -1515,16 +1519,14 @@ def inject_css() -> None:
             padding: 14px;
             min-height: 300px;
         }
-        .foundation-flow-block:not(:last-child)::after {
-            content: "→";
-            position: absolute;
-            right: -18px;
-            top: 50%;
-            transform: translateY(-50%);
+        .foundation-flow-arrow {
+            align-items: center;
+            display: flex;
+            justify-content: center;
             color: #39c5bb;
-            font-size: 1.3rem;
+            font-size: 1.9rem;
             font-weight: 900;
-            z-index: 2;
+            text-shadow: 0 0 18px rgba(57,197,187,0.55);
         }
         .foundation-flow-block b {
             color: #f8fdff;
@@ -1662,12 +1664,9 @@ def inject_css() -> None:
             .architecture-edge-row {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
             }
-            .foundation-flow-block:not(:last-child)::after {
-                content: "↓";
-                right: 18px;
-                top: auto;
-                bottom: -22px;
-                transform: none;
+            .foundation-flow-arrow {
+                min-height: 28px;
+                transform: rotate(90deg);
             }
             .metric-value {
                 white-space: normal;
@@ -2300,10 +2299,10 @@ def foundation_flow_map_html() -> str:
             "ai",
         ),
     ]
-    blocks = []
-    for eyebrow, title, items, variant in columns:
+    flow_parts = []
+    for index, (eyebrow, title, items, variant) in enumerate(columns):
         item_html = "".join(f'<div class="foundation-flow-item">{escape(item)}</div>' for item in items)
-        blocks.append(
+        flow_parts.append(
             f"""
             <div class="foundation-flow-block {variant}">
                 <span>{escape(eyebrow)}</span>
@@ -2312,7 +2311,9 @@ def foundation_flow_map_html() -> str:
             </div>
             """
         )
-    return f'<div class="foundation-flow-map">{"".join(blocks)}</div>'
+        if index < len(columns) - 1:
+            flow_parts.append('<div class="foundation-flow-arrow">→</div>')
+    return f'<div class="foundation-flow-map">{"".join(flow_parts)}</div>'
 
 
 def presentation_divider_html(label: str) -> str:
