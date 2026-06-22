@@ -59,7 +59,7 @@ Presenter/support app:
 - **Reference Architecture**: Explain implementation options and rollout approach for AI-enabled FP&A.
 - **Client Follow-up**: Summarize takeaways and move into data assessment / PoC scoping.
 - **デモ解説用 / Presenter Guide**: Internal talk track, Q&A, and wording guardrails.
-- **技術構成プレゼン / Tech Architecture**: Slide-style internal page explaining how the demo is built, operated, and extended.
+- **技術構成 / Tech Architecture**: Slide-style internal page explaining how the demo is built, operated, and extended.
 - **Data Explorer**: Inspect generated fictional data, row counts, columns, samples, and statistics.
 
 ## Recommended Next Steps

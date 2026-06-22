@@ -1275,20 +1275,19 @@ def presentation_table_html(headers: list[str], rows: list[list[str]]) -> str:
 
 
 def render_presentation_slide(eyebrow: str, title: str, body_html: str, footer: str = "") -> None:
+    body = "\n".join(line.strip() for line in body_html.strip().splitlines())
     footer_html = f'<div class="presentation-footer">{escape(footer)}</div>' if footer else ""
-    st.markdown(
-        f"""
-        <div class="presentation-slide">
-            <div>
-                <div class="presentation-eyebrow">{escape(eyebrow)}</div>
-                <h2>{escape(title)}</h2>
-                {body_html}
-            </div>
-            {footer_html}
-        </div>
-        """,
-        unsafe_allow_html=True,
+    html = (
+        '<div class="presentation-slide">\n'
+        "<div>\n"
+        f'<div class="presentation-eyebrow">{escape(eyebrow)}</div>\n'
+        f"<h2>{escape(title)}</h2>\n"
+        f"{body}\n"
+        "</div>\n"
+        f"{footer_html}\n"
+        "</div>"
     )
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def presentation_snapshot_html(
@@ -1336,7 +1335,7 @@ def presentation_snapshot_html(
 
 def render_client_pre_demo(kpis: pd.DataFrame, risk: pd.DataFrame, metadata: dict[str, Any]) -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
-    render_header("デモ閲覧前プレゼン / Client Preview", "Before viewing the AI FP&A cockpit")
+    render_header("デモ閲覧前 / Client Preview", "Before viewing the AI FP&A cockpit")
 
     slide = render_presentation_controls(
         "client_pre_demo",
@@ -1565,7 +1564,7 @@ def render_internal_demo_guide() -> None:
 
 def render_client_post_demo() -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
-    render_header("デモ閲覧後プレゼン / Client Follow-up", "What to take away and how to move next")
+    render_header("デモ閲覧後 / Client Follow-up", "What to take away and how to move next")
 
     slide = render_presentation_controls(
         "client_post_demo",
@@ -2874,7 +2873,7 @@ def render_foundation_quality_matrix() -> None:
 
 def render_data_foundation(data: dict[str, Any]) -> None:
     st.markdown('<div id="foundation-page"></div>', unsafe_allow_html=True)
-    render_header("データ基盤プレゼン / Data Foundation", "AI投資の前に、経営データの分断を解く")
+    render_header("データ基盤 / Data Foundation", "AI投資の前に、経営データの分断を解く")
 
     slide = render_presentation_controls(
         "data_foundation",
@@ -3170,7 +3169,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
     generated_at = format_generated_at(metadata)
     total_rows = row_count_text(metadata)
 
-    render_header("技術構成プレゼン / Tech Architecture", "社内説明用: デモの構成、処理、公開運用、次の拡張を説明する")
+    render_header("技術構成 / Tech Architecture", "社内説明用: デモの構成、処理、公開運用、次の拡張を説明する")
     st.caption("このページは社内・説明者向けです。クライアント向けダッシュボードURLには表示されません。")
 
     titles = [
@@ -3228,7 +3227,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
                         "presenter_app.py",
                         "社内・説明者向けURL",
                         "当社側の説明者",
-                        "閲覧前/後プレゼン、データ基盤、技術構成、データ確認",
+                        "閲覧前/後の説明、データ基盤、技術構成、データ確認",
                         "商談や社内説明で投影する支援資料。",
                     ],
                     [
@@ -3377,7 +3376,7 @@ def render_tech_architecture(data: dict[str, Any]) -> None:
                     ["本体デモ", "AI Commentary", "会議資料に使う日本語コメントを生成する。", "表示する"],
                     ["説明者支援", "Client Pre/Post Demo", "デモ前後の説明、期待値調整、次アクション整理。", "表示しない"],
                     ["説明者支援", "Data Foundation", "AI活用に必要なデータ基盤の論点を説明する。", "表示しない"],
-                    ["説明者支援", "Tech Architecture", "この技術構成プレゼン。実装と運用を説明する。", "表示しない"],
+                    ["説明者支援", "Tech Architecture", "この技術構成資料。実装と運用を説明する。", "表示しない"],
                     ["内部確認", "Data Explorer", "架空データの列、件数、サンプルを検証する。", "表示しない"],
                 ],
             ),
@@ -3461,10 +3460,10 @@ def main(app_mode: str = "internal") -> None:
         ("AI Commentary", "AIコメント", False),
     ]
     presentation_pages = [
-        ("Client Pre-Demo", "デモ閲覧前プレゼン", False),
-        ("Data Foundation", "データ基盤プレゼン", False),
+        ("Client Pre-Demo", "デモ閲覧前", False),
+        ("Data Foundation", "データ基盤", False),
         ("Reference Architecture", "リファレンス構成", False),
-        ("Client Post-Demo", "デモ閲覧後プレゼン", False),
+        ("Client Post-Demo", "デモ閲覧後", False),
     ]
     operational_pages = [
         ("Dashboard", "全社ダッシュボード"),
@@ -3474,7 +3473,7 @@ def main(app_mode: str = "internal") -> None:
     ]
     internal_pages = [
         ("Internal Demo Guide", "デモ解説用", False),
-        ("Tech Architecture", "技術構成プレゼン", False),
+        ("Tech Architecture", "技術構成", False),
         ("Data Explorer", "データ確認", False),
     ]
     presenter_pages = presentation_pages + internal_pages
@@ -3686,7 +3685,7 @@ def main(app_mode: str = "internal") -> None:
     elif st.session_state.get("active_surface") == "internal":
         internal_label_map = {
             "Internal Demo Guide": "説明者向けガイド",
-            "Tech Architecture": "技術構成プレゼン",
+            "Tech Architecture": "技術構成",
             "Data Explorer": "データ確認",
         }
         current_label = internal_label_map.get(page, page)
