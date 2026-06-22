@@ -5,6 +5,7 @@ import hashlib
 from datetime import datetime
 from html import escape
 from pathlib import Path
+from textwrap import dedent
 from typing import Any
 
 import numpy as np
@@ -2123,6 +2124,10 @@ def yfiles_edge_label(item: dict[str, Any]) -> Any:
     )
 
 
+def html_fragment(html: str) -> str:
+    return "\n".join(line.strip() for line in dedent(html).strip().splitlines())
+
+
 def architecture_graph_fallback_html(nodes: list[dict[str, Any]], edges: list[dict[str, Any]]) -> str:
     node_lookup = {node["id"]: node for node in nodes}
     node_html = "".join(
@@ -2145,13 +2150,15 @@ def architecture_graph_fallback_html(nodes: list[dict[str, Any]], edges: list[di
         )
         for edge in edges
     )
-    return f"""
+    return html_fragment(
+        f"""
     <div class="architecture-fallback">
         <div class="architecture-object-grid">{node_html}</div>
         <div class="presentation-section-divider"><span>Connections</span></div>
         <div class="architecture-edge-list">{edge_html}</div>
     </div>
     """
+    )
 
 
 def render_yfiles_architecture_graph(
@@ -2189,25 +2196,29 @@ def render_yfiles_architecture_graph(
         for edge in edges
     ]
 
-    widget = StreamlitGraphWidget(
-        graph_nodes,
-        graph_edges,
-        node_label_mapping=yfiles_node_label,
-        edge_label_mapping=yfiles_edge_label,
-        node_color_mapping=lambda item: item.get("properties", {}).get("color", "#39c5bb"),
-        edge_color_mapping=lambda item: item.get("properties", {}).get("color", "#39c5bb"),
-        node_size_mapping=lambda item: tuple(item.get("properties", {}).get("size", (160, 68))),
-        node_type_mapping=lambda item: item.get("properties", {}).get("layer", ""),
-        edge_thickness_factor_mapping=lambda item: item.get("properties", {}).get("thickness", 2.0),
-    )
-    layout = Layout.HIERARCHIC if Layout is not None else None
-    widget.show(
-        directed=True,
-        graph_layout=layout,
-        sidebar={"enabled": True, "start_with": "Data"},
-        overview=True,
-        key=key,
-    )
+    try:
+        widget = StreamlitGraphWidget(
+            graph_nodes,
+            graph_edges,
+            node_label_mapping=yfiles_node_label,
+            edge_label_mapping=yfiles_edge_label,
+            node_color_mapping=lambda item: item.get("properties", {}).get("color", "#39c5bb"),
+            edge_color_mapping=lambda item: item.get("properties", {}).get("color", "#39c5bb"),
+            node_size_mapping=lambda item: tuple(item.get("properties", {}).get("size", (160, 68))),
+            node_type_mapping=lambda item: item.get("properties", {}).get("layer", ""),
+            edge_thickness_factor_mapping=lambda item: item.get("properties", {}).get("thickness", 2.0),
+        )
+        layout = Layout.HIERARCHIC if Layout is not None else None
+        widget.show(
+            directed=True,
+            graph_layout=layout,
+            sidebar={"enabled": True, "start_with": "Data"},
+            overview=True,
+            key=key,
+        )
+    except Exception as exc:  # pragma: no cover - depends on optional Streamlit component runtime.
+        print(f"Architecture graph component failed; rendering static fallback ({type(exc).__name__}).")
+        st.markdown(architecture_graph_fallback_html(nodes, edges), unsafe_allow_html=True)
 
 
 def render_architecture_graph_slide(
@@ -2220,25 +2231,32 @@ def render_architecture_graph_slide(
     notes_html: str,
     footer: str,
 ) -> None:
+    lead = html_fragment(lead_html)
+    notes = html_fragment(notes_html)
+
     st.markdown(
-        f"""
+        html_fragment(
+            f"""
         <div class="presentation-slide presentation-graph-header">
             <div class="presentation-eyebrow">{escape(eyebrow)}</div>
             <h2>{escape(title)}</h2>
-            {lead_html}
+            {lead}
             {presentation_divider_html("構成オブジェクトと接続")}
         </div>
-        """,
+        """
+        ),
         unsafe_allow_html=True,
     )
-    render_yfiles_architecture_graph(nodes, edges, key)
+    st.markdown(architecture_graph_fallback_html(nodes, edges), unsafe_allow_html=True)
     st.markdown(
-        f"""
+        html_fragment(
+            f"""
         <div class="presentation-graph-notes">
-            {notes_html}
+            {notes}
             <div class="presentation-footer">{escape(footer)}</div>
         </div>
-        """,
+        """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -2397,92 +2415,107 @@ def presentation_snapshot_html(
 
 def render_client_pre_demo(kpis: pd.DataFrame, risk: pd.DataFrame, metadata: dict[str, Any]) -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
-    render_header("デモ閲覧前 / Client Preview", "Before viewing the AI-driven FP&A cockpit")
+    render_header(
+        "AI活用の前に整えるべきFP&Aデータ基盤",
+        "経営KPIから案件リスク・打ち手まで説明できる状態をつくる",
+    )
 
     slide = render_presentation_controls(
         "client_pre_demo",
-        ["導入メッセージ", "現在のデモデータ", "押さえる3点", "デモの流れ", "前提"],
+        ["本日の論点", "経営会議の問い", "AI導入の落とし穴", "デモで見ること", "進め方"],
     )
 
     if slide == 0:
         render_presentation_slide(
-            "Client Preview",
-            "まず確認していただきたい状況",
+            "Opening",
+            "本日のテーマは、AIツールの紹介ではありません",
             """
             <div class="presentation-lead">
-            このデモは、重工業のFP&amp;Aで起こりやすい「売上は伸びているのに、利益率とキャッシュフローは悪化している」
-            状況を扱います。見るべきポイントは、AIが文章を作ることそのものではありません。
+            CFO、経営企画、FP&amp;Aが必要としているのは、AIが文章を書くことそのものではありません。
+            経営会議で「なぜ悪化したのか」「どの案件に手を打つべきか」を、同じ根拠データで説明できる状態です。
             </div>
             <div class="presentation-note">
-            経営KPI、差異要因、案件リスク、根拠データが同じ流れでつながり、会議で説明責任を果たせる状態になることを確認します。
+            今日確認したいのは、AI活用の前に、経営KPI、差異要因、案件リスク、打ち手をつなぐFP&amp;Aデータ基盤をどう整えるかです。
             </div>
             """,
-            "この後の画面は、経営説明の流れを疑似体験するための架空データデモです。",
+            "途中でCockpitを操作し、最後にデータ基盤アセスメントの論点へ戻します。",
         )
     elif slide == 1:
         render_presentation_slide(
-            "Current Snapshot",
-            "最新デモデータの状態",
-            presentation_snapshot_html(kpis, risk, metadata),
+            "Management Question",
+            "経営会議で問われるのは、数字ではなく原因と打ち手です",
+            """
+            <div class="presentation-lead">
+            重工業のFP&amp;Aでは、売上が上振れていても、営業利益、利益率、キャッシュフローが悪化することがあります。
+            このとき経営会議で必要なのは、グラフの説明ではなく、悪化要因と手を打つべき案件をすぐ示せることです。
+            </div>
+            """
+            + presentation_snapshot_html(kpis, risk, metadata),
             "数値はすべて架空データです。実在企業の財務・案件情報は含みません。",
         )
     elif slide == 2:
         render_presentation_slide(
-            "Key Points",
-            "最初に押さえていただきたい3点",
+            "AI Trap",
+            "データが分断されたままAIを入れても、説明責任は強くなりません",
             presentation_cards_html(
                 [
                     (
-                        "1. 経営KPIから原因へたどれる",
-                        "全社の売上、営業利益、利益率、キャッシュフローを起点に、セグメント別・要因別の差異へ掘り下げます。",
+                        "定義が揃わない",
+                        "売上、営業利益、EAC、案件ステータスの定義が部門ごとに違うと、AIの出力を検証できません。",
                     ),
                     (
-                        "2. 案件リスクまでつながる",
-                        "EAC悪化、設計変更、外注費、工程遅延など、利益悪化の原因を案件単位のアクションへつなげます。",
+                        "版が揃わない",
+                        "予算、前回見込、最新見込、実績の版が管理されていないと、差異説明が毎回作り直しになります。",
                     ),
                     (
-                        "3. AIの前提は信頼できるデータ",
-                        "AIコメントの品質は、ERP、EPM、案件EAC、調達、工程、マスタが整備されているかで決まります。",
+                        "案件と財務がつながらない",
+                        "EAC悪化、調達費、工程遅延が財務KPIへつながらないと、原因は見えても打ち手に落ちません。",
                     ),
                 ],
                 columns=3,
             ),
-            "AIの見せ場よりも、根拠データがつながっていることを重視して見てください。",
+            "AIは最後の文章化を助けますが、経営説明の品質はその前のデータ基盤で決まります。",
         )
     elif slide == 3:
         render_presentation_slide(
             "Demo Flow",
-            "デモは、経営説明の一本の流れとして見ます",
+            "デモは、データがつながった場合の経営説明体験として見ます",
             """
             <div class="presentation-lead">
-            画面を順番に紹介するのではなく、経営会議で説明するときの思考の流れに沿って見ます。
-            まず全社KPIの違和感をつかみ、差異の主因を絞り、最後に案件アクションとコメントへ落とします。
+            この後、一度Cockpitをしっかり操作します。ただし見る対象は画面機能ではありません。
+            経営KPIから差異要因、案件リスク、経営会議コメントまでが、同じ根拠でつながる流れを確認します。
+            </div>
+            """
+            + presentation_flow_html(
+                [
+                    ("Dashboard", "売上、利益、利益率、CFの矛盾を捉える。"),
+                    ("Variance", "差異を要因別に分解し、説明の主因を絞る。"),
+                    ("Project Risk", "財務影響を案件リスクと打ち手へつなげる。"),
+                    ("AI Commentary", "会議向けコメントを根拠付きの文章案にする。"),
+                ],
+                columns=4,
+            ),
+            "デモ後に、この体験を本番で成立させるためのデータ基盤論点へ戻ります。",
+        )
+    else:
+        render_presentation_slide(
+            "Assessment Lens",
+            "本日のゴールは、データ基盤アセスメントの論点を揃えることです",
+            """
+            <div class="presentation-lead">
+            デモ画面は完成製品の紹介ではなく、FP&amp;Aデータ基盤が整うと経営説明がどう変わるかを示す到達イメージです。
+            操作後は、どの会議テーマ、KPI、データ、品質ゲートから棚卸しすべきかを確認します。
             </div>
             """
             + presentation_cards_html(
                 [
-                    ("全社KPI", "売上は伸びているのに、利益率とキャッシュフローが悪化する矛盾を最初に捉えます。"),
-                    ("差異と案件", "差異要因を追い、利益悪化につながる案件へ話を落とします。"),
-                    ("説明と実装論点", "AIコメントを見たうえで、なぜデータ基盤が必要なのかへつなげます。"),
+                    ("会議テーマ", "月次経営会議、予実会議、見込更新会議のどこを最初に変えるか。"),
+                    ("KPIと粒度", "売上、営業利益、利益率、CFをどの期間・セグメント・案件粒度で説明するか。"),
+                    ("必要データ", "ERP、EPM、案件EAC、調達、工程、マスタのどこにギャップがあるか。"),
                 ],
                 columns=3,
             ),
-            "画面を個別機能としてではなく、経営説明の一連の流れとして確認します。",
-        )
-    else:
-        render_presentation_slide(
-            "Assumptions",
-            "このデモの前提",
-            """
-            <div class="presentation-lead">
-            数値はすべて架空です。実在企業の財務・案件情報は使っていません。
-            ここで見ていただきたいのは、完成済み製品ではなく、AI-driven FP&amp;Aがどのような経営説明体験になるかです。
-            </div>
-            <div class="presentation-note">
-            画面の見た目だけでなく、どのデータがつながると説明が速く、深く、再現可能になるかを確認してください。
-            </div>
-            """,
-            "この前提を置いたうえで、次のダッシュボード以降を確認します。",
+            "この前提を置いたうえで、Cockpitの操作に入ります。",
         )
 
 
@@ -2496,8 +2529,8 @@ def render_internal_demo_guide() -> None:
             <h2>このデモで伝える芯</h2>
             <p>
             クライアントに残したい印象は「AIでコメントが出る」ではなく、
-            「予実差、見込差、案件リスク、根拠データがつながると、経営会議の説明品質とスピードが変わる」です。
-            AIは最後の文章化を担い、価値の源泉は信頼できるFP&amp;Aデータ基盤にある、という順で説明します。
+            「経営会議で原因、影響、打ち手を説明するには、予実・見込・案件・調達・工程・マスタがつながる必要がある」です。
+            Cockpitは到達イメージとして見せ、最後はデータ基盤アセスメントへ会話を戻します。
             </p>
         </div>
         """,
@@ -2519,14 +2552,14 @@ def render_internal_demo_guide() -> None:
             <tbody>
                 <tr>
                     <td>Client Preview</td>
-                    <td>AI-driven FP&amp;Aの完成イメージを先に合わせる</td>
-                    <td>架空データであること、重工業の典型課題、見る順を短く説明する。</td>
-                    <td>「すぐ本番で使えます」と言い切る。</td>
+                    <td>AI活用前のデータ基盤論点を置く</td>
+                    <td>CFO・経営企画・FP&amp;A向けに、経営会議で説明すべき原因と打ち手から話を始める。</td>
+                    <td>AIツールや画面機能の紹介から入る。</td>
                 </tr>
                 <tr>
                     <td>Dashboard</td>
-                    <td>売上が良くても利益とCFは悪化しうる</td>
-                    <td>経営層が最初に見るべき矛盾を提示する。Revenue上振れとOP/CF悪化を対比する。</td>
+                    <td>経営会議の問いを作る</td>
+                    <td>売上は上振れ、利益とCFは悪化という矛盾を提示し、原因説明の必要性を作る。</td>
                     <td>グラフ仕様の説明に長く入る。</td>
                 </tr>
                 <tr>
@@ -2538,26 +2571,26 @@ def render_internal_demo_guide() -> None:
                 <tr>
                     <td>Project Risk</td>
                     <td>KPIから案件アクションへ落とす</td>
-                    <td>Marine &amp; OffshoreのCritical案件、Aerospace &amp; DefenseのHigh案件を例にする。</td>
+                    <td>財務影響をEAC悪化、調達、工程遅延などの案件論点へつなげる。</td>
                     <td>案件リスクを財務KPIと別物として扱う。</td>
                 </tr>
                 <tr>
                     <td>AI Commentary</td>
-                    <td>経営会議向けコメント作成を速くする</td>
-                    <td>金額、要因、案件、推奨アクションを含むコメントになる点を見せる。</td>
+                    <td>AIは最後の文章化の出口として扱う</td>
+                    <td>金額、要因、案件、推奨アクションが同じ根拠から文章化される点を見せる。</td>
                     <td>AIが最終判断まで自動化すると受け取られる言い方。</td>
                 </tr>
                 <tr>
                     <td>Data Foundation</td>
-                    <td>本番化の主戦場はデータ基盤</td>
-                    <td>ERP、EPM、EAC、調達、工程、マスタ、品質ゲートを説明する。</td>
-                    <td>LLM連携だけを導入テーマにする。</td>
+                    <td>本番化の主戦場はデータ基盤アセスメント</td>
+                    <td>ERP、EPM、EAC、調達、工程、マスタ、品質ゲートを棚卸し対象として説明する。</td>
+                    <td>LLM連携や画面構築だけを次アクションにする。</td>
                 </tr>
                 <tr>
                     <td>Client Follow-up</td>
-                    <td>次は自社データで検証する</td>
-                    <td>データ棚卸し、KPI定義、代表ユースケース、PoC範囲へ落とす。</td>
-                    <td>デモ後の具体アクションを曖昧にする。</td>
+                    <td>次はデータ基盤アセスメントを始める</td>
+                    <td>会議テーマ、KPI定義、必要データ、版管理、粒度、リネージの棚卸しへ落とす。</td>
+                    <td>「PoCしましょう」だけで終える。</td>
                 </tr>
             </tbody>
         </table>
@@ -2571,23 +2604,23 @@ def render_internal_demo_guide() -> None:
         <div class="briefing-flow">
             <div class="briefing-step">
                 <b>0:00 Opening</b>
-                <span>「重工業のFP&amp;Aで、売上・利益・CF・案件リスクを一気通貫で説明するデモです。」</span>
+                <span>「本日はAIツールではなく、経営説明に必要なFP&amp;Aデータ基盤の話です。」</span>
             </div>
             <div class="briefing-step">
-                <b>0:45 Dashboard</b>
-                <span>売上は上振れ、利益とCFは悪化という矛盾を見せる。</span>
+                <b>0:45 Problem</b>
+                <span>売上は上振れ、利益とCFは悪化という経営会議の問いを置く。</span>
             </div>
             <div class="briefing-step">
-                <b>1:45 Variance</b>
-                <span>差異要因をウォーターフォールで分解し、主要ドライバーへ絞る。</span>
+                <b>1:30 Demo</b>
+                <span>Dashboard、Variance、Risk、AI Commentaryを経営説明の流れとして操作する。</span>
             </div>
             <div class="briefing-step">
-                <b>3:00 Risk + AI</b>
-                <span>案件リスクへ落とし、AIコメントで会議資料化する。</span>
+                <b>3:45 Foundation</b>
+                <span>今の体験は、ERP、EPM、案件EAC、調達、工程、マスタがつながることが前提だと戻す。</span>
             </div>
             <div class="briefing-step">
                 <b>4:30 Close</b>
-                <span>「実現の鍵はLLMではなく、根拠データがつながるFP&amp;A基盤です。」で締める。</span>
+                <span>「次はデータ基盤アセスメントから始めましょう」で締める。</span>
             </div>
         </div>
         """,
@@ -2610,12 +2643,12 @@ def render_internal_demo_guide() -> None:
                     <td>いいえ、完全な架空データです。実装時はERP、EPM、案件EAC、調達、工程、マスタを接続します。</td>
                 </tr>
                 <tr>
-                    <td>AIは何を判断していますか</td>
-                    <td>AIは承認済みのKPI、差異要因、案件リスクをもとに説明文を生成します。最終判断は人が行います。</td>
+                    <td>これはAI製品のデモですか</td>
+                    <td>主目的は製品紹介ではありません。経営説明に必要なデータ接続と品質ゲートを具体化するための到達イメージです。</td>
                 </tr>
                 <tr>
                     <td>最初に何から始めるべきですか</td>
-                    <td>代表ユースケースを1つ選び、KPI定義、比較軸、必要データ、品質ゲートを棚卸しするのが現実的です。</td>
+                    <td>代表会議テーマを1つ選び、KPI定義、比較軸、必要データ、品質ゲートを棚卸しするのが現実的です。</td>
                 </tr>
                 <tr>
                     <td>どのくらいでPoCできますか</td>
@@ -2630,28 +2663,27 @@ def render_internal_demo_guide() -> None:
 
 def render_client_post_demo() -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
-    render_header("デモ閲覧後 / Client Follow-up", "What to take away and how to move next")
+    render_header("データ基盤アセスメント / Client Follow-up", "デモ体験を自社適用の論点へ戻す")
 
     slide = render_presentation_controls(
         "client_post_demo",
-        ["持ち帰り", "主な示唆", "確認観点", "次の進め方", "次回アジェンダ"],
+        ["回収メッセージ", "主な示唆", "アセスメント観点", "次の進め方", "次回アジェンダ"],
     )
 
     if slide == 0:
         render_presentation_slide(
             "Client Follow-up",
-            "デモ後に持ち帰っていただきたいこと",
+            "今見た体験は、AI単体では成立しません",
             """
             <div class="presentation-lead">
-            AI-driven FP&amp;Aの価値は、月次差異説明を速くするだけではありません。
-            経営KPIから差異要因、案件リスク、推奨アクション、根拠データまでを同じ流れで確認できるようにし、
-            経営会議での説明を再現可能にすることが本質です。
+            Cockpitで見た「KPIから差異要因、案件リスク、会議コメントまでつながる」体験は、
+            ERP、EPM、案件EAC、調達、工程、マスタが同じ定義・版・粒度でつながって初めて成立します。
             </div>
             <div class="presentation-note">
-            重要なのは、AIコメントを出すことではなく、コメントの根拠をKPI、差異要因、案件、元データまで戻れる状態にすることです。
+            次に行うべきことはAIツール選定ではなく、自社のFP&amp;Aデータ基盤が経営説明に耐えられるかを確認するアセスメントです。
             </div>
             """,
-            "ここから自社適用の論点へ切り替えます。",
+            "ここから自社データで何を確認すべきかに切り替えます。",
         )
     elif slide == 1:
         render_presentation_slide(
@@ -2660,37 +2692,37 @@ def render_client_post_demo() -> None:
             presentation_cards_html(
                 [
                     (
-                        "1. 差異説明は標準化できる",
-                        "毎月の説明が担当者ごとのExcel作業に依存していても、KPIと差異要因を定義すれば再利用可能な説明プロセスにできます。",
+                        "1. 経営説明はデータのつながりで決まる",
+                        "売上、利益、CF、案件リスクが同じ根拠でつながると、会議で説明すべき原因と打ち手が見えやすくなります。",
                     ),
                     (
                         "2. 重工業では案件粒度が重要",
                         "売上・利益・CFの変化は、案件EAC、設計変更、調達、工程遅延とつながっています。全社KPIだけでは打ち手に届きません。",
                     ),
                     (
-                        "3. AI導入はデータ基盤から始める",
-                        "LLM連携より先に、データソース、KPI定義、シナリオ版管理、案件マスタ、品質ゲートを整理する必要があります。",
+                        "3. AI導入はアセスメントから始める",
+                        "LLM連携より先に、データソース、KPI定義、シナリオ版管理、案件マスタ、品質ゲートを棚卸しする必要があります。",
                     ),
                 ],
                 columns=3,
             ),
-            "この3点がPoCの設計と本番化の優先順位を決めます。",
+            "この3点が、データ基盤アセスメントと後続PoCの優先順位を決めます。",
         )
     elif slide == 2:
         render_presentation_slide(
             "Assessment",
-            "自社適用に向けた確認観点",
+            "データ基盤アセスメントで確認する観点",
             """
             <div class="presentation-lead">
-            次に確認すべきことは多くありません。最初の会議テーマを選び、その説明に必要なデータとKPI定義を確認し、
-            PoCで扱う範囲を小さく決めます。
+            最初から全社データをすべて調べる必要はありません。経営説明の改善効果が大きい会議テーマを一つ選び、
+            その説明に必要なKPI、データ、品質ゲートを棚卸しします。
             </div>
             """
             + presentation_cards_html(
                 [
-                    ("会議テーマ", "予実差、見込差、案件リスク、CF悪化など、最初に改善したい説明業務を一つに絞ります。"),
-                    ("根拠データ", "ERP、EPM、案件EAC、調達、工程、マスタの所在と責任部門を確認します。"),
-                    ("PoC範囲", "代表セグメント、代表案件、代表KPIに限定し、短期間で価値を検証します。"),
+                    ("会議テーマとKPI", "月次経営会議、予実会議、見込更新会議のどこを対象にし、どのKPIを説明可能にするか。"),
+                    ("根拠データとマスタ", "ERP、EPM、案件EAC、調達、工程、セグメント・案件・勘定マスタの所在と責任部門。"),
+                    ("品質ゲート", "照合、版管理、粒度合わせ、ID統合、リネージ、承認プロセスをどこまで持てているか。"),
                 ],
                 columns=3,
             ),
@@ -2699,20 +2731,21 @@ def render_client_post_demo() -> None:
     elif slide == 3:
         render_presentation_slide(
             "Next Steps",
-            "次の進め方",
+            "データ基盤アセスメントの進め方",
             """
             <div class="presentation-lead">
             進め方は、最初から大きな基盤を作るのではなく、説明責任が高い会議テーマから小さく始めます。
-            そのテーマで必要なデータとKPIを固め、画面とAIコメントを検証し、月次運用に組み込みます。
+            そのテーマで必要なデータとKPIを固め、ギャップを見える化し、短期PoCの範囲へ落とします。
             </div>
             """
             + presentation_flow_html(
                 [
-                    ("課題を絞る", "最初に変えたい会議とKPIを決めます。"),
-                    ("根拠をそろえる", "必要データ、比較軸、案件粒度を固定します。"),
-                    ("運用に入れる", "PoC後に月次サイクルと承認プロセスへ組み込みます。"),
+                    ("対象を決める", "最初に変えたい会議とKPIを決めます。"),
+                    ("根拠を棚卸し", "必要データ、比較軸、案件粒度、責任部門を確認します。"),
+                    ("ギャップを整理", "定義、版、粒度、マスタ、リネージの不足を明確にします。"),
+                    ("PoCへ落とす", "代表セグメントと重点案件に絞って検証範囲を決めます。"),
                 ],
-                columns=3,
+                columns=4,
             ),
             "最初から全社展開を狙わず、説明責任が高い会議テーマに絞って検証します。",
         )
@@ -2722,13 +2755,13 @@ def render_client_post_demo() -> None:
             "推奨する次回アジェンダ",
             presentation_cards_html(
                 [
-                    ("ユースケース", "自社で最初に改善したい会議テーマを一つ選びます。"),
-                    ("データとKPI", "必要データの所在、粒度、比較軸、責任部門を確認します。"),
-                    ("進め方", "短期PoCで何を示し、どの範囲を本番設計に進めるかを決めます。"),
+                    ("会議テーマ", "経営会議、予実会議、見込更新会議のどこを最初の対象にするかを決めます。"),
+                    ("データとKPI", "必要データの所在、粒度、比較軸、責任部門、品質ゲートを確認します。"),
+                    ("アセスメント範囲", "どのセグメント、案件、KPIを対象に棚卸しし、短期PoCへつなげるかを決めます。"),
                 ],
                 columns=3,
             ),
-            "AIコメント生成より前に、整えるべきデータ基盤の範囲を明確にします。",
+            "AIコメント生成より前に、整えるべきFP&Aデータ基盤の範囲を明確にします。",
         )
 
 
@@ -3007,6 +3040,140 @@ def kpi_variance(base: dict[str, float], current: dict[str, float], kpi: str) ->
     current_value = float(current[key])
     variance = current_value - base_value
     return base_value, current_value, variance
+
+
+def format_heatmap_amount(value_jpy_mn: float) -> str:
+    return f"{value_jpy_mn / 1_000:+,.1f}bn"
+
+
+def normalize_for_heatmap(values: pd.Series) -> pd.Series:
+    max_abs = float(values.abs().max()) if not values.empty else 0.0
+    if max_abs < 1e-9:
+        return pd.Series(np.zeros(len(values)), index=values.index)
+    return (values / max_abs).clip(-1.0, 1.0)
+
+
+def render_segment_kpi_heatmap(kpis: pd.DataFrame, risk: pd.DataFrame, selected_period: str) -> go.Figure:
+    scoped = apply_period_filter(kpis, selected_period)
+    segment_kpis = (
+        scoped[scoped["scenario"].isin(["Budget", "Actual"])]
+        .groupby(["segment_code", "segment_en", "scenario"], observed=True)[
+            ["revenue_jpy_mn", "operating_profit_jpy_mn", "cash_flow_jpy_mn"]
+        ]
+        .sum()
+        .reset_index()
+    )
+
+    rows: list[dict[str, Any]] = []
+    for (segment_code, segment_en), segment_rows in segment_kpis.groupby(
+        ["segment_code", "segment_en"],
+        observed=True,
+        sort=True,
+    ):
+        budget_rows = segment_rows[segment_rows["scenario"] == "Budget"]
+        actual_rows = segment_rows[segment_rows["scenario"] == "Actual"]
+        if budget_rows.empty or actual_rows.empty:
+            continue
+
+        budget = budget_rows.iloc[0]
+        actual = actual_rows.iloc[0]
+        budget_revenue = float(budget["revenue_jpy_mn"])
+        actual_revenue = float(actual["revenue_jpy_mn"])
+        budget_op = float(budget["operating_profit_jpy_mn"])
+        actual_op = float(actual["operating_profit_jpy_mn"])
+        budget_cf = float(budget["cash_flow_jpy_mn"])
+        actual_cf = float(actual["cash_flow_jpy_mn"])
+        budget_margin = budget_op / budget_revenue * 100 if abs(budget_revenue) > 1e-9 else 0.0
+        actual_margin = actual_op / actual_revenue * 100 if abs(actual_revenue) > 1e-9 else 0.0
+        scoped_risk = risk[risk["segment_en"] == segment_en]
+
+        rows.append(
+            {
+                "segment": f"{segment_code} | {segment_en}",
+                "segment_en": segment_en,
+                "revenue_delta": actual_revenue - budget_revenue,
+                "revenue_pct": pct_change(actual_revenue, budget_revenue),
+                "op_delta": actual_op - budget_op,
+                "op_pct": pct_change(actual_op, budget_op),
+                "margin_delta": actual_margin - budget_margin,
+                "actual_margin": actual_margin,
+                "cf_delta": actual_cf - budget_cf,
+                "cf_pct": pct_change(actual_cf, budget_cf),
+                "loss_risk_count": int(scoped_risk["loss_risk_flag"].sum()),
+                "critical_count": int((scoped_risk["risk_level"] == "Critical").sum()),
+                "high_count": int((scoped_risk["risk_level"] == "High").sum()),
+            }
+        )
+
+    heatmap = pd.DataFrame(rows).sort_values("segment_en")
+    columns = ["Revenue", "OP", "Margin", "Cash Flow", "Loss Risk"]
+    if heatmap.empty:
+        fig = go.Figure()
+        fig.update_layout(title="Segment KPI Heatmap / Budget variance and loss-risk concentration")
+        return style_fig(fig, 380)
+
+    heatmap["revenue_z"] = normalize_for_heatmap(heatmap["revenue_delta"])
+    heatmap["op_z"] = normalize_for_heatmap(heatmap["op_delta"])
+    heatmap["margin_z"] = normalize_for_heatmap(heatmap["margin_delta"])
+    heatmap["cf_z"] = normalize_for_heatmap(heatmap["cf_delta"])
+    max_loss_count = int(heatmap["loss_risk_count"].max())
+    heatmap["loss_risk_z"] = (
+        -(heatmap["loss_risk_count"] / max_loss_count).clip(0.0, 1.0)
+        if max_loss_count > 0
+        else 0.0
+    )
+
+    z_values: list[list[float]] = []
+    text_values: list[list[str]] = []
+    for row in heatmap.itertuples(index=False):
+        z_values.append(
+            [
+                float(row.revenue_z),
+                float(row.op_z),
+                float(row.margin_z),
+                float(row.cf_z),
+                float(row.loss_risk_z),
+            ]
+        )
+        text_values.append(
+            [
+                f"{format_heatmap_amount(row.revenue_delta)}<br>{row.revenue_pct:+.1f}%",
+                f"{format_heatmap_amount(row.op_delta)}<br>{row.op_pct:+.1f}%",
+                f"{row.margin_delta:+.1f}pt<br>{row.actual_margin:.1f}%",
+                f"{format_heatmap_amount(row.cf_delta)}<br>{row.cf_pct:+.1f}%",
+                f"{row.loss_risk_count} loss<br>{row.critical_count} Critical",
+            ]
+        )
+
+    fig = go.Figure(
+        go.Heatmap(
+            z=z_values,
+            x=columns,
+            y=heatmap["segment"].tolist(),
+            text=text_values,
+            texttemplate="%{text}",
+            textfont={"color": "#edf6f9", "size": 12},
+            colorscale=[
+                [0.0, "#7a2330"],
+                [0.42, "#2a3640"],
+                [0.50, "#3a4a55"],
+                [0.58, "#274b42"],
+                [1.0, "#3f7f55"],
+            ],
+            zmin=-1,
+            zmax=1,
+            xgap=3,
+            ygap=3,
+            hovertemplate="%{y}<br>%{x}: %{text}<extra></extra>",
+            showscale=False,
+        )
+    )
+    fig.update_layout(title="Segment KPI Heatmap / Budget variance and loss-risk concentration")
+    fig.update_xaxes(side="top", tickfont={"size": 12})
+    fig.update_yaxes(autorange="reversed", tickfont={"size": 11})
+    fig = style_fig(fig, 420)
+    fig.update_layout(margin={"l": 165, "r": 20, "t": 60, "b": 20})
+    return fig
 
 
 def render_dashboard(
@@ -3786,7 +3953,10 @@ def render_data_explorer(data: dict[str, Any]) -> None:
 
 def render_data_foundation(data: dict[str, Any]) -> None:
     st.markdown('<div id="foundation-page"></div>', unsafe_allow_html=True)
-    render_header("データ基盤 / Data Foundation", "AI投資の前に、経営データの分断を解く")
+    render_header(
+        "FP&Aデータ基盤 / Data Foundation",
+        "経営説明・意思決定のために、定義・版・粒度・根拠をそろえる",
+    )
 
     slide = render_presentation_controls(
         "data_foundation",
@@ -3796,11 +3966,11 @@ def render_data_foundation(data: dict[str, Any]) -> None:
     if slide == 0:
         render_presentation_slide(
             "Executive Risk Message",
-            "データが分断されたままAIを導入しても、経営会議で説明責任を果たせるAIにはならない。",
+            "AI活用の前に、経営説明の根拠をつなぐ必要があります",
             """
             <div class="presentation-lead">
             LLMは文章を作ることはできます。しかし、売上・利益・キャッシュフロー・案件EAC・調達・工程・マスタが分断されたままでは、
-            AIは「なぜ業績が悪化したのか」「どの案件に手を打つべきか」を根拠付きで説明できません。
+            経営会議で「なぜ業績が悪化したのか」「どの案件に手を打つべきか」を根拠付きで説明できません。
             </div>
             <div class="presentation-note">
             速くなるのは説明ではなく、もっともらしいが検証できないコメントの生成です。
@@ -3811,7 +3981,7 @@ def render_data_foundation(data: dict[str, Any]) -> None:
     elif slide == 1:
         render_presentation_slide(
             "Management Thesis",
-            "経営層に伝える3つの論点",
+            "CFO・経営企画・FP&Aに伝える3つの論点",
             presentation_cards_html(
                 [
                     (
@@ -3892,7 +4062,7 @@ def render_data_foundation(data: dict[str, Any]) -> None:
     else:
         render_presentation_slide(
             "Executive Decisions",
-            "経営層が決めること",
+            "経営層・FP&Aが決めること",
             """
             <div class="presentation-lead">
             経営層が決めるべきことは、AIツールの種類ではありません。
@@ -3914,15 +4084,15 @@ def render_data_foundation(data: dict[str, Any]) -> None:
             まず経営データの定義・版・粒度・根拠を揃える必要があります。
             </div>
             """,
-            "This demo currently uses generated fictional Parquet files. In a real implementation, these files are replaced by a governed FP&A data mart.",
+            "ここで決めた範囲が、データ基盤アセスメントと短期PoCの対象になります。",
         )
 
 
 def render_reference_architecture() -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
     render_header(
-        "リファレンス構成 / Reference Architecture",
-        "AI-driven FP&Aの推奨構成を説明する",
+        "構成・進め方 / Reference Architecture",
+        "経営説明から逆算して、FP&Aデータ基盤とAI活用を設計する",
     )
 
     slide = render_presentation_controls(
@@ -3934,7 +4104,7 @@ def render_reference_architecture() -> None:
         nodes, edges = architecture_graph_system_data()
         render_architecture_graph_slide(
             "Reference View",
-            "AI-driven FP&Aは、画面、データ、AI、統制を一体で設計する",
+            "構成は、経営会議で説明したい問いから逆算して設計する",
             """
             <div class="presentation-lead">
             最初に決めるべきことは、LLMの製品名ではありません。
@@ -3959,7 +4129,7 @@ def render_reference_architecture() -> None:
         nodes, edges = architecture_graph_system_data()
         render_architecture_graph_slide(
             "Recommended Architecture",
-            "推奨構成: 全社AI基盤とつなぐFP&A構成",
+            "推奨構成: FP&Aデータ基盤を全社データ・AI基盤へつなぐ",
             """
             <div class="presentation-lead">
             FP&amp;Aだけで閉じる構成ではなく、全社データ基盤、AI共通基盤、業務ワークフローへ接続できる形で設計します。
@@ -3973,7 +4143,7 @@ def render_reference_architecture() -> None:
             + presentation_cards_html(
                 [
                     ("設計の考え方", "FP&Aだけで閉じず、全社データ基盤とAI共通基盤に接続できる形で作る。"),
-                    ("最初の範囲", "代表KPI、代表会議、重点案件に絞り、FP&Aデータマートの最小構成から始める。"),
+                    ("最初の範囲", "代表会議、代表KPI、重点案件に絞り、FP&Aデータマートの最小構成から始める。"),
                 ],
                 columns=2,
             ),
@@ -4220,10 +4390,10 @@ def main(app_mode: str = "internal") -> None:
         ("AI Commentary", "AIコメント", False),
     ]
     presentation_pages = [
-        ("Client Pre-Demo", "デモ閲覧前", False),
-        ("Data Foundation", "データ基盤", False),
-        ("Reference Architecture", "リファレンス構成", False),
-        ("Client Post-Demo", "デモ閲覧後", False),
+        ("Client Pre-Demo", "導入・問題提起", False),
+        ("Data Foundation", "FP&Aデータ基盤", False),
+        ("Reference Architecture", "構成・進め方", False),
+        ("Client Post-Demo", "アセスメント提案", False),
     ]
     operational_pages = [
         ("Dashboard", "全社ダッシュボード"),

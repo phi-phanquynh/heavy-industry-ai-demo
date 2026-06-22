@@ -2,6 +2,13 @@
 
 Fictional FP&A variance analysis demo for **Nippon Advanced Heavy Industries**.
 
+Presentation theme:
+
+**AI活用の前に整えるべきFP&Aデータ基盤**
+
+The client-facing story is aimed at CFO, corporate planning, and FP&A audiences.
+The demo is used to show why management explanation and decision-making require a trusted FP&A data foundation before AI commentary can be operationally reliable.
+
 [Dashboard/client app](https://heavy-industry-ai-demo-client.streamlit.app/)
 
 [Full app](https://heavy-industry-ai-demo-6apcskxwufgremlq9bivhk.streamlit.app/)
@@ -54,10 +61,10 @@ Dashboard/client app:
 
 Presenter/support app:
 
-- **Client Preview**: Align expectations, fictional-data premise, and what to watch.
-- **Data Foundation**: Explain why trusted FP&A data is the prerequisite for AI variance analysis.
-- **Reference Architecture**: Explain implementation options and rollout approach for AI-driven FP&A.
-- **Client Follow-up**: Summarize takeaways and move into data assessment / PoC scoping.
+- **Client Preview**: Frame the discussion as FP&A data foundation readiness, not an AI tool demo.
+- **Data Foundation**: Explain why trusted FP&A data is the prerequisite for management-ready AI commentary.
+- **Reference Architecture**: Explain implementation options from the management explanation flow backward.
+- **Client Follow-up**: Move into FP&A data foundation assessment and PoC scoping.
 - **デモ解説用 / Presenter Guide**: Internal talk track, Q&A, and wording guardrails.
 - **技術構成 / Tech Architecture**: Slide-style internal page explaining how the demo is built, operated, and extended.
 - **Data Explorer**: Inspect generated fictional data, row counts, columns, samples, and statistics.
@@ -66,16 +73,16 @@ Presenter/support app:
 
 | Priority | Theme | Action | Output |
 |---|---|---|---|
-| 1 | Demo script | Fix the story sequence: Dashboard -> Variance Analysis -> Project Risk -> AI Commentary | 5-minute and 15-minute talk tracks |
-| 2 | Story depth | Prepare representative Critical and High project examples | Focus project list and expected Q&A |
-| 3 | Data credibility | Document fictional assumptions, data grain, KPI definitions, and variance logic | Data definition slide |
-| 4 | AI positioning | Explain the rule-based Japanese commentary logic and its limits | AI value explanation |
+| 1 | Client message | Lead with FP&A data foundation readiness before the demo | CFO/FP&A opening talk track |
+| 2 | Demo script | Operate Dashboard -> Variance Analysis -> Project Risk -> AI Commentary as one management explanation flow | Mid-demo talk track |
+| 3 | Assessment CTA | Convert the demo into FP&A data foundation assessment next steps | Assessment agenda |
+| 4 | Data credibility | Document fictional assumptions, data grain, KPI definitions, and variance logic | Data definition slide |
 | 5 | Deployment | Push to GitHub and deploy on Streamlit Community Cloud | Shareable demo URL |
 
 ## Data Foundation Message
 
-The central point of this demo is not only that AI can write variance comments.
-The more important message is that AI-driven FP&A requires a trusted data foundation.
+The central point of this demo is not that AI can write variance comments.
+The more important message is that CFO, corporate planning, and FP&A teams need a trusted data foundation to explain causes, impacts, and actions in management meetings.
 
 ERP actuals, EPM budget and forecast data, project EAC, procurement costs, schedule milestones, FX data, and master data must be reconciled and governed before AI can produce reliable management commentary.
 
