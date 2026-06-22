@@ -2,12 +2,15 @@
 
 Fictional FP&A variance analysis demo for **Nippon Advanced Heavy Industries**.
 
+[Dashboard/client app](https://heavy-industry-ai-demo-client.streamlit.app/)
+
 [Full app](https://heavy-industry-ai-demo-6apcskxwufgremlq9bivhk.streamlit.app/)
 
 Deploy targets:
 
+- Dashboard/client app: `client_app.py`
+- Presenter/support app: `presenter_app.py`
 - Internal/full app: `app.py`
-- External/client app: `client_app.py`
 
 - Demo data only
 - All figures are fictional
@@ -36,24 +39,25 @@ http://localhost:8501
 
 ## Demo Flow
 
-The app separates two usage modes:
+The app separates three usage modes:
 
-- **Client-facing pages**: pre-demo briefing, post-demo follow-up, and data foundation explanation.
-- **Presenter/internal pages**: demo talk track, technical explanation, and data inspection.
-- **Operational Cockpit**: screens a real FP&A user would use for daily or monthly variance review.
+- **Dashboard/client app**: only the cockpit screens a client can display and touch.
+- **Presenter/support app**: briefing, data foundation, reference architecture, follow-up, and support pages shown by us.
+- **Internal/full app**: all modes in one app for maintenance and QA.
 
-Recommended client journey:
+Dashboard/client app:
 
-1. **デモ閲覧前 / Client Preview**: Align expectations, fictional-data premise, and what to watch.
-2. **Dashboard**: Show the executive story: revenue is above plan, while operating profit, margin, and cash flow deteriorate.
-3. **Variance Analysis**: Select period, segment, KPI, and comparison type; explain the waterfall and top drivers.
-4. **Project Risk**: Highlight Critical Marine & Offshore projects and High Aerospace & Defense projects.
-5. **AI Commentary**: Generate Japanese FP&A comments for management meeting materials.
-6. **Data Foundation**: Explain why trusted FP&A data is the prerequisite for AI variance analysis.
-7. **デモ閲覧後 / Client Follow-up**: Summarize takeaways and move into data assessment / PoC scoping.
+1. **Dashboard**: Show the executive story: revenue is above plan, while operating profit, margin, and cash flow deteriorate.
+2. **Variance Analysis**: Select period, segment, KPI, and comparison type; explain the waterfall and top drivers.
+3. **Project Risk**: Highlight Critical Marine & Offshore projects and High Aerospace & Defense projects.
+4. **AI Commentary**: Generate Japanese FP&A comments for management meeting materials.
 
-Presenter and support pages are also visible in the same app:
+Presenter/support app:
 
+- **Client Preview**: Align expectations, fictional-data premise, and what to watch.
+- **Data Foundation**: Explain why trusted FP&A data is the prerequisite for AI variance analysis.
+- **Reference Architecture**: Explain implementation options and rollout approach for AI-enabled FP&A.
+- **Client Follow-up**: Summarize takeaways and move into data assessment / PoC scoping.
 - **デモ解説用 / Presenter Guide**: Internal talk track, Q&A, and wording guardrails.
 - **Tech Architecture**: Explain how the demo is built and what to improve next.
 - **Data Explorer**: Inspect generated fictional data, row counts, columns, samples, and statistics.

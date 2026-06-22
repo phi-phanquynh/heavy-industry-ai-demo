@@ -3342,14 +3342,16 @@ def main(app_mode: str = "internal") -> None:
     metadata = data.get("metadata", {})
 
     client_pages = [
-        ("Client Pre-Demo", "デモ閲覧前", False),
-        ("Dashboard", "1. ダッシュボード", True),
-        ("Variance Analysis", "2. 差異分析", True),
-        ("Project Risk", "3. 案件リスク", True),
-        ("AI Commentary", "4. AIコメント", True),
-        ("Data Foundation", "5. データ基盤", False),
-        ("Reference Architecture", "6. リファレンス構成", False),
-        ("Client Post-Demo", "7. デモ閲覧後", False),
+        ("Dashboard", "ダッシュボード", False),
+        ("Variance Analysis", "差異分析", False),
+        ("Project Risk", "案件リスク", False),
+        ("AI Commentary", "AIコメント", False),
+    ]
+    presentation_pages = [
+        ("Client Pre-Demo", "デモ閲覧前プレゼン", False),
+        ("Data Foundation", "データ基盤プレゼン", False),
+        ("Reference Architecture", "リファレンス構成", False),
+        ("Client Post-Demo", "デモ閲覧後プレゼン", False),
     ]
     operational_pages = [
         ("Dashboard", "全社ダッシュボード"),
@@ -3362,17 +3364,22 @@ def main(app_mode: str = "internal") -> None:
         ("Tech Architecture", "技術構成", False),
         ("Data Explorer", "データ確認", False),
     ]
+    presenter_pages = presentation_pages + internal_pages
     client_page_keys = {key for key, _, _ in client_pages}
     client_page_guides = {key: guide for key, _, guide in client_pages}
     client_page_labels = {key: label for key, label, _ in client_pages}
+    presenter_page_keys = {key for key, _, _ in presenter_pages}
+    presenter_page_guides = {key: guide for key, _, guide in presenter_pages}
+    presenter_page_labels = {key: label for key, label, _ in presenter_pages}
     internal_page_labels = {key: label for key, label, _ in internal_pages}
     operational_page_labels = {key: label for key, label in operational_pages}
     internal_page_keys = {key for key, _, _ in internal_pages}
     operational_page_keys = {key for key, _ in operational_pages}
-    client_only = app_mode == "client"
+    client_only = app_mode in {"client", "dashboard"}
+    presenter_only = app_mode == "presenter"
 
     if "active_page" not in st.session_state:
-        st.session_state["active_page"] = "Client Pre-Demo"
+        st.session_state["active_page"] = "Dashboard" if client_only else "Client Pre-Demo"
         st.session_state["active_surface"] = "client"
         st.session_state["show_guide"] = False
 
@@ -3384,16 +3391,26 @@ def main(app_mode: str = "internal") -> None:
     if client_only:
         active_page = st.session_state.get("active_page")
         if active_page not in client_page_keys:
-            active_page = "Client Pre-Demo"
+            active_page = "Dashboard"
         st.session_state["active_surface"] = "client"
         st.session_state["active_page"] = active_page
         st.session_state["show_guide"] = client_page_guides.get(active_page, False)
-    elif st.session_state.get("active_surface") not in {"client", "operational", "internal"}:
+    elif presenter_only:
+        active_page = st.session_state.get("active_page")
+        if active_page not in presenter_page_keys:
+            active_page = "Client Pre-Demo"
+        st.session_state["active_surface"] = "presenter"
+        st.session_state["active_page"] = active_page
+        st.session_state["show_guide"] = presenter_page_guides.get(active_page, False)
+    elif st.session_state.get("active_surface") not in {"client", "presenter", "operational", "internal"}:
         st.session_state["active_surface"] = "client"
 
     active_surface = st.session_state.get("active_surface")
     active_page = st.session_state.get("active_page")
     if active_surface == "client" and active_page not in client_page_keys:
+        st.session_state["active_page"] = "Dashboard"
+        st.session_state["show_guide"] = False
+    elif active_surface == "presenter" and active_page not in presenter_page_keys:
         st.session_state["active_page"] = "Client Pre-Demo"
         st.session_state["show_guide"] = False
     elif active_surface == "operational" and active_page not in operational_page_keys:
@@ -3412,22 +3429,20 @@ def main(app_mode: str = "internal") -> None:
         elif surface == "internal":
             st.session_state["active_page"] = current_page if current_page in internal_page_keys else "Internal Demo Guide"
             st.session_state["show_guide"] = False
+        elif surface == "presenter":
+            st.session_state["active_page"] = current_page if current_page in presenter_page_keys else "Client Pre-Demo"
+            st.session_state["show_guide"] = False
         else:
-            if current_page in operational_page_keys:
-                st.session_state["active_page"] = current_page
-                st.session_state["show_guide"] = True
-            elif current_page in client_page_keys:
-                st.session_state["active_page"] = current_page
-                st.session_state["show_guide"] = False
-            else:
-                st.session_state["active_page"] = "Client Pre-Demo"
-                st.session_state["show_guide"] = False
+            st.session_state["active_page"] = current_page if current_page in client_page_keys else "Dashboard"
+            st.session_state["show_guide"] = False
 
     def choose_page(surface: str, page_key: str) -> None:
         st.session_state["active_surface"] = surface
         st.session_state["active_page"] = page_key
         if surface == "client":
             st.session_state["show_guide"] = client_page_guides.get(page_key, False)
+        elif surface == "presenter":
+            st.session_state["show_guide"] = presenter_page_guides.get(page_key, False)
         else:
             st.session_state["show_guide"] = False
 
@@ -3447,10 +3462,11 @@ def main(app_mode: str = "internal") -> None:
             unsafe_allow_html=True,
         )
 
-        if not client_only:
-            surface_options = ["client", "operational", "internal"]
+        if not client_only and not presenter_only:
+            surface_options = ["client", "presenter", "operational", "internal"]
             surface_labels = {
-                "client": "社外向けデモ",
+                "client": "クライアント操作用",
+                "presenter": "説明者用",
                 "operational": "実務コックピット",
                 "internal": "社内資料",
             }
@@ -3478,6 +3494,18 @@ def main(app_mode: str = "internal") -> None:
             )
             if selected_page != st.session_state.get("active_page"):
                 choose_page("operational", selected_page)
+        elif active_surface == "presenter":
+            page_options = [key for key, _, _ in presenter_pages]
+            active_page = st.session_state.get("active_page")
+            selected_page = st.radio(
+                "ページ",
+                page_options,
+                index=page_options.index(active_page) if active_page in page_options else 0,
+                format_func=lambda key: presenter_page_labels[key],
+                key="presenter_page_selector",
+            )
+            if selected_page != st.session_state.get("active_page"):
+                choose_page("presenter", selected_page)
         elif active_surface == "internal":
             page_options = [key for key, _, _ in internal_pages]
             active_page = st.session_state.get("active_page")
@@ -3506,12 +3534,14 @@ def main(app_mode: str = "internal") -> None:
         current_surface = st.session_state.get("active_surface")
         current_page = st.session_state.get("active_page")
         current_surface_label = {
-            "client": "社外向けデモ",
+            "client": "クライアント操作用",
+            "presenter": "説明者用",
             "operational": "実務コックピット",
             "internal": "社内資料",
-        }.get(current_surface, "社外向けデモ")
+        }.get(current_surface, "クライアント操作用")
         current_page_label = {
             **client_page_labels,
+            **presenter_page_labels,
             **operational_page_labels,
             **internal_page_labels,
         }.get(current_page, current_page)
@@ -3530,20 +3560,16 @@ def main(app_mode: str = "internal") -> None:
     current_label = next((label for key, label in operational_pages if key == page), None)
     if st.session_state.get("active_surface") == "client":
         demo_label_map = {
-            "Client Pre-Demo": "商談前ブリーフ",
-            "Internal Demo Guide": "説明者向けガイド",
-            "Client Post-Demo": "デモ後フォロー",
-            "Dashboard": "デモ用ダッシュボード",
-            "Variance Analysis": "デモ用差異分析",
-            "Project Risk": "デモ用案件リスク",
-            "AI Commentary": "デモ用AIコメント",
-            "Data Foundation": "データ基盤",
-            "Reference Architecture": "リファレンス構成",
-            "Tech Architecture": "技術構成",
-            "Data Explorer": "データ確認",
+            "Dashboard": "ダッシュボード",
+            "Variance Analysis": "差異分析",
+            "Project Risk": "案件リスク",
+            "AI Commentary": "AIコメント",
         }
         current_label = demo_label_map.get(page, page)
-        mode_label = "デモ・提案モード"
+        mode_label = "クライアント操作用"
+    elif st.session_state.get("active_surface") == "presenter":
+        current_label = presenter_page_labels.get(page, page)
+        mode_label = "説明者用"
     elif st.session_state.get("active_surface") == "internal":
         internal_label_map = {
             "Internal Demo Guide": "説明者向けガイド",
