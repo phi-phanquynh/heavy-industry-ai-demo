@@ -1,0 +1,20 @@
+{
+  "company": "Nippon Advanced Heavy Industries",
+  "fiscal_year": "FY2026",
+  "generated_at": "2026-06-22T16:56:49",
+  "disclaimer": "Demo data only. All figures are fictional.",
+  "row_counts": {
+    "dim_projects": 260,
+    "fact_finance": 149760,
+    "fact_variance_drivers": 74880,
+    "project_risk": 260,
+    "total": 225160
+  },
+  "embedded_story": {
+    "company": "Revenue is above plan, while operating profit, margin, and cash flow deteriorate.",
+    "Aerospace & Defense": "Revenue is solid; outsourcing, FX, and long-lead parts pressure margin and cash flow.",
+    "Energy Systems": "High-margin project acceleration improves revenue and operating profit.",
+    "Marine & Offshore": "EAC deterioration, design changes, and delays create major profit pressure and loss-making risk.",
+    "Industrial Machinery & Robotics": "Demand slowdown causes revenue shortfall and fixed-cost absorption pressure."
+  }
+}
