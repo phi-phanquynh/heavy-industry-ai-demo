@@ -1253,6 +1253,9 @@ def inject_css() -> None:
             overflow: hidden !important;
             width: 56px !important;
         }
+        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarContent"] > :not([data-testid="stSidebarHeader"]) {
+            display: none !important;
+        }
         .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarHeader"] {
             width: 56px !important;
         }
@@ -1272,6 +1275,94 @@ def inject_css() -> None:
             max-width: 100vw;
             padding-top: 0.65rem !important;
             padding-bottom: 2.25rem !important;
+        }
+        .proposal-turn-controls {
+            align-items: center;
+            bottom: 18px;
+            display: flex;
+            gap: 10px;
+            left: 50%;
+            position: fixed;
+            transform: translateX(-50%);
+            z-index: 999990;
+        }
+        .proposal-turn {
+            align-items: center;
+            background: rgba(8,20,31,0.92);
+            border: 1px solid rgba(57,197,187,0.32);
+            border-radius: 999px;
+            box-shadow: 0 14px 30px rgba(0,0,0,0.28);
+            color: #edf6f9 !important;
+            display: inline-flex;
+            font-size: 0.86rem;
+            font-weight: 820;
+            gap: 8px;
+            line-height: 1;
+            min-height: 42px;
+            min-width: 104px;
+            justify-content: center;
+            padding: 0 14px;
+            text-decoration: none !important;
+        }
+        .proposal-turn:hover {
+            background: rgba(57,197,187,0.18);
+            border-color: rgba(57,197,187,0.70);
+            color: #ffffff !important;
+        }
+        .proposal-turn.is-disabled {
+            color: rgba(159,178,195,0.40) !important;
+            pointer-events: none;
+            border-color: rgba(159,178,195,0.16);
+        }
+        .proposal-turn-index {
+            color: #9fb2c3;
+            font-size: 0.78rem;
+            font-weight: 780;
+            min-width: 54px;
+            text-align: center;
+        }
+        .st-key-proposal-turn-controls {
+            position: fixed;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            z-index: 999990;
+        }
+        .st-key-proposal-turn-controls [data-testid="stVerticalBlock"] {
+            gap: 8px;
+        }
+        .st-key-proposal-turn-controls button {
+            align-items: center;
+            background: rgba(8,20,31,0.92) !important;
+            border: 1px solid rgba(57,197,187,0.34) !important;
+            border-radius: 999px !important;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.30);
+            color: #edf6f9 !important;
+            display: inline-flex;
+            font-size: 1.1rem !important;
+            font-weight: 900 !important;
+            height: 42px;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 !important;
+            width: 42px;
+        }
+        .st-key-proposal-turn-controls button:hover {
+            background: rgba(57,197,187,0.20) !important;
+            border-color: rgba(57,197,187,0.72) !important;
+            color: #ffffff !important;
+        }
+        .st-key-proposal-turn-controls button:disabled {
+            color: rgba(159,178,195,0.36) !important;
+            border-color: rgba(159,178,195,0.16) !important;
+        }
+        .st-key-proposal-turn-controls .proposal-button-index {
+            color: #9fb2c3;
+            font-size: 0.72rem;
+            font-weight: 820;
+            line-height: 1;
+            text-align: center;
         }
         .stApp:has(#demo-briefing-page) .block-container,
         .stApp:has(#demo-briefing-page) .block-container h1,
@@ -3359,17 +3450,17 @@ def ai_app_architecture_component_html() -> str:
                 "detail": "中心に置くのは計画・予測・承認・レポーティングを担うFP&A/EPM製品です。",
             },
             "nodes": [
-                node("erp", "ERP / GL\nActuals", 80, 96, "source", "実績会計、売上、原価、利益の正本。", "#2563eb"),
-                node("crm", "CRM\nPipeline", 80, 176, "source", "受注見込、商談、顧客別売上の先行指標。", "#2563eb"),
-                node("hcm", "HCM\nWorkforce", 80, 256, "source", "人員、労務費、組織、要員計画。", "#2563eb"),
-                node("scm", "SCM / Project\nEAC", 80, 336, "source", "調達、工程、案件EAC、原価見通し。", "#2563eb"),
-                node("excel", "Local Inputs\nManual Adjustments", 80, 416, "source", "部門別入力、補正、管理表。", "#2563eb"),
-                node("etl", "API / ETL\nData Sync", 255, 256, "data", "各システムから計画粒度へデータを同期。", "#0f766e", 142, 62),
-                node("datahub", "DWH / Data Hub\nReference Data", 420, 256, "data", "必要な実績、マスタ、履歴だけをFP&A製品へ供給。", "#0f766e", 160, 64),
+                node("erp", "ERP / GL\nActuals", 80, 80, "source", "実績会計、売上、原価、利益の正本。", "#2563eb", products="SAP S/4HANA / Oracle Fusion Cloud ERP / Microsoft Dynamics 365 Finance"),
+                node("crm", "CRM\nPipeline", 80, 165, "source", "受注見込、商談、顧客別売上の先行指標。", "#2563eb", products="Salesforce Sales Cloud / Microsoft Dynamics 365 Sales / HubSpot Enterprise"),
+                node("hcm", "HCM\nWorkforce", 80, 250, "source", "人員、労務費、組織、要員計画。", "#2563eb", products="Workday HCM / SAP SuccessFactors / Oracle HCM Cloud"),
+                node("scm", "SCM / Project\nEAC", 80, 335, "source", "調達、工程、案件EAC、原価見通し。", "#2563eb", products="Oracle Primavera P6 / SAP Project System / EcoSys / IFS Cloud"),
+                node("excel", "Local Inputs\nManual Adjustments", 80, 420, "source", "部門別入力、補正、管理表。", "#2563eb", products="Microsoft Excel / Google Sheets / Smartsheet / Airtable"),
+                node("etl", "API / ETL\nData Sync", 255, 256, "data", "各システムから計画粒度へデータを同期。", "#0f766e", 142, 62, products="Informatica / Fivetran / dbt / Azure Data Factory / MuleSoft"),
+                node("datahub", "DWH / Data Hub\nReference Data", 440, 256, "data", "必要な実績、マスタ、履歴だけをFP&A製品へ供給。", "#0f766e", 160, 64, products="Snowflake / Databricks / Microsoft Fabric / BigQuery"),
                 node(
                     "fpna",
                     "FP&A / EPM Platform\nPlanning / Forecast\nConsolidation / Reporting",
-                    665,
+                    705,
                     256,
                     "fpna",
                     "予算、見込、シナリオ、承認、レポートの業務プロセスを保持。",
@@ -3377,14 +3468,15 @@ def ai_app_architecture_component_html() -> str:
                     230,
                     100,
                     "primary",
+                    products="Anaplan / Pigment / Workday Adaptive Planning / Oracle Cloud EPM / CCH Tagetik",
                 ),
-                node("embedded_ai", "Built-in AI\nForecast / Narrative", 665, 104, "ai", "製品内の予測、差異説明、レポート文案生成。", "#a855f7", 190, 68),
-                node("workflow", "Workflow\nApproval", 665, 430, "control", "計画提出、レビュー、承認、差戻し、通知。", "#64748b", 176, 64),
-                node("governance", "Governance\nIAM / Audit", 420, 430, "control", "権限、監査ログ、版管理、変更履歴。", "#64748b", 168, 64),
-                node("variance", "Variance\nExplanation", 925, 116, "usecase", "予実差異・見込差異の説明。", "#dc2626"),
-                node("forecast", "Rolling\nForecast", 925, 216, "usecase", "月次・週次の見込更新。", "#dc2626"),
-                node("scenario", "Scenario\nPlanning", 925, 316, "usecase", "価格、為替、案件EACのシナリオ。", "#dc2626"),
-                node("reporting", "Narrative\nReporting", 925, 416, "usecase", "経営会議、取締役会資料の文案。", "#dc2626"),
+                node("embedded_ai", "Built-in AI\nForecast / Narrative", 705, 104, "ai", "製品内の予測、差異説明、レポート文案生成。", "#a855f7", 190, 68, products="Anaplan Intelligence / Pigment AI / Workday AI / Oracle AI for EPM / CCH Tagetik AI"),
+                node("workflow", "Workflow\nApproval", 705, 430, "control", "計画提出、レビュー、承認、差戻し、通知。", "#64748b", 176, 64, products="ServiceNow / Jira / Microsoft Teams / Power Automate"),
+                node("governance", "Governance\nIAM / Audit", 420, 430, "control", "権限、監査ログ、版管理、変更履歴。", "#64748b", 168, 64, products="Microsoft Entra ID / Okta / Microsoft Purview / Collibra / Atlan"),
+                node("variance", "Variance\nExplanation", 985, 116, "usecase", "予実差異・見込差異の説明。", "#dc2626", products="Anaplan / Pigment / Oracle Cloud EPM / CCH Tagetik"),
+                node("forecast", "Rolling\nForecast", 985, 216, "usecase", "月次・週次の見込更新。", "#dc2626", products="Anaplan / Pigment / Workday Adaptive Planning / Oracle Cloud EPM"),
+                node("scenario", "Scenario\nPlanning", 985, 316, "usecase", "価格、為替、案件EACのシナリオ。", "#dc2626", products="Anaplan / Pigment / Oracle Crystal Ball / CCH Tagetik"),
+                node("reporting", "Narrative\nReporting", 985, 416, "usecase", "経営会議、取締役会資料の文案。", "#dc2626", products="Workiva / Microsoft Power BI / Tableau / Oracle Cloud EPM Narrative Reporting"),
             ],
             "edges": [
                 edge("e1", "erp", "etl", "actuals"),
@@ -3417,29 +3509,30 @@ def ai_app_architecture_component_html() -> str:
                 "detail": "中心に置くのは全社データ基盤です。AIはデータの近くで動かし、結果をFP&A業務へ返します。",
             },
             "nodes": [
-                node("systems", "ERP / CRM / HCM\nSCM / Project", 90, 180, "source", "実績、商談、人員、調達、案件EACを横断的に取得。", "#2563eb", 160, 78),
-                node("external", "External Drivers\nFX / Market / Macro", 90, 330, "source", "為替、金利、市況、サプライヤ情報など外部説明変数。", "#2563eb", 160, 74),
-                node("elt", "ELT / Streaming\nData Quality", 265, 255, "data", "取り込み、標準化、品質チェック、更新管理。", "#0f766e", 156, 68),
+                node("systems", "ERP / CRM / HCM\nSCM / Project", 80, 180, "source", "実績、商談、人員、調達、案件EACを横断的に取得。", "#2563eb", 150, 74, products="SAP S/4HANA / Oracle ERP / Salesforce / Workday / MES・SCM systems"),
+                node("external", "External Drivers\nFX / Market / Macro", 80, 330, "source", "為替、金利、市況、サプライヤ情報など外部説明変数。", "#2563eb", 150, 70, products="LSEG Workspace / Bloomberg / S&P Global / internal market feeds"),
+                node("elt", "ELT / Streaming\nData Quality", 295, 255, "data", "取り込み、標準化、品質チェック、更新管理。", "#0f766e", 150, 64, products="Fivetran / Informatica / dbt / Airflow / Azure Data Factory"),
                 node(
                     "lakehouse",
                     "DWH / Lakehouse\nAI Foundation",
-                    455,
+                    535,
                     255,
                     "data",
                     "全社データ、履歴、権限、リネージを保持するAI活用の中心。",
                     "#0f766e",
-                    210,
-                    86,
+                    180,
+                    76,
                     "primary",
+                    products="Snowflake / Databricks / Microsoft Fabric / BigQuery",
                 ),
-                node("catalog", "Data Catalog\nLineage / Policy", 455, 455, "control", "データ定義、リネージ、ポリシー、利用状況を管理。", "#64748b", 190, 66),
-                node("ai_sql", "Native AI\nSQL / Notebook\nAssist", 690, 112, "ai", "SQL、ノートブック、対話型支援でAI分析を実行。", "#a855f7", 178, 82),
-                node("forecast_model", "Forecast Model\nML / AutoML", 690, 242, "ai", "ローリングフォーキャストやリスク予測をモデル化。", "#a855f7", 166, 66),
-                node("rag", "RAG / AI Search\nPolicy + Docs", 690, 365, "ai", "レポート、議事録、ルール、注記を検索拡張で参照。", "#a855f7", 166, 66),
-                node("fpna_tools", "FP&A / EPM Platform\nPlanning Workflow", 885, 255, "fpna", "計画、承認、予算、見込の業務運用を担う。", "#7c3aed", 180, 76),
-                node("variance", "KPI Driver\nAnalysis", 1080, 135, "usecase", "KPI変動の主因を横断データで分解。", "#dc2626"),
-                node("anomaly", "Anomaly\nDetection", 1080, 255, "usecase", "案件、原価、CFの異常を早期検知。", "#dc2626"),
-                node("writeback", "Planning\nWrite-back", 1080, 375, "usecase", "予測結果やアラートを計画業務へ戻す。", "#dc2626"),
+                node("catalog", "Data Catalog\nLineage / Policy", 535, 455, "control", "データ定義、リネージ、ポリシー、利用状況を管理。", "#64748b", 180, 64, products="Microsoft Purview / Collibra / Atlan / Unity Catalog / Snowflake Horizon"),
+                node("ai_sql", "Native AI\nSQL / Notebook\nAssist", 790, 112, "ai", "SQL、ノートブック、対話型支援でAI分析を実行。", "#a855f7", 170, 78, products="Snowflake Cortex / Databricks Mosaic AI / Microsoft Fabric Copilot / BigQuery ML"),
+                node("forecast_model", "Forecast Model\nML / AutoML", 790, 242, "ai", "ローリングフォーキャストやリスク予測をモデル化。", "#a855f7", 158, 64, products="Databricks AutoML / Azure Machine Learning / Vertex AI / Amazon SageMaker"),
+                node("rag", "RAG / AI Search\nPolicy + Docs", 790, 365, "ai", "レポート、議事録、ルール、注記を検索拡張で参照。", "#a855f7", 158, 64, products="Azure AI Search / Databricks Vector Search / Snowflake Cortex Search / Vertex AI Search"),
+                node("fpna_tools", "FP&A / EPM Platform\nPlanning Workflow", 1010, 255, "fpna", "計画、承認、予算、見込の業務運用を担う。", "#7c3aed", 170, 72, products="Anaplan / Pigment / Workday Adaptive Planning / Oracle Cloud EPM / CCH Tagetik"),
+                node("variance", "KPI Driver\nAnalysis", 1225, 135, "usecase", "KPI変動の主因を横断データで分解。", "#dc2626", products="Snowflake Cortex / Databricks Mosaic AI / Microsoft Fabric Copilot / Power BI"),
+                node("anomaly", "Anomaly\nDetection", 1225, 255, "usecase", "案件、原価、CFの異常を早期検知。", "#dc2626", products="Databricks / Azure Machine Learning / Vertex AI / Amazon SageMaker"),
+                node("writeback", "Planning\nWrite-back", 1225, 375, "usecase", "予測結果やアラートを計画業務へ戻す。", "#dc2626", products="Anaplan APIs / Pigment API / Oracle EPM REST API / CCH Tagetik connectors"),
             ],
             "edges": [
                 edge("d1", "systems", "elt", "internal data"),
@@ -3470,9 +3563,9 @@ def ai_app_architecture_component_html() -> str:
                 "detail": "中心に置くのは業務横断のエージェント層です。各システムの正本を持たず、権限付きで参照・提案します。",
             },
             "nodes": [
-                node("executive", "Executive / CFO\nNatural Language Q&A", 92, 140, "usecase", "経営層が自然言語で業績、案件、打ち手を確認。", "#dc2626", 170, 74),
-                node("fpna_user", "FP&A Team\nReview / Approval", 92, 340, "usecase", "FP&A担当が結果を確認し、会議資料とアクションへ反映。", "#dc2626", 170, 74),
-                node("llm", "LLM Gateway\nModel Routing\nPrompt / Logging", 505, 90, "ai", "モデル選択、プロンプト、利用ログ、コスト制御。", "#a855f7", 210, 84),
+                node("executive", "Executive / CFO\nNatural Language Q&A", 60, 140, "usecase", "経営層が自然言語で業績、案件、打ち手を確認。", "#dc2626", 170, 74, products="Microsoft 365 Copilot / Gemini Enterprise / custom CFO assistant"),
+                node("fpna_user", "FP&A Team\nReview / Approval", 60, 340, "usecase", "FP&A担当が結果を確認し、会議資料とアクションへ反映。", "#dc2626", 170, 74, products="Microsoft Teams / Slack / ServiceNow / Jira"),
+                node("llm", "LLM Gateway\nModel Routing\nPrompt / Logging", 505, 90, "ai", "モデル選択、プロンプト、利用ログ、コスト制御。", "#a855f7", 210, 84, products="Azure OpenAI / Amazon Bedrock / Google Vertex AI"),
                 node(
                     "agent",
                     "AI Agent / Orchestration Layer\nPlanning + Tool Use\nAPI Connectors",
@@ -3484,17 +3577,18 @@ def ai_app_architecture_component_html() -> str:
                     240,
                     112,
                     "primary",
+                    products="Microsoft Copilot Studio / LangGraph / Semantic Kernel / Vertex AI Agent Builder / Amazon Bedrock Agents",
                 ),
-                node("policy", "Policy Engine\nIAM / Guardrails", 505, 475, "control", "権限継承、PII制御、監査ログ、承認ゲート。", "#64748b", 220, 72),
-                node("erp_api", "ERP API\nActuals / GL", 285, 112, "source", "実績、会計伝票、勘定残高を権限付きで参照。", "#2563eb", 152, 68),
-                node("fpna_api", "FP&A API\nPlan / Forecast", 285, 258, "fpna", "予算、見込、シナリオ、承認ステータスを参照。", "#7c3aed", 154, 68),
-                node("docs", "Docs / Meetings\nBoard Pack / Minutes", 285, 404, "source", "会議資料、議事録、注記、業務ルールを検索。", "#2563eb", 160, 70),
-                node("bi", "BI Semantic Layer\nMetrics / Dashboard", 760, 132, "data", "KPI定義、メジャー、ダッシュボード指標を参照。", "#0f766e", 170, 72),
-                node("data", "DWH / Lakehouse\nTrusted Data", 760, 284, "data", "横断分析、特徴量、リネージ、履歴データを提供。", "#0f766e", 170, 72),
-                node("workflow", "Workflow\nApproval / Ticket", 760, 430, "control", "承認、通知、チケット、案件アクションへ接続。", "#64748b", 174, 70),
-                node("qa", "Management\nQ&A", 1000, 128, "usecase", "経営問答。", "#dc2626"),
-                node("draft", "Board Pack\nDrafting", 1000, 258, "usecase", "取締役会・経営会議資料の草案。", "#dc2626"),
-                node("action", "Action\nRecommendation", 1000, 388, "usecase", "打ち手候補、担当、期限の提案。", "#dc2626"),
+                node("policy", "Policy Engine\nIAM / Guardrails", 505, 475, "control", "権限継承、PII制御、監査ログ、承認ゲート。", "#64748b", 220, 72, products="Microsoft Entra ID / Okta / Microsoft Purview / AWS IAM / Google Cloud IAM"),
+                node("erp_api", "ERP API\nActuals / GL", 280, 112, "source", "実績、会計伝票、勘定残高を権限付きで参照。", "#2563eb", 152, 68, products="SAP BTP APIs / Oracle Integration Cloud / MuleSoft / Boomi"),
+                node("fpna_api", "FP&A API\nPlan / Forecast", 280, 258, "fpna", "予算、見込、シナリオ、承認ステータスを参照。", "#7c3aed", 154, 68, products="Anaplan APIs / Pigment API / Oracle EPM REST API / CCH Tagetik connectors"),
+                node("docs", "Docs / Meetings\nBoard Pack / Minutes", 280, 404, "source", "会議資料、議事録、注記、業務ルールを検索。", "#2563eb", 160, 70, products="SharePoint / Confluence / Google Drive / Box / Microsoft Teams"),
+                node("bi", "BI Semantic Layer\nMetrics / Dashboard", 760, 132, "data", "KPI定義、メジャー、ダッシュボード指標を参照。", "#0f766e", 170, 72, products="Power BI / Tableau / Looker / Qlik"),
+                node("data", "DWH / Lakehouse\nTrusted Data", 760, 284, "data", "横断分析、特徴量、リネージ、履歴データを提供。", "#0f766e", 170, 72, products="Snowflake / Databricks / Microsoft Fabric / BigQuery"),
+                node("workflow", "Workflow\nApproval / Ticket", 760, 430, "control", "承認、通知、チケット、案件アクションへ接続。", "#64748b", 174, 70, products="Microsoft Teams / Slack / ServiceNow / Jira / Power Automate"),
+                node("qa", "Management\nQ&A", 1000, 128, "usecase", "経営問答。", "#dc2626", products="Microsoft 365 Copilot / Gemini Enterprise / custom AI assistant"),
+                node("draft", "Board Pack\nDrafting", 1000, 258, "usecase", "取締役会・経営会議資料の草案。", "#dc2626", products="Microsoft PowerPoint / Workiva / Google Slides / Oracle Narrative Reporting"),
+                node("action", "Action\nRecommendation", 1000, 388, "usecase", "打ち手候補、担当、期限の提案。", "#dc2626", products="ServiceNow / Jira / Microsoft Planner / Asana"),
             ],
             "edges": [
                 edge("a1", "executive", "agent", "ask"),
@@ -3833,9 +3927,10 @@ def ai_app_architecture_component_html() -> str:
           document.getElementById(id).textContent = value || "";
         }
 
-        function showNodeDetail(data) {
+        function showNodeDetail(data, fallbackProducts) {
           setText("nodeLabel", data.label || "");
           setText("nodeDetail", data.detail || "");
+          setText("sideProducts", data.products || fallbackProducts || "");
         }
 
         function renderTabs() {
@@ -3862,7 +3957,7 @@ def ai_app_architecture_component_html() -> str:
           setText("sideFit", pattern.fit);
           setText("sideStrength", pattern.strength);
           setText("sideWatch", pattern.watch);
-          showNodeDetail(pattern.focus);
+          showNodeDetail(pattern.focus, pattern.products);
 
           if (!window.cytoscape) {
             document.getElementById("cy").innerHTML = '<div class="fallback">Cytoscape.jsを読み込めませんでした。ネットワーク接続またはCDN許可設定を確認してください。</div>';
@@ -3967,7 +4062,7 @@ def ai_app_architecture_component_html() -> str:
               }
             ]
           });
-          cy.on("tap", "node", (event) => showNodeDetail(event.target.data()));
+          cy.on("tap", "node", (event) => showNodeDetail(event.target.data(), pattern.products));
           cy.ready(() => setTimeout(() => cy.fit(cy.elements(), 28), 20));
         }
 
@@ -6283,6 +6378,43 @@ def main(app_mode: str = "internal") -> None:
         else:
             st.session_state["show_guide"] = False
 
+    def choose_proposal_page(page_key: str) -> None:
+        choose_page("presenter", page_key)
+
+    def render_proposal_turn_controls() -> None:
+        surface_pages = presenter_pages if presenter_only else presentation_pages
+        page_options = [key for key, _, _ in surface_pages]
+        current_page = st.session_state.get("active_page")
+        if current_page not in page_options:
+            return
+
+        current_index = page_options.index(current_page)
+        prev_key = page_options[current_index - 1] if current_index > 0 else None
+        next_key = page_options[current_index + 1] if current_index < len(page_options) - 1 else None
+        with st.container(key="proposal-turn-controls"):
+            st.button(
+                "<",
+                key="proposal_prev_page",
+                disabled=prev_key is None,
+                help="前のページへ",
+                on_click=choose_proposal_page,
+                args=(prev_key or current_page,),
+                width="stretch",
+            )
+            st.markdown(
+                f'<div class="proposal-button-index">{current_index + 1:02d}/{len(page_options):02d}</div>',
+                unsafe_allow_html=True,
+            )
+            st.button(
+                ">",
+                key="proposal_next_page",
+                disabled=next_key is None,
+                help="次のページへ",
+                on_click=choose_proposal_page,
+                args=(next_key or current_page,),
+                width="stretch",
+            )
+
     with st.sidebar:
         proposal_sidebar = presenter_only or st.session_state.get("active_surface") == "presenter"
         if proposal_sidebar:
@@ -6463,6 +6595,9 @@ def main(app_mode: str = "internal") -> None:
         render_data_explorer(data)
     else:
         render_tech_architecture(data)
+
+    if st.session_state.get("active_surface") == "presenter":
+        render_proposal_turn_controls()
 
 
 if __name__ == "__main__":
