@@ -384,6 +384,176 @@ def inject_css() -> None:
             vertical-align: top;
             line-height: 1.55;
         }
+        .presentation-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin: 8px 0 12px 0;
+            color: #475569;
+        }
+        .presentation-progress b {
+            color: #0f172a;
+            font-size: 0.95rem;
+        }
+        .presentation-progress span {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f766e;
+            white-space: nowrap;
+        }
+        .presentation-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .presentation-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: rgba(100, 116, 139, 0.30);
+        }
+        .presentation-dot.active {
+            width: 22px;
+            background: #0f766e;
+        }
+        .presentation-slide {
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: 8px;
+            box-shadow: 0 16px 44px rgba(15, 23, 42, 0.09);
+            min-height: 540px;
+            padding: 30px 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 18px;
+        }
+        .presentation-eyebrow {
+            color: #0f766e;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .presentation-slide h2 {
+            color: #0f172a !important;
+            font-size: 2.05rem;
+            line-height: 1.15;
+            margin: 0 0 10px 0;
+        }
+        .presentation-lead {
+            color: #334155;
+            font-size: 1.06rem;
+            line-height: 1.78;
+            max-width: 980px;
+        }
+        .presentation-card-grid {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .presentation-card-grid.is-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .presentation-card-grid.is-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .presentation-card-grid.is-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .presentation-card-grid.is-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        .presentation-card,
+        .presentation-metric-card {
+            background: #f8fafc;
+            border: 1px solid rgba(15, 23, 42, 0.10);
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 132px;
+        }
+        .presentation-card b,
+        .presentation-metric-card b {
+            color: #0f766e;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.98rem;
+        }
+        .presentation-card span,
+        .presentation-metric-card span {
+            color: #334155;
+            line-height: 1.62;
+            font-size: 0.92rem;
+        }
+        .presentation-metric-card strong {
+            display: block;
+            color: #0f172a;
+            font-size: 1.18rem;
+            line-height: 1.24;
+            margin-bottom: 7px;
+        }
+        .presentation-flow {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .presentation-step {
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-top: 4px solid #0f766e;
+            border-radius: 8px;
+            padding: 13px;
+            min-height: 152px;
+        }
+        .presentation-step b {
+            color: #0f172a;
+            display: block;
+            margin-bottom: 7px;
+        }
+        .presentation-step span {
+            color: #475569;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+        .presentation-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.10);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 16px;
+        }
+        .presentation-table th {
+            text-align: left;
+            background: #102033;
+            color: #ffffff;
+            padding: 10px 11px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .presentation-table td {
+            color: #334155;
+            padding: 10px 11px;
+            border-top: 1px solid rgba(15, 23, 42, 0.10);
+            line-height: 1.5;
+            vertical-align: top;
+            font-size: 0.9rem;
+        }
+        .presentation-note {
+            background: #ecfeff;
+            border: 1px solid rgba(8, 145, 178, 0.28);
+            border-left: 5px solid #0891b2;
+            border-radius: 8px;
+            padding: 13px 15px;
+            color: #164e63;
+            line-height: 1.65;
+            margin-top: 16px;
+        }
+        .presentation-footer {
+            border-top: 1px solid rgba(15, 23, 42, 0.12);
+            padding-top: 11px;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+        .stApp:has(#foundation-page) .presentation-slide {
+            background: #ffffff;
+        }
         .stApp:has(#foundation-page) {
             background: #f4f7fb !important;
         }
@@ -894,6 +1064,24 @@ def inject_css() -> None:
             .briefing-flow {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
             }
+            .presentation-progress {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            .presentation-slide {
+                min-height: auto;
+                padding: 22px 18px;
+            }
+            .presentation-slide h2 {
+                font-size: 1.45rem;
+            }
+            .presentation-card-grid.is-2,
+            .presentation-card-grid.is-3,
+            .presentation-card-grid.is-4,
+            .presentation-card-grid.is-5,
+            .presentation-flow {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
             .foundation-summary-grid,
             .foundation-thesis-row,
             .foundation-split,
@@ -989,113 +1177,243 @@ def render_segment_story_cards() -> None:
             )
 
 
+def render_presentation_controls(deck_key: str, titles: list[str]) -> int:
+    index_key = f"{deck_key}_slide_index"
+    index = int(st.session_state.get(index_key, 0))
+    index = max(0, min(index, len(titles) - 1))
+
+    controls = st.columns([1.15, *([0.48] * len(titles)), 1.15], gap="small")
+    with controls[0]:
+        if st.button("← 前へ", key=f"{deck_key}_prev", disabled=index == 0, width="stretch"):
+            index = max(0, index - 1)
+    for slide_index, _title in enumerate(titles):
+        with controls[slide_index + 1]:
+            if st.button(
+                str(slide_index + 1),
+                key=f"{deck_key}_jump_{slide_index}",
+                type="primary" if slide_index == index else "secondary",
+                width="stretch",
+            ):
+                index = slide_index
+    with controls[-1]:
+        if st.button("次へ →", key=f"{deck_key}_next", disabled=index == len(titles) - 1, width="stretch"):
+            index = min(len(titles) - 1, index + 1)
+
+    st.session_state[index_key] = index
+    dots = "".join(
+        f'<span class="presentation-dot{" active" if i == index else ""}"></span>'
+        for i in range(len(titles))
+    )
+    st.markdown(
+        f"""
+        <div class="presentation-progress">
+            <span>Slide {index + 1} / {len(titles)}</span>
+            <b>{escape(titles[index])}</b>
+            <div class="presentation-dots">{dots}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    return index
+
+
+def presentation_cards_html(cards: list[tuple[str, str]], columns: int = 3) -> str:
+    items = "".join(
+        (
+            '<div class="presentation-card">'
+            f"<b>{escape(title)}</b>"
+            f"<span>{escape(text)}</span>"
+            "</div>"
+        )
+        for title, text in cards
+    )
+    return f'<div class="presentation-card-grid is-{columns}">{items}</div>'
+
+
+def presentation_metric_cards_html(cards: list[tuple[str, str, str]], columns: int = 4) -> str:
+    items = "".join(
+        (
+            '<div class="presentation-metric-card">'
+            f"<b>{escape(label)}</b>"
+            f"<strong>{escape(value)}</strong>"
+            f"<span>{escape(note)}</span>"
+            "</div>"
+        )
+        for label, value, note in cards
+    )
+    return f'<div class="presentation-card-grid is-{columns}">{items}</div>'
+
+
+def presentation_flow_html(steps: list[tuple[str, str]], columns: int = 5) -> str:
+    items = "".join(
+        (
+            '<div class="presentation-step">'
+            f"<b>{escape(title)}</b>"
+            f"<span>{escape(text)}</span>"
+            "</div>"
+        )
+        for title, text in steps
+    )
+    return f'<div class="presentation-flow is-{columns}">{items}</div>'
+
+
+def presentation_table_html(headers: list[str], rows: list[list[str]]) -> str:
+    header_html = "".join(f"<th>{escape(header)}</th>" for header in headers)
+    row_html = "".join(
+        "<tr>" + "".join(f"<td>{escape(cell)}</td>" for cell in row) + "</tr>"
+        for row in rows
+    )
+    return f"""
+    <table class="presentation-table">
+        <thead><tr>{header_html}</tr></thead>
+        <tbody>{row_html}</tbody>
+    </table>
+    """
+
+
+def render_presentation_slide(eyebrow: str, title: str, body_html: str, footer: str = "") -> None:
+    footer_html = f'<div class="presentation-footer">{escape(footer)}</div>' if footer else ""
+    st.markdown(
+        f"""
+        <div class="presentation-slide">
+            <div>
+                <div class="presentation-eyebrow">{escape(eyebrow)}</div>
+                <h2>{escape(title)}</h2>
+                {body_html}
+            </div>
+            {footer_html}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def presentation_snapshot_html(
+    kpis: pd.DataFrame,
+    risk: pd.DataFrame,
+    metadata: dict[str, Any] | None = None,
+    period: str = "FY2026 Total",
+) -> str:
+    metadata = metadata or {}
+    base = aggregate_kpis(kpis, "Budget", period)
+    actual = aggregate_kpis(kpis, "Actual", period)
+    revenue_delta = actual["revenue_jpy_mn"] - base["revenue_jpy_mn"]
+    op_delta = actual["operating_profit_jpy_mn"] - base["operating_profit_jpy_mn"]
+    cf_delta = actual["cash_flow_jpy_mn"] - base["cash_flow_jpy_mn"]
+    margin_delta = actual["op_margin_pct"] - base["op_margin_pct"]
+    critical_count = int((risk["risk_level"] == "Critical").sum())
+    high_count = int((risk["risk_level"] == "High").sum())
+    loss_count = int(risk["loss_risk_flag"].sum())
+    return presentation_metric_cards_html(
+        [
+            (
+                "Data refresh",
+                format_generated_at(metadata),
+                f"{row_count_text(metadata)} / all figures are fictional",
+            ),
+            (
+                "Executive readout",
+                f"売上 {format_kpi_delta('Revenue', revenue_delta)}",
+                f"営業利益 {format_kpi_delta('Operating Profit', op_delta)} / CF {format_kpi_delta('Cash Flow', cf_delta)}",
+            ),
+            (
+                "Margin pressure",
+                format_kpi_value("Operating Profit Margin", actual["op_margin_pct"]),
+                f"vs Budget {format_kpi_delta('Operating Profit Margin', margin_delta)}",
+            ),
+            (
+                "Risk queue",
+                f"Critical {critical_count} / High {high_count}",
+                f"赤字化リスク {loss_count}件を重点確認",
+            ),
+        ],
+        columns=4,
+    )
+
+
 def render_client_pre_demo(kpis: pd.DataFrame, risk: pd.DataFrame, metadata: dict[str, Any]) -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
-    render_header("デモ閲覧前 / Client Preview", "Before viewing the AI FP&A cockpit")
+    render_header("デモ閲覧前プレゼン / Client Preview", "Before viewing the AI FP&A cockpit")
 
-    st.markdown(
-        """
-        <div class="briefing-hero">
-            <h2>まず確認していただきたい状況</h2>
-            <p>
+    slide = render_presentation_controls(
+        "client_pre_demo",
+        ["導入メッセージ", "現在のデモデータ", "押さえる3点", "デモの流れ", "前提"],
+    )
+
+    if slide == 0:
+        render_presentation_slide(
+            "Client Preview",
+            "まず確認していただきたい状況",
+            """
+            <div class="presentation-lead">
             このデモは、重工業のFP&amp;Aで起こりやすい「売上は伸びているのに、利益率とキャッシュフローは悪化している」
             状況を扱います。見るべきポイントは、AIが文章を作ることそのものではありません。
-            経営KPI、差異要因、案件リスク、根拠データが同じ流れでつながり、会議で説明責任を果たせる状態になることです。
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">最新デモデータの状態 / Current Snapshot</div>', unsafe_allow_html=True)
-    render_latest_snapshot(kpis, risk, metadata)
-
-    st.markdown('<div class="section-label">最初に押さえていただきたい3点</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="briefing-grid">
-            <div class="briefing-card">
-                <b>1. 経営KPIから原因へたどれる</b>
-                <span>
-                全社の売上、営業利益、利益率、キャッシュフローを起点に、セグメント別・要因別の差異へ掘り下げます。
-                </span>
             </div>
-            <div class="briefing-card">
-                <b>2. 案件リスクまでつながる</b>
-                <span>
-                重工業では、利益悪化の原因がEAC悪化、設計変更、外注費、工程遅延など案件単位で発生します。
-                KPIの変化を案件アクションへつなげる流れを見せます。
-                </span>
+            <div class="presentation-note">
+            経営KPI、差異要因、案件リスク、根拠データが同じ流れでつながり、会議で説明責任を果たせる状態になることを確認します。
             </div>
-            <div class="briefing-card">
-                <b>3. AIの前提は信頼できるデータ</b>
-                <span>
-                AIコメントの品質は、ERP、EPM、案件EAC、調達、工程、マスタが整備されているかで決まります。
-                このデモでは、AI活用に必要なデータ基盤の姿も確認できます。
-                </span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">デモで見る流れ</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="briefing-flow">
-            <div class="briefing-step">
-                <b>1. Dashboard</b>
-                <span>売上上振れと利益・CF悪化が同時に起きている全社状況を確認します。</span>
-            </div>
-            <div class="briefing-step">
-                <b>2. Variance Analysis</b>
-                <span>予算、見込、前年などの比較軸で、差異の主要因を分解します。</span>
-            </div>
-            <div class="briefing-step">
-                <b>3. Project Risk</b>
-                <span>利益悪化につながるCritical/High案件を特定します。</span>
-            </div>
-            <div class="briefing-step">
-                <b>4. AI Commentary</b>
-                <span>分析結果を経営会議で使える日本語コメントに変換します。</span>
-            </div>
-            <div class="briefing-step">
-                <b>5. Data Foundation</b>
-                <span>自社で実現するために必要なデータ、品質管理、導入ステップを確認します。</span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">前提</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <table class="briefing-table">
-            <thead>
-                <tr>
-                    <th>項目</th>
-                    <th>内容</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>データ</td>
-                    <td>すべて架空データです。実在企業の財務・案件情報は使っていません。</td>
-                </tr>
-                <tr>
-                    <td>目的</td>
-                    <td>完成済み製品の紹介ではなく、AIを使ったFP&amp;A差異分析の完成イメージと実装論点を共有することです。</td>
-                </tr>
-                <tr>
-                    <td>見てほしい観点</td>
-                    <td>画面の見た目だけでなく、どのデータがつながると経営説明が速く・深く・再現可能になるかを確認してください。</td>
-                </tr>
-            </tbody>
-        </table>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            "この後の画面は、経営説明の流れを疑似体験するための架空データデモです。",
+        )
+    elif slide == 1:
+        render_presentation_slide(
+            "Current Snapshot",
+            "最新デモデータの状態",
+            presentation_snapshot_html(kpis, risk, metadata),
+            "数値はすべて架空データです。実在企業の財務・案件情報は含みません。",
+        )
+    elif slide == 2:
+        render_presentation_slide(
+            "Key Points",
+            "最初に押さえていただきたい3点",
+            presentation_cards_html(
+                [
+                    (
+                        "1. 経営KPIから原因へたどれる",
+                        "全社の売上、営業利益、利益率、キャッシュフローを起点に、セグメント別・要因別の差異へ掘り下げます。",
+                    ),
+                    (
+                        "2. 案件リスクまでつながる",
+                        "EAC悪化、設計変更、外注費、工程遅延など、利益悪化の原因を案件単位のアクションへつなげます。",
+                    ),
+                    (
+                        "3. AIの前提は信頼できるデータ",
+                        "AIコメントの品質は、ERP、EPM、案件EAC、調達、工程、マスタが整備されているかで決まります。",
+                    ),
+                ],
+                columns=3,
+            ),
+            "AIの見せ場よりも、根拠データがつながっていることを重視して見てください。",
+        )
+    elif slide == 3:
+        render_presentation_slide(
+            "Demo Flow",
+            "デモで見る流れ",
+            presentation_flow_html(
+                [
+                    ("1. Dashboard", "売上上振れと利益・CF悪化が同時に起きている全社状況を確認します。"),
+                    ("2. Variance Analysis", "予算、見込、前年などの比較軸で、差異の主要因を分解します。"),
+                    ("3. Project Risk", "利益悪化につながるCritical/High案件を特定します。"),
+                    ("4. AI Commentary", "分析結果を経営会議で使える日本語コメントに変換します。"),
+                    ("5. Data Foundation", "自社で実現するために必要なデータ、品質管理、導入ステップを確認します。"),
+                ]
+            ),
+            "画面を個別機能としてではなく、経営説明の一連の流れとして確認します。",
+        )
+    else:
+        render_presentation_slide(
+            "Assumptions",
+            "このデモの前提",
+            presentation_table_html(
+                ["項目", "内容"],
+                [
+                    ["データ", "すべて架空データです。実在企業の財務・案件情報は使っていません。"],
+                    ["目的", "完成済み製品の紹介ではなく、AIを使ったFP&A差異分析の完成イメージと実装論点を共有することです。"],
+                    ["見てほしい観点", "画面の見た目だけでなく、どのデータがつながると経営説明が速く・深く・再現可能になるかを確認してください。"],
+                ],
+            ),
+            "この前提を置いたうえで、次のダッシュボード以降を確認します。",
+        )
 
 
 def render_internal_demo_guide() -> None:
@@ -1242,131 +1560,99 @@ def render_internal_demo_guide() -> None:
 
 def render_client_post_demo() -> None:
     st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
-    render_header("デモ閲覧後 / Client Follow-up", "What to take away and how to move next")
+    render_header("デモ閲覧後プレゼン / Client Follow-up", "What to take away and how to move next")
 
-    st.markdown(
-        """
-        <div class="briefing-hero">
-            <h2>デモ後に持ち帰っていただきたいこと</h2>
-            <p>
+    slide = render_presentation_controls(
+        "client_post_demo",
+        ["持ち帰り", "主な示唆", "確認観点", "次の進め方", "次回アジェンダ"],
+    )
+
+    if slide == 0:
+        render_presentation_slide(
+            "Client Follow-up",
+            "デモ後に持ち帰っていただきたいこと",
+            """
+            <div class="presentation-lead">
             AI FP&amp;Aの価値は、月次差異説明を速くするだけではありません。
             経営KPIから差異要因、案件リスク、推奨アクション、根拠データまでを同じ流れで確認できるようにし、
             経営会議での説明を再現可能にすることが本質です。
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">主な示唆</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="briefing-grid">
-            <div class="briefing-card">
-                <b>1. 差異説明は標準化できる</b>
-                <span>
-                毎月の説明が担当者ごとのExcel作業に依存している場合でも、KPIと差異要因を定義すれば再利用可能な説明プロセスにできます。
-                </span>
             </div>
-            <div class="briefing-card">
-                <b>2. 重工業では案件粒度が重要</b>
-                <span>
-                売上・利益・CFの変化は、案件EAC、設計変更、調達、工程遅延とつながっています。全社KPIだけでは打ち手に届きません。
-                </span>
+            <div class="presentation-note">
+            重要なのは、AIコメントを出すことではなく、コメントの根拠をKPI、差異要因、案件、元データまで戻れる状態にすることです。
             </div>
-            <div class="briefing-card">
-                <b>3. AI導入はデータ基盤から始める</b>
-                <span>
-                LLM連携より先に、データソース、KPI定義、シナリオ版管理、案件マスタ、品質ゲートを整理する必要があります。
-                </span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">自社適用に向けた確認観点</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <table class="briefing-table">
-            <thead>
-                <tr>
-                    <th>論点</th>
-                    <th>確認すること</th>
-                    <th>初期アウトプット</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>ユースケース</td>
-                    <td>予実差、見込差、案件リスク、CF悪化など、最初に解きたい会議テーマを1つ選ぶ。</td>
-                    <td>PoC対象KPIと対象会議</td>
-                </tr>
-                <tr>
-                    <td>データソース</td>
-                    <td>ERP、EPM、案件EAC、調達、工程、為替、マスタの所在と責任部門を確認する。</td>
-                    <td>データソース棚卸し</td>
-                </tr>
-                <tr>
-                    <td>KPI定義</td>
-                    <td>売上、営業利益、利益率、CF、EACなどの計算式、粒度、比較軸を固定する。</td>
-                    <td>KPI・差異要因定義書</td>
-                </tr>
-                <tr>
-                    <td>品質ゲート</td>
-                    <td>実績照合、シナリオ版管理、案件ID紐づけ、勘定科目マッピング、根拠追跡を確認する。</td>
-                    <td>データ品質チェックリスト</td>
-                </tr>
-                <tr>
-                    <td>PoC範囲</td>
-                    <td>代表セグメント、代表案件、代表KPIに絞り、短期間で価値を検証する。</td>
-                    <td>PoCスコープと成功条件</td>
-                </tr>
-            </tbody>
-        </table>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">次の進め方</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="briefing-flow">
-            <div class="briefing-step">
-                <b>1. 課題選定</b>
-                <span>経営会議、予実会議、見込更新など、最初に改善したい説明業務を選びます。</span>
-            </div>
-            <div class="briefing-step">
-                <b>2. データ棚卸し</b>
-                <span>必要データの所在、粒度、更新頻度、品質課題を確認します。</span>
-            </div>
-            <div class="briefing-step">
-                <b>3. KPI設計</b>
-                <span>比較軸、KPI、差異要因、案件リスクの定義をそろえます。</span>
-            </div>
-            <div class="briefing-step">
-                <b>4. PoC構築</b>
-                <span>代表領域に絞り、ダッシュボード、差異分解、AIコメントを検証します。</span>
-            </div>
-            <div class="briefing-step">
-                <b>5. 業務定着</b>
-                <span>月次サイクル、承認プロセス、データ品質運用へ組み込みます。</span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        """
-        <div class="briefing-message">
-        <b>推奨する次回アジェンダ:</b>
-        自社の代表ユースケースを1つ選び、必要データ、KPI定義、現状の品質課題、PoCで確認する成功条件を整理します。
-        そのうえで、AIコメント生成より前に整えるべきデータ基盤の範囲を明確にします。
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            "ここから自社適用の論点へ切り替えます。",
+        )
+    elif slide == 1:
+        render_presentation_slide(
+            "Takeaways",
+            "主な示唆",
+            presentation_cards_html(
+                [
+                    (
+                        "1. 差異説明は標準化できる",
+                        "毎月の説明が担当者ごとのExcel作業に依存していても、KPIと差異要因を定義すれば再利用可能な説明プロセスにできます。",
+                    ),
+                    (
+                        "2. 重工業では案件粒度が重要",
+                        "売上・利益・CFの変化は、案件EAC、設計変更、調達、工程遅延とつながっています。全社KPIだけでは打ち手に届きません。",
+                    ),
+                    (
+                        "3. AI導入はデータ基盤から始める",
+                        "LLM連携より先に、データソース、KPI定義、シナリオ版管理、案件マスタ、品質ゲートを整理する必要があります。",
+                    ),
+                ],
+                columns=3,
+            ),
+            "この3点がPoCの設計と本番化の優先順位を決めます。",
+        )
+    elif slide == 2:
+        render_presentation_slide(
+            "Assessment",
+            "自社適用に向けた確認観点",
+            presentation_table_html(
+                ["論点", "確認すること", "初期アウトプット"],
+                [
+                    ["ユースケース", "予実差、見込差、案件リスク、CF悪化など、最初に解きたい会議テーマを1つ選ぶ。", "PoC対象KPIと対象会議"],
+                    ["データソース", "ERP、EPM、案件EAC、調達、工程、為替、マスタの所在と責任部門を確認する。", "データソース棚卸し"],
+                    ["KPI定義", "売上、営業利益、利益率、CF、EACなどの計算式、粒度、比較軸を固定する。", "KPI・差異要因定義書"],
+                    ["品質ゲート", "実績照合、シナリオ版管理、案件ID紐づけ、勘定科目マッピング、根拠追跡を確認する。", "データ品質チェックリスト"],
+                    ["PoC範囲", "代表セグメント、代表案件、代表KPIに絞り、短期間で価値を検証する。", "PoCスコープと成功条件"],
+                ],
+            ),
+            "この表を次回ディスカッションの確認リストとして使います。",
+        )
+    elif slide == 3:
+        render_presentation_slide(
+            "Next Steps",
+            "次の進め方",
+            presentation_flow_html(
+                [
+                    ("1. 課題選定", "経営会議、予実会議、見込更新など、最初に改善したい説明業務を選びます。"),
+                    ("2. データ棚卸し", "必要データの所在、粒度、更新頻度、品質課題を確認します。"),
+                    ("3. KPI設計", "比較軸、KPI、差異要因、案件リスクの定義をそろえます。"),
+                    ("4. PoC構築", "代表領域に絞り、ダッシュボード、差異分解、AIコメントを検証します。"),
+                    ("5. 業務定着", "月次サイクル、承認プロセス、データ品質運用へ組み込みます。"),
+                ]
+            ),
+            "最初から全社展開を狙わず、説明責任が高い会議テーマに絞って検証します。",
+        )
+    else:
+        render_presentation_slide(
+            "Recommended Agenda",
+            "推奨する次回アジェンダ",
+            presentation_cards_html(
+                [
+                    ("1. 代表ユースケース", "自社で最初に改善したい会議テーマを1つ選びます。"),
+                    ("2. 必要データ", "ERP、EPM、案件EAC、調達、工程、マスタの所在と粒度を確認します。"),
+                    ("3. KPI定義", "比較軸、計算式、更新頻度、責任部門を揃えます。"),
+                    ("4. 品質課題", "欠損、版ずれ、案件ID不一致、勘定科目マッピングの課題を整理します。"),
+                    ("5. 成功条件", "PoCで何が確認できれば次に進むかを定義します。"),
+                ],
+                columns=5,
+            ),
+            "AIコメント生成より前に、整えるべきデータ基盤の範囲を明確にします。",
+        )
 
 
 @st.cache_data(show_spinner="デモデータを読み込み中...")
@@ -2421,7 +2707,7 @@ def render_data_explorer(data: dict[str, Any]) -> None:
             st.json(metadata)
 
 
-def render_foundation_sankey() -> None:
+def render_foundation_sankey(height: int = 460) -> None:
     labels = [
         "ERP実績",
         "EPM予算・見込",
@@ -2510,7 +2796,7 @@ def render_foundation_sankey() -> None:
     )
     fig.update_layout(
         title="Disconnected facts produce unverifiable AI comments; governed data produces accountable management commentary",
-        height=560,
+        height=height,
         paper_bgcolor="#071016",
         plot_bgcolor="#071016",
         font={"color": "#edf6f9", "size": 12},
@@ -2583,139 +2869,111 @@ def render_foundation_quality_matrix() -> None:
 
 def render_data_foundation(data: dict[str, Any]) -> None:
     st.markdown('<div id="foundation-page"></div>', unsafe_allow_html=True)
-    render_header("Data Foundation", "AI投資の前に、経営データの分断を解く")
+    render_header("データ基盤プレゼン / Data Foundation", "AI投資の前に、経営データの分断を解く")
 
-    st.markdown(
-        """
-        <div class="foundation-hero">
-            <div class="foundation-eyebrow">EXECUTIVE RISK MESSAGE</div>
-            <h2>データが分断されたままAIを導入しても、経営会議で説明責任を果たせるAIにはならない。</h2>
-            <p>
+    slide = render_presentation_controls(
+        "data_foundation",
+        ["経営リスク", "3つの論点", "データの流れ", "つなぐデータ", "品質ゲート", "経営判断"],
+    )
+
+    if slide == 0:
+        render_presentation_slide(
+            "Executive Risk Message",
+            "データが分断されたままAIを導入しても、経営会議で説明責任を果たせるAIにはならない。",
+            """
+            <div class="presentation-lead">
             LLMは文章を作ることはできます。しかし、売上・利益・キャッシュフロー・案件EAC・調達・工程・マスタが分断されたままでは、
             AIは「なぜ業績が悪化したのか」「どの案件に手を打つべきか」を根拠付きで説明できません。
-            速くなるのは説明ではなく、もっともらしいが検証できないコメントの生成です。
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">サマリ / 経営層に伝える3つの論点</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="foundation-thesis">
-            <div class="foundation-thesis-row">
-                <div class="foundation-thesis-item danger">
-                    <b>AI投資の落とし穴</b>
-                    <span>AIツールを導入しても、根拠データが分断されていれば、生成されるのは検証しにくいコメントです。</span>
-                </div>
-                <div class="foundation-thesis-item warning">
-                    <b>本当の経営リスク</b>
-                    <span>経営会議で「なぜ悪化したのか」「どの案件に手を打つべきか」を説明できないことがリスクです。</span>
-                </div>
-                <div class="foundation-thesis-item">
-                    <b>先に整えるべきもの</b>
-                    <span>LLMの前に、売上・利益・CF・案件リスクの根拠をつなぐ経営データ基盤が必要です。</span>
-                </div>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">経営データの流れ / Fragmented data vs trusted AI commentary</div>', unsafe_allow_html=True)
-    render_foundation_sankey()
-    st.markdown(
-        """
-        <div class="foundation-pullquote">
-            <b>読み方:</b>
-            左側の同じデータでも、手元Excelでつなぐだけでは「根拠を追えないAIコメント」に流れます。
-            品質ゲートとTrusted FP&amp;A Data Foundationを通すことで、KPI、差異要因、案件リスク、AIコメント、経営判断が同じ根拠でつながります。
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown('<div class="section-label">個別論点 / 何を整える必要があるか</div>', unsafe_allow_html=True)
-    tab_lineage, tab_data, tab_controls, tab_exec = st.tabs(
-        ["説明責任", "つなぐべきデータ", "最低限の統制", "経営層が決めること"]
-    )
-
-    with tab_lineage:
-        st.markdown(
-            """
-            <div class="foundation-tabs-copy">
-                <b>AIコメントから元データまで戻れることが、経営会議で使う最低条件です。</b><br>
-                コメント、KPI、差異要因、案件、元データの線が切れていると、AIは会議資料の下書きにはなっても、説明責任を果たす材料にはなりません。
+            <div class="presentation-note">
+            速くなるのは説明ではなく、もっともらしいが検証できないコメントの生成です。
             </div>
             """,
-            unsafe_allow_html=True,
+            "AI導入の前に、経営データの定義・版・粒度・根拠をそろえる必要があります。",
         )
-        lineage_df = pd.DataFrame(
-            [
-                {"Level": "AIコメント", "What must be traceable": "経営会議向けの説明文、リスク、推奨アクション"},
-                {"Level": "KPI", "What must be traceable": "売上、営業利益、利益率、キャッシュフロー"},
-                {"Level": "差異要因", "What must be traceable": "材料費、外注費、EAC悪化、為替、工程遅延"},
-                {"Level": "案件・部門", "What must be traceable": "案件ID、事業セグメント、責任部署、アクションオーナー"},
-                {"Level": "元データ", "What must be traceable": "ERP、EPM、EAC、調達、工程、マスタの承認済みデータ"},
-            ]
+    elif slide == 1:
+        render_presentation_slide(
+            "Management Thesis",
+            "経営層に伝える3つの論点",
+            presentation_cards_html(
+                [
+                    (
+                        "AI投資の落とし穴",
+                        "AIツールを導入しても、根拠データが分断されていれば、生成されるのは検証しにくいコメントです。",
+                    ),
+                    (
+                        "本当の経営リスク",
+                        "経営会議で「なぜ悪化したのか」「どの案件に手を打つべきか」を説明できないことがリスクです。",
+                    ),
+                    (
+                        "先に整えるべきもの",
+                        "LLMの前に、売上・利益・CF・案件リスクの根拠をつなぐ経営データ基盤が必要です。",
+                    ),
+                ],
+                columns=3,
+            ),
+            "この論点はIT施策ではなく、経営判断の品質に関わるアジェンダです。",
         )
-        st.dataframe(lineage_df, width="stretch", hide_index=True)
-
-    with tab_data:
-        domains = pd.DataFrame(
-            [
-                {"Domain": "Actuals / 実績", "Source": "ERP, GL, sub-ledger", "Why it matters": "予算・見込との差異説明の起点"},
-                {"Domain": "Budget & Forecast / 予算・見込", "Source": "EPM, planning system", "Why it matters": "比較軸の正本"},
-                {"Domain": "Project EAC / 案件見積総原価", "Source": "Project control, PMO", "Why it matters": "赤字化リスクと設計変更影響の中核"},
-                {"Domain": "Procurement / 調達・外注", "Source": "Procurement, supplier contracts", "Why it matters": "材料費・外注費・長納期部品の影響"},
-                {"Domain": "Schedule / 工程・納期", "Source": "Project schedule, milestones", "Why it matters": "計上時期、検収遅れ、CF悪化"},
-                {"Domain": "Master Data / マスタ", "Source": "MDM, ERP master", "Why it matters": "セグメント、案件、勘定科目、顧客の定義"},
-            ]
+    elif slide == 2:
+        render_presentation_slide(
+            "Data Flow",
+            "経営データの流れ",
+            """
+            <div class="presentation-lead">
+            同じデータでも、手元Excelでつなぐだけでは「根拠を追えないAIコメント」に流れます。
+            品質ゲートとTrusted FP&amp;A Data Foundationを通すことで、KPI、差異要因、案件リスク、AIコメント、経営判断が同じ根拠でつながります。
+            </div>
+            """,
         )
-        st.dataframe(domains, width="stretch", hide_index=True)
-
-    with tab_controls:
+        render_foundation_sankey(height=410)
+    elif slide == 3:
+        render_presentation_slide(
+            "Data Domains",
+            "つなぐべきデータ",
+            presentation_table_html(
+                ["Domain", "Source", "Why it matters"],
+                [
+                    ["Actuals / 実績", "ERP, GL, sub-ledger", "予算・見込との差異説明の起点"],
+                    ["Budget & Forecast / 予算・見込", "EPM, planning system", "比較軸の正本"],
+                    ["Project EAC / 案件見積総原価", "Project control, PMO", "赤字化リスクと設計変更影響の中核"],
+                    ["Procurement / 調達・外注", "Procurement, supplier contracts", "材料費・外注費・長納期部品の影響"],
+                    ["Schedule / 工程・納期", "Project schedule, milestones", "計上時期、検収遅れ、CF悪化"],
+                    ["Master Data / マスタ", "MDM, ERP master", "セグメント、案件、勘定科目、顧客の定義"],
+                ],
+            ),
+            "AIコメントの精度は、これらのデータが同じ粒度と定義でつながるかで決まります。",
+        )
+    elif slide == 4:
+        render_presentation_slide(
+            "Quality Gates",
+            "最低限の品質ゲート",
+            """
+            <div class="presentation-lead">
+            AIコメントから元データまで戻れることが、経営会議で使う最低条件です。
+            コメント、KPI、差異要因、案件、元データの線が切れていると、説明責任を果たす材料にはなりません。
+            </div>
+            """,
+        )
         render_foundation_quality_matrix()
-
-    with tab_exec:
-        decisions = pd.DataFrame(
-            [
-                {
-                    "Theme": "KPI",
-                    "Executive question": "どの経営指標を、AIで説明責任を果たせる状態にするか",
-                    "Initial scope": "売上、営業利益、営業利益率、キャッシュフロー",
-                },
-                {
-                    "Theme": "Meeting",
-                    "Executive question": "どの会議の説明品質と意思決定スピードを変えるか",
-                    "Initial scope": "月次経営会議、予実会議、見込更新会議",
-                },
-                {
-                    "Theme": "Business area",
-                    "Executive question": "どのセグメント・案件タイプから始めるか",
-                    "Initial scope": "赤字化リスクが高い案件群、EAC悪化が大きい事業",
-                },
-            ]
-        )
-        st.dataframe(decisions, width="stretch", hide_index=True)
-
-    st.markdown(
-        """
-        <div class="foundation-close">
-            <b>結論:</b>
+    else:
+        render_presentation_slide(
+            "Executive Decisions",
+            "経営層が決めること",
+            presentation_table_html(
+                ["Theme", "Executive question", "Initial scope"],
+                [
+                    ["KPI", "どの経営指標を、AIで説明責任を果たせる状態にするか", "売上、営業利益、営業利益率、キャッシュフロー"],
+                    ["Meeting", "どの会議の説明品質と意思決定スピードを変えるか", "月次経営会議、予実会議、見込更新会議"],
+                    ["Business area", "どのセグメント・案件タイプから始めるか", "赤字化リスクが高い案件群、EAC悪化が大きい事業"],
+                ],
+            )
+            + """
+            <div class="presentation-note">
             AI活用の成否は、モデル選定だけでは決まりません。経営会議で使えるAIにするには、
             まず経営データの定義・版・粒度・根拠を揃える必要があります。
-            これはIT課題ではなく、経営判断の品質を左右する経営アジェンダです。
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    metadata = data.get("metadata", {})
-    if metadata:
-        st.caption(
-            "This demo currently uses generated fictional Parquet files. In a real implementation, these files are replaced by a governed FP&A data mart."
+            </div>
+            """,
+            "This demo currently uses generated fictional Parquet files. In a real implementation, these files are replaced by a governed FP&A data mart.",
         )
 
 
