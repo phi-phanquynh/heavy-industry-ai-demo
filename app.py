@@ -4039,7 +4039,7 @@ def ai_app_architecture_component_html() -> str:
         }
         .slide {
           position: relative;
-          min-height: 660px;
+          min-height: 800px;
           padding: 22px 24px;
           overflow: hidden;
           background:
@@ -4139,7 +4139,7 @@ def ai_app_architecture_component_html() -> str:
           border-radius: 8px;
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
         }
-        .graph-card { padding: 10px; min-height: 430px; }
+        .graph-card { padding: 10px; min-height: 580px; }
         .graph-title {
           display: flex;
           align-items: baseline;
@@ -4188,7 +4188,7 @@ def ai_app_architecture_component_html() -> str:
         }
         #cy {
           width: 100%;
-          height: 370px;
+          height: 520px;
           background:
             linear-gradient(90deg, rgba(57,197,187,0.04) 0 1px, transparent 1px 80px),
             linear-gradient(0deg, rgba(96,165,250,0.04) 0 1px, transparent 1px 70px),
@@ -4197,11 +4197,11 @@ def ai_app_architecture_component_html() -> str:
           margin-top: 10px;
         }
         .side-card {
-          max-height: 430px;
+          max-height: 580px;
           overflow-x: hidden;
           overflow-y: auto;
           padding: 14px;
-          min-height: 430px;
+          min-height: 580px;
           scrollbar-color: rgba(57,197,187,0.62) rgba(7,18,28,0.92);
           scrollbar-gutter: stable;
         }
@@ -4602,7 +4602,7 @@ def ai_app_architecture_component_html() -> str:
 
 def render_proposal_ai_app_architecture() -> None:
     st.markdown('<div id="demo-briefing-page"></div><div id="proposal-component-page"></div>', unsafe_allow_html=True)
-    components.html(ai_app_architecture_component_html(), height=662, scrolling=False)
+    components.html(ai_app_architecture_component_html(), height=802, scrolling=False)
 
 
 def render_proposal_system_architecture() -> None:
