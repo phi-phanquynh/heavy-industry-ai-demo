@@ -4139,7 +4139,12 @@ def ai_app_architecture_component_html() -> str:
           border-radius: 8px;
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
         }
-        .graph-card { padding: 10px; min-height: 580px; }
+        .graph-card {
+          display: flex;
+          flex-direction: column;
+          padding: 10px;
+          min-height: 580px;
+        }
         .graph-title {
           display: flex;
           align-items: baseline;
@@ -4187,14 +4192,15 @@ def ai_app_architecture_component_html() -> str:
           100% { box-shadow: 0 0 0 0 rgba(255,176,0,0); }
         }
         #cy {
+          flex: 1 1 auto;
           width: 100%;
-          height: 520px;
+          min-height: 460px;
           background:
             linear-gradient(90deg, rgba(57,197,187,0.04) 0 1px, transparent 1px 80px),
             linear-gradient(0deg, rgba(96,165,250,0.04) 0 1px, transparent 1px 70px),
             rgba(4, 10, 17, 0.42);
           border-radius: 6px;
-          margin-top: 10px;
+          margin-top: 8px;
         }
         .side-card {
           max-height: 580px;
@@ -4307,9 +4313,10 @@ def ai_app_architecture_component_html() -> str:
         }
         .legend {
           display: flex;
+          flex: 0 0 auto;
           flex-wrap: wrap;
           gap: 8px;
-          margin-top: 12px;
+          margin-top: 8px;
         }
         .legend span {
           align-items: center;
