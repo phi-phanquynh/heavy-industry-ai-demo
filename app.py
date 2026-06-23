@@ -6211,7 +6211,104 @@ def build_action_register(risk: pd.DataFrame) -> pd.DataFrame:
     return action
 
 
-def render_project_risk(risk: pd.DataFrame, show_guide: bool = True) -> None:
+def risk_level_from_score(score: float) -> str:
+    if score >= 86:
+        return "Critical"
+    if score >= 70:
+        return "High"
+    if score >= 48:
+        return "Medium"
+    return "Low"
+
+
+def risk_animation_periods(kpis: pd.DataFrame | None = None) -> list[str]:
+    if kpis is not None and not kpis.empty and "period" in kpis.columns:
+        periods = sorted(kpis["period"].dropna().astype(str).unique().tolist())
+        if periods:
+            return periods
+    return [str(period) for period in pd.period_range("2025-04", periods=12, freq="M")]
+
+
+def risk_progression(month_index: int, total_months: int, record: dict[str, Any]) -> float:
+    risk_level = str(record.get("risk_level", "Low"))
+    schedule_delay = max(float(record.get("schedule_delay_days", 0.0)), 0.0)
+    sequence = project_sequence(record.get("project_id"))
+    acceleration = {
+        "Critical": 0.58,
+        "High": 0.48,
+        "Medium": 0.34,
+        "Low": 0.22,
+    }.get(risk_level, 0.30)
+    month_ratio = month_index / max(total_months, 1)
+    delay_ratio = min(schedule_delay / 180.0, 1.0)
+    curve_power = max(0.72, 1.68 - acceleration - delay_ratio * 0.28)
+    project_shift = ((sequence % 5) - 2) * 0.018 * month_ratio * (1 - month_ratio)
+    progress = month_ratio**curve_power + acceleration * 0.16 * month_ratio + project_shift
+    return float(np.clip(progress, 0.0, 1.0))
+
+
+def build_project_risk_animation(risk: pd.DataFrame, kpis: pd.DataFrame | None = None) -> pd.DataFrame:
+    if risk.empty:
+        return pd.DataFrame()
+
+    periods = risk_animation_periods(kpis)
+    total_months = len(periods)
+    rows: list[dict[str, Any]] = []
+    for record in risk.to_dict("records"):
+        annual_revenue = max(float(record.get("annual_revenue_budget_jpy_mn", 0.0)), 1.0)
+        budget_eac = float(record.get("budget_eac_jpy_mn", annual_revenue * 0.905))
+        final_eac_delta = float(record.get("eac_deterioration_jpy_mn", 0.0))
+        final_margin = float(record.get("forecast_margin_pct", 0.0))
+        start_margin = (annual_revenue - budget_eac) / annual_revenue * 100
+        final_score = float(record.get("risk_score", 0.0))
+        schedule_delay = float(record.get("schedule_delay_days", 0.0))
+        delay_ratio = min(max(schedule_delay / 180.0, 0.0), 1.0)
+        score_start = max(8.0, final_score - 34.0 - delay_ratio * 10.0)
+
+        for month_index, period in enumerate(periods, start=1):
+            progress = risk_progression(month_index, total_months, record)
+            eac_delta = final_eac_delta * progress
+            forecast_margin = start_margin + (final_margin - start_margin) * progress
+            risk_score = score_start + (final_score - score_start) * progress
+            risk_level = risk_level_from_score(risk_score)
+            if month_index == total_months:
+                risk_score = final_score
+                risk_level = str(record.get("risk_level", risk_level))
+                forecast_margin = final_margin
+                eac_delta = final_eac_delta
+
+            animated_record = dict(record)
+            animated_record.update(
+                {
+                    "period": period,
+                    "fiscal_month": month_index,
+                    "eac_deterioration_jpy_mn_frame": eac_delta,
+                    "eac_deterioration_jpy_bn": eac_delta / 1_000,
+                    "forecast_margin_pct_frame": forecast_margin,
+                    "risk_score_frame": risk_score,
+                    "risk_level_frame": risk_level,
+                    "schedule_delay_days_frame": schedule_delay * progress,
+                    "loss_risk_flag_frame": bool(forecast_margin < 0 or risk_score >= 88),
+                }
+            )
+            rows.append(animated_record)
+
+    return pd.DataFrame(rows)
+
+
+def risk_animation_ranges(animated: pd.DataFrame) -> tuple[list[float], list[float]]:
+    x_values = animated["eac_deterioration_jpy_bn"]
+    y_values = animated["forecast_margin_pct_frame"]
+    x_span = max(float(x_values.max() - x_values.min()), 1.0)
+    y_span = max(float(y_values.max() - y_values.min()), 4.0)
+    x_pad = max(x_span * 0.12, 1.0)
+    y_pad = max(y_span * 0.12, 1.5)
+    range_x = [min(0.0, float(x_values.min())) - x_pad, max(0.0, float(x_values.max())) + x_pad]
+    range_y = [min(0.0, float(y_values.min())) - y_pad, max(10.0, float(y_values.max())) + y_pad]
+    return range_x, range_y
+
+
+def render_project_risk(risk: pd.DataFrame, kpis: pd.DataFrame | None = None, show_guide: bool = True) -> None:
     render_header("Project Risk", "Risk map / Action register / Forecast impact")
     if show_guide:
         render_page_guide(
@@ -6219,7 +6316,7 @@ def render_project_risk(risk: pd.DataFrame, show_guide: bool = True) -> None:
             "重工業のFP&Aでは、危ない案件を見つけるだけでなく、誰が、いつまでに、何をして、いくら戻せる可能性があるかを経営会議で確認できる状態にすることが重要です。",
             [
                 "上部のカードでは、すぐ対応が必要な件数、期限が近い件数、戻せる見込金額、業績見通し修正が必要な件数を確認します。",
-                "リスクマップでは、コスト悪化額が大きく、利益率が低い案件ほど経営論点になりやすいです。",
+                "Animated Bubbleでは、コスト悪化額、利益率、リスクスコアが期中にどう悪化したかを月次で確認します。",
                 "アクション台帳では、問題、まずやること、担当部署、期限、戻せる見込、業績見通し修正の要否を案件単位で整理します。",
             ],
             "この画面のゴールは、単なるリスク一覧ではなく、経営会議後に追える是正アクション台帳を作ることです。",
@@ -6282,28 +6379,81 @@ def render_project_risk(risk: pd.DataFrame, show_guide: bool = True) -> None:
         st.info("条件に一致するアクションはありません。フィルタ条件を変更してください。")
         return
 
-    fig = px.scatter(
-        scoped,
-        x=scoped["eac_deterioration_jpy_mn"] / 1_000,
-        y="forecast_margin_pct",
-        size="annual_revenue_budget_jpy_mn",
-        color="risk_level",
-        color_discrete_map=RISK_COLORS,
-        hover_name="project_name",
-        hover_data={
-            "project_id": True,
-            "segment_ja": True,
-            "risk_score": True,
-            "schedule_delay_days": True,
-            "eac_deterioration_jpy_mn": ":,.0f",
-            "annual_revenue_budget_jpy_mn": ":,.0f",
-            "forecast_margin_pct": ":.1f",
-        },
-        labels={"x": "EAC Deterioration (JPY bn)", "forecast_margin_pct": "Forecast Margin %"},
-        title="案件別リスクマップ / Project Risk Map",
+    map_mode = st.radio(
+        "リスクマップ表示",
+        ["月次進行 / Animated Bubble", "最新スナップショット / Current Bubble"],
+        horizontal=True,
+        key="risk_map_mode",
     )
-    fig.add_hline(y=0, line_dash="dash", line_color="#ff647c", annotation_text="Loss threshold")
-    st.plotly_chart(style_fig(fig, 460), width="stretch")
+    if map_mode.startswith("月次進行"):
+        animated = build_project_risk_animation(scoped, kpis)
+        range_x, range_y = risk_animation_ranges(animated)
+        fig = px.scatter(
+            animated,
+            x="eac_deterioration_jpy_bn",
+            y="forecast_margin_pct_frame",
+            animation_frame="period",
+            animation_group="project_id",
+            size="annual_revenue_budget_jpy_mn",
+            size_max=48,
+            color="risk_level_frame",
+            color_discrete_map=RISK_COLORS,
+            category_orders={"period": risk_animation_periods(kpis)},
+            hover_name="project_name",
+            hover_data={
+                "project_id": True,
+                "segment_ja": True,
+                "risk_score_frame": ":.1f",
+                "schedule_delay_days_frame": ":.0f",
+                "eac_deterioration_jpy_mn_frame": ":,.0f",
+                "annual_revenue_budget_jpy_mn": ":,.0f",
+                "forecast_margin_pct_frame": ":.1f",
+                "risk_level_frame": False,
+                "period": False,
+            },
+            range_x=range_x,
+            range_y=range_y,
+            labels={
+                "eac_deterioration_jpy_bn": "Cumulative EAC deterioration (JPY bn)",
+                "forecast_margin_pct_frame": "Forecast Margin %",
+                "risk_level_frame": "Risk level",
+                "annual_revenue_budget_jpy_mn": "Annual revenue budget (JPY mn)",
+            },
+            title="案件リスク推移 / Plotly Animated Bubble",
+        )
+        fig.add_hline(y=0, line_dash="dash", line_color="#ff647c", annotation_text="Loss threshold")
+        fig.add_vline(x=0, line_dash="dot", line_color="rgba(159,178,195,0.45)")
+        fig.update_traces(marker={"line": {"width": 0.8, "color": "rgba(237,246,249,0.55)"}})
+        slider_config = []
+        for slider in fig.layout.sliders:
+            slider_dict = slider.to_plotly_json()
+            slider_dict["currentvalue"] = {"prefix": "Month: "}
+            slider_config.append(slider_dict)
+        fig.update_layout(sliders=slider_config)
+        st.plotly_chart(style_fig(fig, 500), width="stretch")
+    else:
+        fig = px.scatter(
+            scoped,
+            x=scoped["eac_deterioration_jpy_mn"] / 1_000,
+            y="forecast_margin_pct",
+            size="annual_revenue_budget_jpy_mn",
+            color="risk_level",
+            color_discrete_map=RISK_COLORS,
+            hover_name="project_name",
+            hover_data={
+                "project_id": True,
+                "segment_ja": True,
+                "risk_score": True,
+                "schedule_delay_days": True,
+                "eac_deterioration_jpy_mn": ":,.0f",
+                "annual_revenue_budget_jpy_mn": ":,.0f",
+                "forecast_margin_pct": ":.1f",
+            },
+            labels={"x": "EAC Deterioration (JPY bn)", "forecast_margin_pct": "Forecast Margin %"},
+            title="案件別リスクマップ / Project Risk Map",
+        )
+        fig.add_hline(y=0, line_dash="dash", line_color="#ff647c", annotation_text="Loss threshold")
+        st.plotly_chart(style_fig(fig, 460), width="stretch")
 
     st.markdown('<div class="section-label">是正アクション台帳 / Action Register</div>', unsafe_allow_html=True)
     display_cols = [
@@ -7248,7 +7398,7 @@ def main(app_mode: str = "internal") -> None:
     elif page == "Variance Analysis":
         render_variance_analysis(kpis, data["fact_variance_drivers"], data["project_risk"], show_guide=show_guide)
     elif page == "Project Risk":
-        render_project_risk(data["project_risk"], show_guide=show_guide)
+        render_project_risk(data["project_risk"], kpis, show_guide=show_guide)
     elif page == "AI Commentary":
         render_ai_commentary(kpis, data["fact_variance_drivers"], data["project_risk"], show_guide=show_guide)
     elif page == "Data Explorer":
