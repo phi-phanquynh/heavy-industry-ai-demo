@@ -1224,7 +1224,16 @@ def inject_css() -> None:
         .stApp:has(.presentation-slide) [data-testid="stDecoration"] {
             display: none !important;
         }
+        .stApp:has(#proposal-component-page) [data-testid="stToolbar"],
+        .stApp:has(#proposal-component-page) [data-testid="stDecoration"] {
+            display: none !important;
+        }
         .stApp:has(.presentation-slide) [data-testid="stHeader"] {
+            background: transparent !important;
+            pointer-events: none;
+            z-index: 999999;
+        }
+        .stApp:has(#proposal-component-page) [data-testid="stHeader"] {
             background: transparent !important;
             pointer-events: none;
             z-index: 999999;
@@ -2321,6 +2330,374 @@ def inject_css() -> None:
             margin-top: 15px;
             padding: 13px 16px;
         }
+        /* Projection readability pass: larger type with proportional spacing. */
+        .stApp:has(.presentation-slide) [data-testid="stSidebar"] {
+            max-width: 56px !important;
+            min-width: 56px !important;
+            width: 56px !important;
+        }
+        .stApp:has(#proposal-component-page) [data-testid="stSidebar"] {
+            max-width: 56px !important;
+            min-width: 56px !important;
+            width: 56px !important;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stSidebarContent"] {
+            background: #09131b !important;
+            border-right: 1px solid rgba(57,197,187,0.22);
+            min-width: 56px !important;
+            overflow: hidden !important;
+            width: 56px !important;
+        }
+        .stApp:has(#proposal-component-page) [data-testid="stSidebarContent"] {
+            background: #09131b !important;
+            border-right: 1px solid rgba(57,197,187,0.22);
+            min-width: 56px !important;
+            overflow: hidden !important;
+            width: 56px !important;
+        }
+        .stApp:has(.presentation-slide) [data-testid="stSidebarContent"] > :not([data-testid="stSidebarHeader"]),
+        .stApp:has(.presentation-slide) [data-testid="stSidebarUserContent"],
+        .stApp:has(#proposal-component-page) [data-testid="stSidebarContent"] > :not([data-testid="stSidebarHeader"]),
+        .stApp:has(#proposal-component-page) [data-testid="stSidebarUserContent"] {
+            display: none !important;
+        }
+        .stApp:has(.presentation-slide) .block-container,
+        .stApp:has(#proposal-component-page) .block-container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        .presentation-progress {
+            margin: 0.4rem 0 0.75rem 0;
+        }
+        .presentation-progress b {
+            font-size: 1.08rem;
+        }
+        .presentation-progress span {
+            font-size: 0.9rem;
+        }
+        .presentation-slide {
+            min-height: calc(100vh - 44px);
+            padding: clamp(17px, 1.5vw, 31px);
+        }
+        .presentation-eyebrow {
+            font-size: 0.86rem;
+            margin-bottom: 9px;
+        }
+        .presentation-slide h2 {
+            font-size: clamp(2.5rem, 3.05vw, 3.25rem);
+            line-height: 1.12;
+            margin-bottom: 17px;
+        }
+        .presentation-lead {
+            font-size: 1.18rem;
+            line-height: 1.62;
+            max-width: 1240px;
+        }
+        .presentation-card-grid,
+        .presentation-flow {
+            gap: 16px;
+            margin-top: 22px;
+        }
+        .presentation-card,
+        .presentation-metric-card {
+            min-height: 150px;
+            padding: 18px;
+        }
+        .presentation-card b,
+        .presentation-metric-card b,
+        .presentation-step b,
+        .architecture-node b {
+            font-size: 1.1rem;
+            line-height: 1.34;
+        }
+        .presentation-card span,
+        .presentation-metric-card span,
+        .presentation-step span,
+        .architecture-node span {
+            font-size: 1.06rem;
+            line-height: 1.52;
+        }
+        .presentation-metric-card strong {
+            font-size: 1.32rem;
+        }
+        .presentation-step {
+            min-height: 166px;
+            padding: 17px;
+        }
+        .architecture-node {
+            min-height: 166px;
+            padding: 17px;
+        }
+        .architecture-node strong {
+            font-size: 0.9rem;
+        }
+        .presentation-table th,
+        .presentation-table td {
+            font-size: 0.9rem;
+            line-height: 1.36;
+            padding: 8px 9px;
+        }
+        .presentation-note {
+            font-size: 1.08rem;
+            line-height: 1.56;
+            padding: 15px 17px;
+        }
+        .presentation-footer {
+            font-size: 0.98rem;
+        }
+        .presentation-section-divider {
+            font-size: 0.9rem;
+        }
+        .presentation-slide.architecture-slide {
+            padding: clamp(28px, 2.5vw, 42px);
+        }
+        .architecture-slide .presentation-lead {
+            font-size: 1.08rem;
+            line-height: 1.56;
+        }
+        .architecture-lane-map {
+            grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr);
+            gap: 9px;
+        }
+        .architecture-lane {
+            min-height: 350px;
+            padding: 14px;
+        }
+        .architecture-lane-title em {
+            font-size: 0.8rem;
+        }
+        .architecture-lane-title b {
+            font-size: 1.08rem;
+        }
+        .architecture-node-chip {
+            min-height: 86px;
+            padding: 10px 11px;
+        }
+        .architecture-node-chip strong {
+            font-size: 0.78rem;
+        }
+        .architecture-node-chip b {
+            font-size: 0.98rem;
+        }
+        .architecture-node-chip span {
+            font-size: 0.86rem;
+            -webkit-line-clamp: 3;
+        }
+        .architecture-route-chip {
+            font-size: 0.86rem;
+            line-height: 1.4;
+            padding: 9px 10px;
+        }
+        .architecture-route-chip b {
+            font-size: 0.9rem;
+        }
+        .briefing-hero h2 {
+            font-size: 1.95rem;
+        }
+        .briefing-hero p,
+        .briefing-card span,
+        .briefing-step span,
+        .briefing-table td {
+            font-size: 1.04rem;
+            line-height: 1.56;
+        }
+        .briefing-card b,
+        .briefing-step b,
+        .briefing-table th {
+            font-size: 1.08rem;
+        }
+        .briefing-step {
+            min-height: 148px;
+            padding: 15px;
+        }
+        .briefing-card {
+            padding: 18px;
+        }
+        .foundation-flow-map {
+            grid-template-columns:
+                minmax(200px, 1fr) 32px
+                minmax(200px, 1fr) 32px
+                minmax(200px, 1fr) 32px
+                minmax(200px, 1fr);
+        }
+        .foundation-flow-block {
+            min-height: 330px;
+            padding: 16px;
+        }
+        .foundation-flow-block b,
+        .foundation-quality-card b {
+            font-size: 1.14rem;
+        }
+        .foundation-flow-block span,
+        .foundation-flow-item,
+        .foundation-quality-card span {
+            font-size: 1.04rem;
+            line-height: 1.48;
+        }
+        .foundation-quality-card em {
+            font-size: 0.9rem;
+        }
+        .proposal-slide {
+            padding: clamp(17px, 1.5vw, 31px);
+        }
+        .proposal-topline {
+            margin-bottom: 10px;
+        }
+        .proposal-kicker {
+            font-size: 0.86rem;
+        }
+        .proposal-dot {
+            width: 8px;
+            height: 8px;
+        }
+        .proposal-dot.active {
+            width: 28px;
+        }
+        .proposal-slide h2 {
+            font-size: clamp(2.45rem, 3.1vw, 3.5rem);
+            line-height: 1.07;
+            margin-bottom: 10px;
+        }
+        .proposal-lead {
+            font-size: clamp(1.2rem, 1.28vw, 1.36rem);
+            line-height: 1.43;
+            max-width: 1220px;
+        }
+        .proposal-panel {
+            padding: 20px;
+        }
+        .proposal-panel b {
+            font-size: 1.18rem;
+        }
+        .proposal-panel span,
+        .proposal-panel li {
+            font-size: 1.14rem;
+            line-height: 1.48;
+        }
+        .fragment-card {
+            min-height: 148px;
+            padding: 17px;
+        }
+        .fragment-card em,
+        .fpna-expectation em,
+        .flow-node em,
+        .tech-layer em,
+        .option-card em,
+        .roadmap-phase em,
+        .assessment-item em {
+            font-size: 0.84rem;
+        }
+        .fragment-card b,
+        .fpna-expectation b {
+            font-size: 1.12rem;
+        }
+        .fragment-card span {
+            font-size: 1.08rem;
+            line-height: 1.46;
+        }
+        .expectation-items div {
+            font-size: 1rem;
+            padding: 8px 10px;
+        }
+        .problem-connector {
+            font-size: 0.95rem;
+        }
+        .fragment-stage.problem-blockers .fragment-card {
+            min-height: 128px;
+            padding: 12px 12px 12px 14px;
+        }
+        .fragment-stage.problem-blockers .fragment-card b {
+            font-size: 1.05rem;
+        }
+        .fragment-stage.problem-blockers .fragment-card span {
+            font-size: 0.98rem;
+            line-height: 1.36;
+        }
+        .executive-question {
+            font-size: 1.06rem;
+            padding: 8px 12px;
+        }
+        .flow-node {
+            min-height: 182px;
+            padding: 18px;
+        }
+        .flow-node b {
+            font-size: 1.16rem;
+        }
+        .flow-node span {
+            font-size: 1rem;
+            line-height: 1.44;
+        }
+        .foundation-core {
+            font-size: 1.42rem;
+            min-height: 100px;
+        }
+        .tech-architecture {
+            grid-template-columns: 1.12fr 0.18fr 1.12fr 0.18fr 1.12fr 0.18fr 1.08fr 0.18fr 1.08fr;
+            gap: 7px;
+        }
+        .tech-layer {
+            min-height: 286px;
+            padding: 12px;
+        }
+        .tech-layer em {
+            font-size: 0.95rem;
+        }
+        .tech-layer b {
+            font-size: 1.08rem;
+            line-height: 1.24;
+        }
+        .tech-pill {
+            font-size: 0.94rem;
+            line-height: 1.24;
+            padding: 6px 7px;
+        }
+        .tech-footnote div {
+            font-size: 0.95rem;
+            line-height: 1.32;
+            padding: 8px 9px;
+        }
+        .option-card {
+            min-height: 316px;
+        }
+        .option-card b,
+        .roadmap-phase b,
+        .assessment-item b {
+            font-size: 1.18rem;
+            line-height: 1.32;
+        }
+        .option-card span,
+        .roadmap-phase span,
+        .assessment-item span {
+            font-size: 1.02rem;
+            line-height: 1.46;
+        }
+        .option-meta {
+            font-size: 0.96rem;
+        }
+        .roadmap-phase {
+            min-height: 340px;
+            padding: 20px;
+        }
+        .roadmap-gate {
+            font-size: 0.98rem;
+        }
+        .assessment-item {
+            min-height: 162px;
+            padding: 18px;
+        }
+        .proposal-close {
+            font-size: 1.18rem;
+            line-height: 1.46;
+            padding: 15px 18px;
+        }
+        .stApp:has(#presentation-focus-mode) .presentation-slide {
+            min-height: calc(100vh - 84px);
+            padding: clamp(34px, 3.2vw, 60px);
+        }
+        .stApp:has(#presentation-focus-mode) .presentation-slide h2 {
+            font-size: clamp(2.65rem, 3.2vw, 3.45rem);
+        }
         @media (max-width: 900px) {
             .cockpit-title {
                 align-items: flex-start;
@@ -2348,10 +2725,18 @@ def inject_css() -> None:
             }
             .presentation-slide {
                 min-height: auto;
-                padding: 22px 18px;
+                padding: 24px 18px;
             }
             .presentation-slide h2 {
-                font-size: 1.45rem;
+                font-size: 1.8rem;
+            }
+            .presentation-lead,
+            .presentation-card span,
+            .presentation-metric-card span,
+            .presentation-step span,
+            .proposal-panel span,
+            .proposal-panel li {
+                font-size: 1rem;
             }
             .presentation-card-grid.is-2,
             .presentation-card-grid.is-3,
@@ -2436,13 +2821,13 @@ def inject_css() -> None:
                 padding: 24px 18px;
             }
             .proposal-slide h2 {
-                font-size: 1.75rem;
+                font-size: 2rem;
             }
             .fpna-expectation {
                 display: block;
             }
             .proposal-lead {
-                font-size: 0.98rem;
+                font-size: 1.06rem;
             }
             .flow-node:not(:last-child)::after {
                 bottom: -22px;
@@ -3578,71 +3963,53 @@ def ai_app_architecture_component_html() -> str:
             "strength": "ベンダー横断で柔軟に設計でき、BI、FP&A、ERP、文書、会議情報をまたいだ業務体験と開発・運用支援を作れる。",
             "watch": "権限継承、監査、データ境界、コスト制御、Human-in-the-loopを最初から設計する。開発・運用エージェントは本番データや権限境界に直接触れさせず、リポジトリ、CI/CD、承認フローで統制する。",
             "focus": {
-                "label": "AI Agent / Orchestration Layer",
+                "label": "Business AI Agent\nOrchestration Layer",
                 "detail": "中心に置くのは業務横断のエージェント層です。各システムの正本を持たず、権限付きで参照・提案します。",
             },
             "nodes": [
-                node("executive", "Executive / CFO\nNatural Language Q&A", 60, 140, "usecase", "経営層が自然言語で業績、案件、打ち手を確認。", "#dc2626", 170, 74, products="Microsoft 365 Copilot / Gemini Enterprise / custom CFO assistant"),
-                node("fpna_user", "FP&A Team\nReview / Approval", 60, 340, "usecase", "FP&A担当が結果を確認し、会議資料とアクションへ反映。", "#dc2626", 170, 74, products="Microsoft Teams / Slack / ServiceNow / Jira"),
-                node("llm", "LLM Gateway\nModel Routing\nPrompt / Logging", 505, 90, "ai", "モデル選択、プロンプト、利用ログ、コスト制御。", "#a855f7", 210, 84, products="Azure OpenAI / Amazon Bedrock / Google Vertex AI"),
+                node("channels", "Users / Channels\nCFO + FP&A\nChat / Approval", 95, 260, "usecase", "経営層とFP&A担当が自然言語で問い、確認・承認・指示を行う入口。", "#dc2626", 184, 94, products="Microsoft 365 Copilot / Gemini Enterprise / Microsoft Teams / Slack / ServiceNow"),
+                node("llm", "LLM Gateway\nModel Routing\nPrompt / Logs", 430, 95, "ai", "モデル選択、プロンプト、利用ログ、コスト制御。", "#a855f7", 210, 84, products="Azure OpenAI / Amazon Bedrock / Google Vertex AI"),
                 node(
                     "agent",
-                    "AI Agent / Orchestration Layer\nPlanning + Tool Use\nAPI Connectors",
-                    505,
-                    258,
+                    "Business AI Agent\nPlanning + Tool Use\nAnswer + Draft",
+                    430,
+                    260,
                     "ai",
                     "ユーザー意図を解釈し、必要なシステムを呼び出して回答・提案を生成。",
                     "#a855f7",
-                    240,
-                    112,
+                    230,
+                    104,
                     "primary",
                     products="Microsoft Copilot Studio / LangGraph / Semantic Kernel / Vertex AI Agent Builder / Amazon Bedrock Agents",
                 ),
-                node("policy", "Policy Engine\nIAM / Guardrails", 505, 455, "control", "権限継承、PII制御、監査ログ、承認ゲート。", "#64748b", 220, 72, products="Microsoft Entra ID / Okta / Microsoft Purview / AWS IAM / Google Cloud IAM"),
-                node("erp_api", "ERP API\nActuals / GL", 280, 112, "source", "実績、会計伝票、勘定残高を権限付きで参照。", "#2563eb", 152, 68, products="SAP BTP APIs / Oracle Integration Cloud / MuleSoft / Boomi"),
-                node("fpna_api", "FP&A API\nPlan / Forecast", 280, 258, "fpna", "予算、見込、シナリオ、承認ステータスを参照。", "#7c3aed", 154, 68, products="Anaplan APIs / Pigment API / Oracle EPM REST API / CCH Tagetik connectors"),
-                node("docs", "Docs / Meetings\nBoard Pack / Minutes", 280, 404, "source", "会議資料、議事録、注記、業務ルールを検索。", "#2563eb", 160, 70, products="SharePoint / Confluence / Google Drive / Box / Microsoft Teams"),
-                node("bi", "BI Semantic Layer\nMetrics / Dashboard", 760, 132, "data", "KPI定義、メジャー、ダッシュボード指標を参照。", "#0f766e", 170, 72, products="Power BI / Tableau / Looker / Qlik"),
-                node("data", "DWH / Lakehouse\nTrusted Data", 760, 284, "data", "横断分析、特徴量、リネージ、履歴データを提供。", "#0f766e", 170, 72, products="Snowflake / Databricks / Microsoft Fabric / BigQuery"),
-                node("workflow", "Workflow\nApproval / Ticket", 760, 430, "control", "承認、通知、チケット、案件アクションへ接続。", "#64748b", 174, 70, products="Microsoft Teams / Slack / ServiceNow / Jira / Power Automate"),
+                node("systems_api", "Business System APIs\nERP / FP&A / Docs", 735, 140, "source", "実績、計画、文書、会議情報をAPI・コネクタ経由で参照する接続面。", "#2563eb", 210, 86, products="SAP BTP APIs / Oracle Integration Cloud / MuleSoft / Boomi / Anaplan APIs / Pigment API / Oracle EPM REST API / CCH Tagetik connectors / SharePoint / Confluence / Google Drive"),
+                node("data_access", "Data & BI Access\nDWH / Metrics / Search", 735, 295, "data", "横断分析、KPI定義、検索、特徴量、履歴データをまとめて参照する層。", "#0f766e", 210, 86, products="Snowflake / Databricks / Microsoft Fabric / BigQuery / Power BI / Tableau / Looker / Azure AI Search / Vertex AI Search"),
+                node("governance", "Governance & Workflow\nIAM / Approval / Audit", 735, 455, "control", "権限継承、PII制御、監査ログ、承認、チケット、案件アクションを統制。", "#64748b", 220, 86, products="Microsoft Entra ID / Okta / Microsoft Purview / AWS IAM / Google Cloud IAM / ServiceNow / Jira / Power Automate"),
                 node(
                     "engineering_agent",
-                    "Engineering Agent\nAI SDLC / DevOps\nCode + Test + Docs",
-                    505,
-                    570,
+                    "Engineering Agent\nAI SDLC / DevOps\nBuild + Operate",
+                    430,
+                    455,
                     "ai",
                     "データ連携、API、RAG、テスト、監視、ドキュメント更新を支援する開発・運用エージェント。",
                     "#a855f7",
-                    230,
+                    220,
                     78,
                     products="Codex / Claude Code / Cursor / Devin / GitHub Copilot",
                 ),
-                node("qa", "Management\nQ&A", 1000, 128, "usecase", "経営問答。", "#dc2626", products="Microsoft 365 Copilot / Gemini Enterprise / custom AI assistant"),
-                node("draft", "Board Pack\nDrafting", 1000, 258, "usecase", "取締役会・経営会議資料の草案。", "#dc2626", products="Microsoft PowerPoint / Workiva / Google Slides / Oracle Narrative Reporting"),
-                node("action", "Action\nRecommendation", 1000, 388, "usecase", "打ち手候補、担当、期限の提案。", "#dc2626", products="ServiceNow / Jira / Microsoft Planner / Asana"),
+                node("outputs", "Management Outputs\nQ&A / Board Pack\nActions", 1020, 280, "usecase", "経営問答、会議資料草案、打ち手候補、担当、期限を出力する。", "#dc2626", 190, 100, products="Microsoft 365 Copilot / Gemini Enterprise / Microsoft PowerPoint / Workiva / Google Slides / Oracle Narrative Reporting / ServiceNow / Jira / Microsoft Planner / Asana"),
             ],
             "edges": [
-                edge("a1", "executive", "agent", "ask"),
-                edge("a2", "fpna_user", "agent", "review"),
-                edge("a3", "llm", "agent", "reasoning", "ai-edge"),
-                edge("a4", "agent", "erp_api", "tool call"),
-                edge("a5", "agent", "fpna_api", "tool call"),
-                edge("a6", "agent", "docs", "search"),
-                edge("a7", "agent", "bi", "metric"),
-                edge("a8", "agent", "data", "query"),
-                edge("a9", "agent", "workflow", "create task"),
-                edge("a10", "agent", "qa", "answer"),
-                edge("a11", "agent", "draft", "draft"),
-                edge("a12", "agent", "action", "recommend"),
-                edge("a13", "policy", "agent", "guardrail", "control-edge"),
-                edge("a14", "policy", "llm", "logging", "control-edge"),
-                edge("a15", "policy", "workflow", "approval", "control-edge"),
-                edge("a16", "engineering_agent", "agent", "app delivery", "ai-edge"),
-                edge("a17", "engineering_agent", "erp_api", "connector", "ai-edge"),
-                edge("a18", "engineering_agent", "fpna_api", "API build", "ai-edge"),
-                edge("a19", "engineering_agent", "data", "pipeline", "ai-edge"),
-                edge("a20", "engineering_agent", "workflow", "ops", "ai-edge"),
-                edge("a21", "policy", "engineering_agent", "repo policy", "control-edge"),
+                edge("a1", "channels", "agent", ""),
+                edge("a2", "llm", "agent", "", "ai-edge"),
+                edge("a3", "agent", "systems_api", ""),
+                edge("a4", "agent", "data_access", ""),
+                edge("a5", "agent", "outputs", ""),
+                edge("a6", "governance", "agent", "", "control-edge"),
+                edge("a7", "engineering_agent", "agent", "", "ai-edge"),
+                edge("a8", "engineering_agent", "systems_api", "", "ai-edge"),
+                edge("a9", "engineering_agent", "data_access", "", "ai-edge"),
+                edge("a10", "governance", "engineering_agent", "", "control-edge"),
             ],
         },
     }
@@ -3672,8 +4039,8 @@ def ai_app_architecture_component_html() -> str:
         }
         .slide {
           position: relative;
-          min-height: 836px;
-          padding: 30px 34px;
+          min-height: 660px;
+          padding: 22px 24px;
           overflow: hidden;
           background:
             linear-gradient(135deg, rgba(9,18,29,0.99), rgba(5,12,20,0.99) 58%, rgba(18,26,37,0.99)),
@@ -3696,11 +4063,11 @@ def ai_app_architecture_component_html() -> str:
           align-items: center;
           justify-content: space-between;
           gap: 18px;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
         .kicker {
           color: var(--muted);
-          font-size: 0.74rem;
+          font-size: 0.86rem;
           font-weight: 800;
           text-transform: uppercase;
         }
@@ -3721,24 +4088,24 @@ def ai_app_architecture_component_html() -> str:
           box-shadow: 0 0 18px rgba(57,197,187,0.55);
         }
         h1 {
-          margin: 0 0 9px 0;
+          margin: 0 0 8px 0;
           color: var(--text);
-          font-size: clamp(2rem, 2.85vw, 3.15rem);
+          font-size: clamp(2.15rem, 2.85vw, 3.2rem);
           line-height: 1.08;
           letter-spacing: 0;
         }
         .lead {
           color: #d6e7ee;
           max-width: 1160px;
-          margin: 0 0 16px 0;
-          font-size: 1.02rem;
-          line-height: 1.58;
+          margin: 0 0 10px 0;
+          font-size: 1.08rem;
+          line-height: 1.42;
         }
         .pattern-tabs {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 10px;
-          margin: 18px 0 14px 0;
+          gap: 8px;
+          margin: 12px 0 10px 0;
         }
         .pattern-tab {
           background: rgba(14,29,42,0.90);
@@ -3747,10 +4114,10 @@ def ai_app_architecture_component_html() -> str:
           color: #c8dce6;
           cursor: pointer;
           font: inherit;
-          font-size: 0.9rem;
+          font-size: 1rem;
           font-weight: 750;
-          min-height: 48px;
-          padding: 10px 12px;
+          min-height: 42px;
+          padding: 8px 10px;
           text-align: left;
         }
         .pattern-tab.active {
@@ -3761,8 +4128,8 @@ def ai_app_architecture_component_html() -> str:
         }
         .main-grid {
           display: grid;
-          grid-template-columns: minmax(760px, 1fr) 330px;
-          gap: 16px;
+          grid-template-columns: minmax(760px, 1fr) 340px;
+          gap: 12px;
           align-items: stretch;
         }
         .graph-card,
@@ -3772,24 +4139,24 @@ def ai_app_architecture_component_html() -> str:
           border-radius: 8px;
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
         }
-        .graph-card { padding: 12px; min-height: 566px; }
+        .graph-card { padding: 10px; min-height: 430px; }
         .graph-title {
           display: flex;
           align-items: baseline;
           justify-content: space-between;
           gap: 12px;
-          min-height: 44px;
-          padding: 0 2px 10px 2px;
+          min-height: 38px;
+          padding: 0 2px 8px 2px;
           border-bottom: 1px solid rgba(57,197,187,0.18);
         }
         .graph-title b {
           color: #f8fdff;
           display: block;
-          font-size: 1.05rem;
+          font-size: 1.1rem;
         }
         .graph-title span {
           color: #9fb2c3;
-          font-size: 0.78rem;
+          font-size: 0.9rem;
           white-space: nowrap;
         }
         .graph-title-meta {
@@ -3801,7 +4168,7 @@ def ai_app_architecture_component_html() -> str:
           align-items: center;
           color: #d9fffb !important;
           display: inline-flex;
-          font-size: 0.76rem !important;
+          font-size: 0.9rem !important;
           font-weight: 800;
           gap: 6px;
         }
@@ -3821,7 +4188,7 @@ def ai_app_architecture_component_html() -> str:
         }
         #cy {
           width: 100%;
-          height: 500px;
+          height: 370px;
           background:
             linear-gradient(90deg, rgba(57,197,187,0.04) 0 1px, transparent 1px 80px),
             linear-gradient(0deg, rgba(96,165,250,0.04) 0 1px, transparent 1px 70px),
@@ -3830,11 +4197,11 @@ def ai_app_architecture_component_html() -> str:
           margin-top: 10px;
         }
         .side-card {
-          max-height: 566px;
+          max-height: 430px;
           overflow-x: hidden;
           overflow-y: auto;
-          padding: 16px;
-          min-height: 566px;
+          padding: 14px;
+          min-height: 430px;
           scrollbar-color: rgba(57,197,187,0.62) rgba(7,18,28,0.92);
           scrollbar-gutter: stable;
         }
@@ -3857,7 +4224,7 @@ def ai_app_architecture_component_html() -> str:
         .section-label {
           color: #9fb2c3;
           display: block;
-          font-size: 0.72rem;
+          font-size: 0.84rem;
           font-weight: 850;
           margin-bottom: 7px;
           text-transform: uppercase;
@@ -3865,7 +4232,7 @@ def ai_app_architecture_component_html() -> str:
         .side-eyebrow {
           color: var(--cyan);
           display: block;
-          font-size: 0.74rem;
+          font-size: 0.86rem;
           font-weight: 850;
           margin-bottom: 5px;
           text-transform: uppercase;
@@ -3879,20 +4246,20 @@ def ai_app_architecture_component_html() -> str:
         }
         .change-note {
           color: #ffdf86;
-          font-size: 0.72rem;
+          font-size: 0.84rem;
           font-weight: 850;
           white-space: nowrap;
         }
         .side-card h2 {
           color: #f8fdff;
-          font-size: 1.25rem;
+          font-size: 1.32rem;
           line-height: 1.24;
           margin: 0 0 8px 0;
         }
         .side-card p {
           color: #c8dce6;
-          font-size: 0.9rem;
-          line-height: 1.55;
+          font-size: 1rem;
+          line-height: 1.45;
           margin: 0;
         }
         .info-block {
@@ -3908,14 +4275,14 @@ def ai_app_architecture_component_html() -> str:
         .info-block b {
           color: #d9fffb;
           display: block;
-          font-size: 0.8rem;
+          font-size: 0.92rem;
           margin-bottom: 5px;
         }
         .info-block span {
           color: #c8dce6;
           display: block;
-          font-size: 0.86rem;
-          line-height: 1.5;
+          font-size: 0.96rem;
+          line-height: 1.42;
         }
         .node-detail {
           background: rgba(57,197,187,0.09);
@@ -3928,15 +4295,15 @@ def ai_app_architecture_component_html() -> str:
         .node-detail strong {
           color: #f8fdff;
           display: block;
-          font-size: 0.92rem;
+          font-size: 1.02rem;
           line-height: 1.32;
           margin-bottom: 5px;
           white-space: pre-line;
         }
         .node-detail span {
           color: #d9fffb;
-          font-size: 0.84rem;
-          line-height: 1.48;
+          font-size: 0.96rem;
+          line-height: 1.42;
         }
         .legend {
           display: flex;
@@ -3948,7 +4315,7 @@ def ai_app_architecture_component_html() -> str:
           align-items: center;
           color: #9fb2c3;
           display: inline-flex;
-          font-size: 0.75rem;
+          font-size: 0.9rem;
           gap: 5px;
         }
         .legend i {
@@ -4114,7 +4481,7 @@ def ai_app_architecture_component_html() -> str:
                   "label": "data(label)",
                   "color": "#f8fdff",
                   "font-family": "Inter, Noto Sans JP, Yu Gothic, Meiryo, sans-serif",
-                  "font-size": 10.5,
+                  "font-size": 12,
                   "font-weight": 700,
                   "line-height": 1.18,
                   "text-wrap": "wrap",
@@ -4130,7 +4497,7 @@ def ai_app_architecture_component_html() -> str:
                 style: {
                   "border-width": 3,
                   "border-color": "#f8fdff",
-                  "font-size": 12.5,
+                  "font-size": 14,
                   "text-max-width": 225
                 }
               },
@@ -4152,7 +4519,7 @@ def ai_app_architecture_component_html() -> str:
                   "label": "data(label)",
                   "color": "#d9fffb",
                   "font-family": "Inter, Noto Sans JP, Yu Gothic, Meiryo, sans-serif",
-                  "font-size": 8.5,
+                  "font-size": 9.5,
                   "font-weight": 700,
                   "text-background-color": "#071016",
                   "text-background-opacity": 0.86,
@@ -4234,8 +4601,8 @@ def ai_app_architecture_component_html() -> str:
 
 
 def render_proposal_ai_app_architecture() -> None:
-    st.markdown('<div id="demo-briefing-page"></div>', unsafe_allow_html=True)
-    components.html(ai_app_architecture_component_html(), height=858, scrolling=False)
+    st.markdown('<div id="demo-briefing-page"></div><div id="proposal-component-page"></div>', unsafe_allow_html=True)
+    components.html(ai_app_architecture_component_html(), height=662, scrolling=False)
 
 
 def render_proposal_system_architecture() -> None:
