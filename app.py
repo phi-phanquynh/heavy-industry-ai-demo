@@ -1336,8 +1336,9 @@ def inject_css() -> None:
             background: rgba(7, 16, 22, 0.96);
             border: 1px solid rgba(57,197,187,0.28);
             border-radius: 8px;
+            box-sizing: border-box;
             box-shadow: 0 14px 34px rgba(0,0,0,0.30);
-            margin: 0 0 12px 0;
+            margin: 0 0.75rem 12px 0;
             padding: 10px 12px 6px 12px;
             position: sticky;
             top: 0;
@@ -1354,26 +1355,8 @@ def inject_css() -> None:
             border-color: rgba(57,197,187,0.32) !important;
             border-radius: 6px !important;
         }
-        .nav-current {
-            background: rgba(57,197,187,0.10);
-            border: 1px solid rgba(57,197,187,0.32);
-            border-radius: 8px;
-            padding: 9px 11px;
-            margin: 0 0 4px 0;
-            color: #d7e7ee;
-            line-height: 1.45;
-        }
-        .nav-current b {
-            display: block;
-            color: #39c5bb;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-        }
-        .nav-current span {
-            display: block;
-            color: #edf6f9;
-            font-weight: 700;
+        .st-key-page-navigation [data-testid="column"] {
+            min-width: 0;
         }
         div[data-testid="stMetric"] {
             background: rgba(16,27,36,0.88);
@@ -1496,7 +1479,7 @@ def inject_css() -> None:
         }
         .st-key-proposal-turn-controls {
             position: fixed;
-            right: 16px;
+            right: 34px;
             top: 50%;
             transform: translateY(-50%);
             width: 50px;
@@ -8448,7 +8431,7 @@ def main(app_mode: str = "internal") -> None:
                     active_surface = "presenter"
                     st.session_state["active_surface"] = active_surface
                 st.session_state["surface_selector_main"] = active_surface
-                surface_col, page_col, status_col = st.columns([1.0, 2.0, 1.35], gap="small")
+                surface_col, page_col = st.columns([0.85, 2.35], gap="small")
                 with surface_col:
                     st.selectbox(
                         "表示範囲",
@@ -8459,7 +8442,7 @@ def main(app_mode: str = "internal") -> None:
                     )
                 active_surface = st.session_state.get("active_surface", active_surface)
             else:
-                page_col, status_col = st.columns([2.2, 1.3], gap="small")
+                page_col = st.container()
 
             page_options, page_labels = options_for_surface(active_surface)
             active_page = st.session_state.get("active_page")
@@ -8479,25 +8462,6 @@ def main(app_mode: str = "internal") -> None:
                     key=selector_key,
                     on_change=choose_page_from_selector,
                     args=(active_surface, selector_key),
-                )
-
-            current_surface = st.session_state.get("active_surface", active_surface)
-            current_page = st.session_state.get("active_page", active_page)
-            current_page_label = {
-                **client_page_labels,
-                **presenter_page_labels,
-                **operational_page_labels,
-                **internal_page_labels,
-            }.get(current_page, current_page)
-            with status_col:
-                st.markdown(
-                    f"""
-                    <div class="nav-current">
-                        <b>現在</b>
-                        <span>{escape(surface_labels.get(current_surface, current_surface))} / {escape(current_page_label)}</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
                 )
 
     render_top_navigation()
