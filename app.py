@@ -92,7 +92,7 @@ st.set_page_config(
     page_title=APP_NAME,
     page_icon="",
     layout="wide",
-    initial_sidebar_state="auto",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -123,12 +123,10 @@ def inject_css() -> None:
             padding-bottom: 2.5rem;
             max-width: 1480px;
         }
-        [data-testid="stSidebar"] {
-            background: #09131b;
-            border-right: 1px solid var(--line);
-        }
-        [data-testid="stSidebar"] * {
-            letter-spacing: 0;
+        [data-testid="stSidebar"],
+        [data-testid="stSidebarCollapsedControl"],
+        [data-testid="stSidebarCollapseButton"] {
+            display: none !important;
         }
         h1, h2, h3 {
             letter-spacing: 0;
@@ -902,8 +900,6 @@ def inject_css() -> None:
         }
         .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] button,
         .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] [role="button"],
-        .stApp:has(#presentation-focus-mode) [data-testid="stSidebarCollapsedControl"],
-        .stApp:has(#presentation-focus-mode) [data-testid="stSidebarCollapseButton"],
         .stApp:has(#presentation-focus-mode) button[data-testid="stBaseButton-headerNoPadding"] {
             display: inline-flex !important;
             opacity: 1 !important;
@@ -1336,23 +1332,34 @@ def inject_css() -> None:
             font-size: 0.72rem;
             margin-bottom: 2px;
         }
-        .sidebar-meta {
-            border-top: 1px solid rgba(148, 163, 184, 0.24);
-            margin-top: 12px;
-            padding-top: 10px;
-            color: var(--muted);
-            font-size: 0.78rem;
-            line-height: 1.5;
+        .st-key-page-navigation {
+            background: rgba(7, 16, 22, 0.96);
+            border: 1px solid rgba(57,197,187,0.28);
+            border-radius: 8px;
+            box-shadow: 0 14px 34px rgba(0,0,0,0.30);
+            margin: 0 0 12px 0;
+            padding: 10px 12px 6px 12px;
+            position: sticky;
+            top: 0;
+            z-index: 999980;
         }
-        .sidebar-meta b {
-            color: #d7e7ee;
+        .st-key-page-navigation label {
+            color: #9fb2c3 !important;
+            font-size: 0.76rem !important;
+            font-weight: 800 !important;
+            letter-spacing: 0;
+        }
+        .st-key-page-navigation [data-baseweb="select"] > div {
+            background: rgba(11, 26, 37, 0.98) !important;
+            border-color: rgba(57,197,187,0.32) !important;
+            border-radius: 6px !important;
         }
         .nav-current {
             background: rgba(57,197,187,0.10);
             border: 1px solid rgba(57,197,187,0.32);
             border-radius: 8px;
-            padding: 10px 11px;
-            margin: 12px 0 14px 0;
+            padding: 9px 11px;
+            margin: 0 0 4px 0;
             color: #d7e7ee;
             line-height: 1.45;
         }
@@ -1422,13 +1429,9 @@ def inject_css() -> None:
         }
         .stApp:has(#proposal-component-page) [data-testid="stHeader"] button,
         .stApp:has(#proposal-component-page) [data-testid="stHeader"] [role="button"],
-        .stApp:has(#proposal-component-page) [data-testid="stSidebarCollapsedControl"],
-        .stApp:has(#proposal-component-page) [data-testid="stSidebarCollapseButton"],
         .stApp:has(#proposal-component-page) button[data-testid="stBaseButton-headerNoPadding"],
         .stApp:has(#data-foundation-component-page) [data-testid="stHeader"] button,
         .stApp:has(#data-foundation-component-page) [data-testid="stHeader"] [role="button"],
-        .stApp:has(#data-foundation-component-page) [data-testid="stSidebarCollapsedControl"],
-        .stApp:has(#data-foundation-component-page) [data-testid="stSidebarCollapseButton"],
         .stApp:has(#data-foundation-component-page) button[data-testid="stBaseButton-headerNoPadding"] {
             display: inline-flex !important;
             opacity: 1 !important;
@@ -8293,7 +8296,12 @@ def main(app_mode: str = "internal") -> None:
             st.session_state["active_surface"] = "client"
         elif st.session_state.get("active_surface") not in {"client", "operational"}:
             st.session_state["active_surface"] = "operational"
-        for selector_key in ("client_page_selector", "operational_page_selector"):
+        for selector_key in (
+            "client_page_selector",
+            "operational_page_selector",
+            "client_page_selector_main",
+            "operational_page_selector_main",
+        ):
             if selector_key in st.session_state:
                 del st.session_state[selector_key]
 
@@ -8311,7 +8319,7 @@ def main(app_mode: str = "internal") -> None:
         st.session_state["active_surface"] = "presenter"
         st.session_state["active_page"] = active_page
         st.session_state["show_guide"] = presenter_page_guides.get(active_page, False)
-    elif st.session_state.get("active_surface") not in {"presenter", "internal"}:
+    elif st.session_state.get("active_surface") not in {"presenter", "operational", "internal"}:
         st.session_state["active_surface"] = "internal" if st.session_state.get("active_page") in internal_page_keys else "presenter"
 
     active_surface = st.session_state.get("active_surface")
@@ -8365,7 +8373,17 @@ def main(app_mode: str = "internal") -> None:
 
     def turn_to_proposal_page(page_key: str) -> None:
         choose_page("presenter", page_key)
-        st.session_state["presenter_page_selector"] = page_key
+        st.session_state["presenter_page_selector_main"] = page_key
+
+    def switch_surface_from_selector() -> None:
+        selected_surface = st.session_state.get("surface_selector_main")
+        if selected_surface:
+            switch_surface(selected_surface)
+
+    def choose_page_from_selector(surface: str, selector_key: str) -> None:
+        selected_page = st.session_state.get(selector_key)
+        if selected_page:
+            choose_page(surface, selected_page)
 
     def render_proposal_turn_controls() -> None:
         surface_pages = presenter_pages if presenter_only else presentation_pages
@@ -8403,123 +8421,86 @@ def main(app_mode: str = "internal") -> None:
                 width="stretch",
             )
 
-    with st.sidebar:
-        proposal_sidebar = presenter_only or st.session_state.get("active_surface") == "presenter"
-        if proposal_sidebar:
-            st.markdown("### AI時代のFP&Aデータ基盤")
-            st.caption("経営向けリファレンス構成")
-        else:
-            st.markdown(f"### {APP_NAME}")
-            st.caption("AI時代のFP&Aデータ基盤")
-            row_total = metadata.get("row_counts", {}).get("total")
-            row_total_text = f"{int(row_total):,}" if row_total is not None else "N/A"
-            st.markdown(
-                f"""
-                <div class="sidebar-meta">
-                    <b>Current data</b><br>
-                    Generated:&nbsp;{escape(format_generated_at(metadata))}<br>
-                    Records:&nbsp;{escape(row_total_text)}
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        if not client_only and not presenter_only:
-            surface_options = ["presenter", "internal"]
-            surface_labels = {
-                "presenter": "【社外用】プレゼンテーション資料",
-                "internal": "【社内用】当デモに関する情報",
-            }
-            active_surface = st.session_state.get("active_surface")
-            selected_surface = st.radio(
-                "表示範囲",
-                surface_options,
-                index=surface_options.index(active_surface) if active_surface in surface_options else 0,
-                format_func=lambda key: surface_labels[key],
-                key="surface_selector",
-            )
-            if selected_surface != st.session_state.get("active_surface"):
-                switch_surface(selected_surface)
-
-        active_surface = st.session_state.get("active_surface")
-        if active_surface == "operational":
-            page_options = [key for key, _ in operational_pages]
-            active_page = st.session_state.get("active_page")
-            selected_page = st.radio(
-                "ページ",
-                page_options,
-                index=page_options.index(active_page) if active_page in page_options else 0,
-                format_func=lambda key: operational_page_labels[key],
-                key="operational_page_selector",
-            )
-            if selected_page != st.session_state.get("active_page"):
-                choose_page("operational", selected_page)
-        elif active_surface == "presenter":
-            surface_pages = presenter_pages if presenter_only else presentation_pages
-            surface_page_labels = presenter_page_labels if presenter_only else presentation_page_labels
-            page_options = [key for key, _, _ in surface_pages]
-            active_page = st.session_state.get("active_page")
-            if st.session_state.get("presenter_page_selector") not in page_options:
-                st.session_state["presenter_page_selector"] = (
-                    active_page if active_page in page_options else page_options[0]
-                )
-            selected_page = st.radio(
-                "ページ",
-                page_options,
-                index=None,
-                format_func=lambda key: surface_page_labels[key],
-                key="presenter_page_selector",
-            )
-            if selected_page is not None and selected_page != st.session_state.get("active_page"):
-                choose_page("presenter", selected_page)
-        elif active_surface == "internal":
-            page_options = [key for key, _, _ in internal_pages]
-            active_page = st.session_state.get("active_page")
-            selected_page = st.radio(
-                "ページ",
-                page_options,
-                index=page_options.index(active_page) if active_page in page_options else 0,
-                format_func=lambda key: internal_page_labels[key],
-                key="internal_page_selector",
-            )
-            if selected_page != st.session_state.get("active_page"):
-                choose_page("internal", selected_page)
-        else:
-            page_options = [key for key, _, _ in client_pages]
-            active_page = st.session_state.get("active_page")
-            selected_page = st.radio(
-                "ページ",
-                page_options,
-                index=page_options.index(active_page) if active_page in page_options else 0,
-                format_func=lambda key: client_page_labels[key],
-                key="client_page_selector",
-            )
-            if selected_page != st.session_state.get("active_page"):
-                choose_page("client", selected_page)
-
-        current_surface = st.session_state.get("active_surface")
-        current_page = st.session_state.get("active_page")
-        current_surface_label = {
+    def render_top_navigation() -> None:
+        surface_labels = {
             "client": "本体デモ",
-            "presenter": "【社外用】プレゼンテーション資料",
-            "operational": "本体デモ確認",
-            "internal": "【社内用】当デモに関する情報",
-        }.get(current_surface, "【社外用】プレゼンテーション資料")
-        current_page_label = {
-            **client_page_labels,
-            **presenter_page_labels,
-            **operational_page_labels,
-            **internal_page_labels,
-        }.get(current_page, current_page)
-        st.markdown(
-            f"""
-            <div class="nav-current">
-                <b>現在の表示</b>
-                <span>{escape(current_surface_label)} / {escape(current_page_label)}</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            "presenter": "提案資料",
+            "operational": "本体デモ",
+            "internal": "社内確認",
+        }
+
+        def options_for_surface(surface: str) -> tuple[list[str], dict[str, str]]:
+            if surface == "operational":
+                return [key for key, _ in operational_pages], operational_page_labels
+            if surface == "presenter":
+                surface_pages = presenter_pages if presenter_only else presentation_pages
+                labels = presenter_page_labels if presenter_only else presentation_page_labels
+                return [key for key, _, _ in surface_pages], labels
+            if surface == "internal":
+                return [key for key, _, _ in internal_pages], internal_page_labels
+            return [key for key, _, _ in client_pages], client_page_labels
+
+        active_surface = st.session_state.get("active_surface", "presenter")
+        with st.container(key="page-navigation"):
+            if not client_only and not presenter_only:
+                surface_options = ["presenter", "operational", "internal"]
+                if active_surface not in surface_options:
+                    active_surface = "presenter"
+                    st.session_state["active_surface"] = active_surface
+                st.session_state["surface_selector_main"] = active_surface
+                surface_col, page_col, status_col = st.columns([1.0, 2.0, 1.35], gap="small")
+                with surface_col:
+                    st.selectbox(
+                        "表示範囲",
+                        surface_options,
+                        format_func=lambda key: surface_labels.get(key, key),
+                        key="surface_selector_main",
+                        on_change=switch_surface_from_selector,
+                    )
+                active_surface = st.session_state.get("active_surface", active_surface)
+            else:
+                page_col, status_col = st.columns([2.2, 1.3], gap="small")
+
+            page_options, page_labels = options_for_surface(active_surface)
+            active_page = st.session_state.get("active_page")
+            if active_page not in page_options:
+                active_page = page_options[0]
+                choose_page(active_surface, active_page)
+
+            selector_key = f"{active_surface}_page_selector_main"
+            if st.session_state.get(selector_key) != active_page:
+                st.session_state[selector_key] = active_page
+
+            with page_col:
+                st.selectbox(
+                    "ページ",
+                    page_options,
+                    format_func=lambda key: page_labels.get(key, key),
+                    key=selector_key,
+                    on_change=choose_page_from_selector,
+                    args=(active_surface, selector_key),
+                )
+
+            current_surface = st.session_state.get("active_surface", active_surface)
+            current_page = st.session_state.get("active_page", active_page)
+            current_page_label = {
+                **client_page_labels,
+                **presenter_page_labels,
+                **operational_page_labels,
+                **internal_page_labels,
+            }.get(current_page, current_page)
+            with status_col:
+                st.markdown(
+                    f"""
+                    <div class="nav-current">
+                        <b>現在</b>
+                        <span>{escape(surface_labels.get(current_surface, current_surface))} / {escape(current_page_label)}</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+    render_top_navigation()
 
     page = st.session_state["active_page"]
     show_guide = bool(st.session_state.get("show_guide", False))
@@ -8551,7 +8532,7 @@ def main(app_mode: str = "internal") -> None:
     if page == "Internal Demo Guide":
         surface_note = "社内・登壇者向けの台本です。公開デモでは確認用ページとして表示しています。"
     elif page in {"Dashboard", "Major KPI Race", "Variance Analysis", "Project Risk", "AI Commentary"}:
-        surface_note = "分析画面は、サイドバーからデモ用ガイド付き表示にも切り替えられます。"
+        surface_note = "ページ切り替えは、画面上部のナビゲーションから行えます。"
     if page == "Problem Statement":
         render_proposal_problem_statement()
     elif page == "Target Operating Model":
