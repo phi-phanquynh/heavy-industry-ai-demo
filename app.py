@@ -4472,6 +4472,7 @@ def ai_app_architecture_component_html() -> str:
             layout: { name: "preset", fit: true, padding: 26 },
             minZoom: 0.42,
             maxZoom: 1.8,
+            wheelSensitivity: 0.18,
             boxSelectionEnabled: false,
             autoungrabify: true,
             style: [
