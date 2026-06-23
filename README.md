@@ -55,7 +55,7 @@ The app separates usage modes by deployment target:
 Dashboard/client app:
 
 1. **Dashboard**: Show the executive story: revenue is above plan, while operating profit, margin, and cash flow deteriorate.
-2. **Profitability Race**: Show animated operating profit margin rankings by segment or project, including margin gap vs Budget.
+2. **Major KPI Race**: Show animated rankings for revenue, operating profit, operating profit margin, and cash flow by segment or project, including gaps vs Budget.
 3. **Variance Analysis**: Select period, segment, KPI, and comparison type; explain the waterfall and top drivers.
 4. **Project Risk**: Highlight Critical Marine & Offshore projects and High Aerospace & Defense projects.
 5. **AI Commentary**: Generate Japanese FP&A comments for management meeting materials.

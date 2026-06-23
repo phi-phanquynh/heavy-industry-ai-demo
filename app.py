@@ -3954,29 +3954,29 @@ def render_proposal_target_operating_model() -> None:
 def data_foundation_flow_component_html() -> str:
     flow_data = {
         "nodes": [
-            {"id": "erp", "title": "ERP / GL actuals", "caption": "Actual revenue, cost, profit", "x": 9, "y": 10, "kind": "source", "color": "#60a5fa"},
-            {"id": "epm", "title": "EPM budget / forecast", "caption": "Budget, prior forecast, latest forecast", "x": 9, "y": 30, "kind": "source", "color": "#60a5fa"},
-            {"id": "eac", "title": "Project EAC", "caption": "Estimate at completion, margin risk", "x": 9, "y": 50, "kind": "source", "color": "#60a5fa"},
-            {"id": "procurement", "title": "Procurement / schedule", "caption": "Supplier cost, long-lead parts, delay", "x": 9, "y": 70, "kind": "source", "color": "#60a5fa"},
-            {"id": "master", "title": "Master data", "caption": "Project, segment, account, customer", "x": 9, "y": 90, "kind": "source", "color": "#60a5fa"},
-            {"id": "quality", "title": "Quality gates", "caption": "Reconcile / version / ID mapping / grain / lineage", "x": 35, "y": 50, "kind": "gate", "color": "#ffb000"},
-            {"id": "foundation", "title": "Trusted FP&A Foundation", "caption": "Common KPI, variance logic, project risk layer", "x": 61, "y": 50, "kind": "foundation", "color": "#39c5bb"},
-            {"id": "variance", "title": "KPI & variance", "caption": "Revenue, OP, margin, cash flow drivers", "x": 88, "y": 21, "kind": "output", "color": "#ff647c"},
-            {"id": "risk", "title": "Project risk", "caption": "EAC deterioration, delay, loss-risk queue", "x": 88, "y": 40, "kind": "output", "color": "#ff647c"},
-            {"id": "commentary", "title": "AI commentary", "caption": "Traceable management explanation", "x": 88, "y": 59, "kind": "output", "color": "#b794f4"},
-            {"id": "action", "title": "Executive actions", "caption": "Owner, decision, follow-up, next refresh", "x": 88, "y": 78, "kind": "output", "color": "#ff647c"},
+            {"id": "erp", "title": "ERP / GL actuals", "caption": "Revenue, cost, profit actuals", "x": 9, "y": 10, "kind": "source", "color": "#3b82f6"},
+            {"id": "epm", "title": "EPM budget / forecast", "caption": "Budget, prior forecast, latest forecast", "x": 9, "y": 30, "kind": "source", "color": "#3b82f6"},
+            {"id": "eac", "title": "Project EAC", "caption": "Project cost outlook and margin risk", "x": 9, "y": 50, "kind": "source", "color": "#3b82f6"},
+            {"id": "procurement", "title": "Procurement / schedule", "caption": "Supplier cost, long-lead parts, delay", "x": 9, "y": 70, "kind": "source", "color": "#3b82f6"},
+            {"id": "master", "title": "Master data", "caption": "Project, segment, account, customer", "x": 9, "y": 90, "kind": "source", "color": "#3b82f6"},
+            {"id": "quality", "title": "Quality gates", "caption": "Reconcile / version / ID mapping / grain / lineage", "x": 35, "y": 50, "kind": "gate", "color": "#f59e0b"},
+            {"id": "foundation", "title": "Trusted FP&A Foundation", "caption": "Common KPI, variance logic, project risk layer", "x": 61, "y": 50, "kind": "foundation", "color": "#10b981"},
+            {"id": "variance", "title": "KPI & variance", "caption": "Revenue, OP, margin, cash flow drivers", "x": 88, "y": 21, "kind": "output", "color": "#f43f5e"},
+            {"id": "risk", "title": "Project risk", "caption": "EAC deterioration, delay, loss-risk queue", "x": 88, "y": 40, "kind": "output", "color": "#f43f5e"},
+            {"id": "commentary", "title": "AI commentary", "caption": "Traceable management explanation", "x": 88, "y": 59, "kind": "output", "color": "#f43f5e"},
+            {"id": "action", "title": "Executive actions", "caption": "Owner, decision, follow-up, next refresh", "x": 88, "y": 78, "kind": "output", "color": "#f43f5e"},
         ],
         "links": [
-            {"source": "erp", "target": "quality", "name": "Actuals reconciliation", "detail": "GL totals must tie back before AI commentary is trusted.", "group": "gate", "value": 9, "color": "#60a5fa"},
-            {"source": "epm", "target": "quality", "name": "Scenario version lock", "detail": "Budget, previous forecast, and latest forecast are compared at the same grain.", "group": "gate", "value": 8, "color": "#60a5fa"},
-            {"source": "eac", "target": "quality", "name": "Project ID mapping", "detail": "EAC deterioration is tied to financial impact by project.", "group": "gate", "value": 10, "color": "#ff647c"},
-            {"source": "procurement", "target": "quality", "name": "Cost and schedule evidence", "detail": "Supplier pressure and delay evidence become explainable variance drivers.", "group": "gate", "value": 8, "color": "#ffb000"},
-            {"source": "master", "target": "quality", "name": "Reference data alignment", "detail": "Segment, account, project, and customer definitions remain consistent.", "group": "gate", "value": 7, "color": "#39c5bb"},
-            {"source": "quality", "target": "foundation", "name": "Governed FP&A mart", "detail": "Quality gates convert raw system data into an explanation-ready layer.", "group": "gate", "value": 12, "color": "#39c5bb"},
-            {"source": "foundation", "target": "variance", "name": "KPI semantic layer", "detail": "Finance and operational views use the same KPI definitions.", "group": "output", "value": 10, "color": "#39c5bb"},
-            {"source": "foundation", "target": "risk", "name": "Project risk layer", "detail": "High-risk projects are linked back to OP and cash-flow impact.", "group": "output", "value": 9, "color": "#ff647c"},
-            {"source": "foundation", "target": "commentary", "name": "Evidence-backed AI narrative", "detail": "AI comments can cite the KPI, driver, project, and source evidence.", "group": "output", "value": 11, "color": "#b794f4"},
-            {"source": "foundation", "target": "action", "name": "Management action loop", "detail": "Recommended actions, owners, and follow-up dates stay connected to facts.", "group": "output", "value": 8, "color": "#ff647c"},
+            {"source": "erp", "target": "quality", "name": "Actuals reconciliation", "detail": "Actual figures are tied back to ERP and GL totals.", "group": "source", "value": 9, "color": "#3b82f6"},
+            {"source": "epm", "target": "quality", "name": "Scenario version lock", "detail": "Budget, previous forecast, and latest forecast are compared at the same grain.", "group": "source", "value": 8, "color": "#3b82f6"},
+            {"source": "eac", "target": "quality", "name": "Project ID mapping", "detail": "EAC changes are connected to financial impact by project.", "group": "source", "value": 10, "color": "#3b82f6"},
+            {"source": "procurement", "target": "quality", "name": "Cost and schedule evidence", "detail": "Supplier cost and delay evidence are linked to variance drivers.", "group": "source", "value": 8, "color": "#3b82f6"},
+            {"source": "master", "target": "quality", "name": "Reference data alignment", "detail": "Segment, account, project, and customer definitions are aligned.", "group": "source", "value": 7, "color": "#3b82f6"},
+            {"source": "quality", "target": "foundation", "name": "Controlled FP&A layer", "detail": "Quality checks turn system data into a layer that FP&A can explain.", "group": "gate", "value": 12, "color": "#f59e0b"},
+            {"source": "foundation", "target": "variance", "name": "KPI semantic layer", "detail": "Finance and operational views use the same KPI definitions.", "group": "output", "value": 10, "color": "#f43f5e"},
+            {"source": "foundation", "target": "risk", "name": "Project risk layer", "detail": "High-risk projects are linked back to OP and cash-flow impact.", "group": "output", "value": 9, "color": "#f43f5e"},
+            {"source": "foundation", "target": "commentary", "name": "Evidence-backed commentary", "detail": "Comments can be checked against KPI, variance, project, and source data.", "group": "output", "value": 11, "color": "#f43f5e"},
+            {"source": "foundation", "target": "action", "name": "Management action loop", "detail": "Actions, owners, and next review dates stay connected to the facts.", "group": "output", "value": 8, "color": "#f43f5e"},
         ],
     }
     flow_json = json.dumps(flow_data, ensure_ascii=False).replace("</", "<\\/")
@@ -3999,15 +3999,15 @@ def data_foundation_flow_component_html() -> str:
         * { box-sizing: border-box; }
         body {
           margin: 0;
-          background: transparent;
+          background: #071016;
           color: var(--text);
           font-family: "Inter", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
           letter-spacing: 0;
         }
         .slide {
           position: relative;
-          min-height: 800px;
-          padding: 22px 24px;
+          min-height: 700px;
+          padding: 18px 22px;
           overflow: hidden;
           background:
             linear-gradient(135deg, rgba(9,18,29,0.99), rgba(5,12,20,0.99) 58%, rgba(18,26,37,0.99)),
@@ -4030,11 +4030,11 @@ def data_foundation_flow_component_html() -> str:
           align-items: center;
           justify-content: space-between;
           gap: 18px;
-          margin-bottom: 8px;
+          margin-bottom: 6px;
         }
         .kicker {
           color: var(--muted);
-          font-size: 0.86rem;
+          font-size: 0.78rem;
           font-weight: 800;
           text-transform: uppercase;
         }
@@ -4055,61 +4055,60 @@ def data_foundation_flow_component_html() -> str:
           box-shadow: 0 0 18px rgba(57,197,187,0.55);
         }
         h1 {
-          margin: 0 0 8px 0;
+          margin: 0 0 6px 0;
           color: var(--text);
-          font-size: clamp(2.15rem, 2.85vw, 3.2rem);
+          font-size: clamp(1.9rem, 2.45vw, 2.75rem);
           line-height: 1.08;
           letter-spacing: 0;
         }
         .lead {
           color: #d6e7ee;
           max-width: 1160px;
-          margin: 0 0 10px 0;
-          font-size: 1.08rem;
-          line-height: 1.42;
+          margin: 0 0 8px 0;
+          font-size: 0.98rem;
+          line-height: 1.38;
         }
         .main-grid {
           display: grid;
-          grid-template-columns: minmax(760px, 1fr) 330px;
-          gap: 12px;
+          grid-template-columns: minmax(760px, 1fr) 300px;
+          gap: 10px;
           align-items: stretch;
-          margin-top: 12px;
+          margin-top: 10px;
         }
         .flow-card,
-        .side-card,
-        .capability {
+        .side-card {
           background: linear-gradient(180deg, rgba(14,29,42,0.92), rgba(7,18,28,0.96));
           border: 1px solid rgba(57,197,187,0.25);
           border-radius: 8px;
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
         }
         .flow-card {
-          min-height: 548px;
-          padding: 12px;
+          min-height: 500px;
+          padding: 10px;
         }
         .flow-head {
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 12px;
-          min-height: 40px;
-          padding-bottom: 8px;
+          min-height: 36px;
+          padding-bottom: 7px;
           border-bottom: 1px solid rgba(57,197,187,0.18);
         }
         .flow-head b {
           display: block;
           color: #f8fdff;
-          font-size: 1.08rem;
+          font-size: 1rem;
         }
         .flow-head span {
           color: #9fb2c3;
-          font-size: 0.88rem;
+          font-size: 0.8rem;
         }
         .mode-buttons {
           display: flex;
           flex-wrap: wrap;
           justify-content: flex-end;
-          gap: 6px;
+          gap: 5px;
         }
         .mode-button {
           border: 1px solid rgba(159,178,195,0.22);
@@ -4118,10 +4117,10 @@ def data_foundation_flow_component_html() -> str:
           color: #c8dce6;
           cursor: pointer;
           font: inherit;
-          font-size: 0.82rem;
+          font-size: 0.76rem;
           font-weight: 760;
-          min-height: 30px;
-          padding: 5px 9px;
+          min-height: 28px;
+          padding: 4px 8px;
         }
         .mode-button.active {
           background: rgba(57,197,187,0.14);
@@ -4130,8 +4129,8 @@ def data_foundation_flow_component_html() -> str:
         }
         .flow-stage {
           position: relative;
-          height: 476px;
-          margin-top: 8px;
+          height: 430px;
+          margin-top: 7px;
           overflow: hidden;
           border-radius: 8px;
           background:
@@ -4147,31 +4146,31 @@ def data_foundation_flow_component_html() -> str:
           position: absolute;
           left: calc(var(--x) * 1%);
           top: calc(var(--y) * 1%);
-          width: var(--w, 172px);
-          min-height: 70px;
+          width: var(--w, 168px);
+          min-height: 66px;
           transform: translate(-50%, -50%);
           border: 1px solid rgba(159,178,195,0.24);
           border-left: 4px solid var(--accent);
           border-radius: 8px;
           background: rgba(7,18,28,0.92);
           box-shadow: 0 10px 28px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05);
-          padding: 9px 10px 9px 11px;
+          padding: 8px 9px 8px 10px;
           z-index: 4;
         }
         .node-card.gate {
-          --w: 204px;
+          --w: 196px;
           background: linear-gradient(180deg, rgba(255,176,0,0.14), rgba(7,18,28,0.94));
         }
         .node-card.foundation {
-          --w: 218px;
-          min-height: 88px;
+          --w: 206px;
+          min-height: 82px;
           background: linear-gradient(180deg, rgba(57,197,187,0.18), rgba(7,18,28,0.94));
         }
-        .node-card.output { --w: 186px; }
+        .node-card.output { --w: 178px; }
         .node-card em {
           display: block;
           color: var(--accent);
-          font-size: 0.66rem;
+          font-size: 0.62rem;
           font-style: normal;
           font-weight: 850;
           margin-bottom: 4px;
@@ -4180,14 +4179,14 @@ def data_foundation_flow_component_html() -> str:
         .node-card b {
           display: block;
           color: #f8fdff;
-          font-size: 0.9rem;
+          font-size: 0.84rem;
           line-height: 1.2;
           margin-bottom: 4px;
         }
         .node-card span {
           display: block;
           color: #c8dce6;
-          font-size: 0.75rem;
+          font-size: 0.7rem;
           line-height: 1.28;
         }
         .fallback-flow {
@@ -4203,76 +4202,80 @@ def data_foundation_flow_component_html() -> str:
           text-align: center;
         }
         .side-card {
-          min-height: 548px;
-          padding: 14px;
+          min-height: 500px;
+          padding: 12px;
         }
         .side-card h2 {
           margin: 0 0 9px 0;
           color: #f8fdff;
-          font-size: 1.13rem;
+          font-size: 1.03rem;
           line-height: 1.28;
         }
         .side-card p {
-          margin: 0 0 12px 0;
+          margin: 0 0 10px 0;
           color: #c8dce6;
-          font-size: 0.93rem;
-          line-height: 1.52;
+          font-size: 0.84rem;
+          line-height: 1.44;
         }
         .proof-list {
           display: grid;
-          gap: 8px;
-          margin-top: 12px;
+          gap: 7px;
+          margin-top: 10px;
         }
         .proof-item {
           border: 1px solid rgba(159,178,195,0.18);
           border-left: 4px solid var(--accent);
           border-radius: 8px;
           background: rgba(255,255,255,0.035);
-          padding: 9px 10px;
+          padding: 8px 9px;
         }
         .proof-item b {
           display: block;
           color: #f8fdff;
-          font-size: 0.9rem;
+          font-size: 0.82rem;
           margin-bottom: 4px;
         }
         .proof-item span {
           display: block;
           color: #c8dce6;
-          font-size: 0.78rem;
+          font-size: 0.72rem;
           line-height: 1.35;
         }
-        .capability-row {
+        .legend-row {
+          align-items: center;
+          background: rgba(7,18,28,0.78);
+          border: 1px solid rgba(159,178,195,0.18);
+          border-radius: 8px;
           display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 10px;
-          margin-top: 12px;
+          gap: 8px;
+          grid-template-columns: 96px repeat(4, minmax(0, 1fr));
+          margin-top: 10px;
+          min-height: 44px;
+          padding: 8px 10px;
         }
-        .capability {
-          min-height: 98px;
-          padding: 11px 12px;
-          border-top: 4px solid var(--accent);
-        }
-        .capability em {
-          display: block;
-          color: var(--accent);
-          font-size: 0.68rem;
-          font-style: normal;
+        .legend-title {
+          color: #9fb2c3;
+          font-size: 0.72rem;
           font-weight: 850;
-          margin-bottom: 6px;
           text-transform: uppercase;
         }
-        .capability b {
-          display: block;
-          color: #f8fdff;
-          font-size: 0.96rem;
-          margin-bottom: 5px;
-        }
-        .capability span {
-          display: block;
-          color: #c8dce6;
+        .legend-chip {
+          align-items: center;
+          color: #dceff5;
+          display: flex;
           font-size: 0.8rem;
-          line-height: 1.34;
+          font-weight: 760;
+          gap: 7px;
+          min-width: 0;
+          white-space: nowrap;
+        }
+        .legend-dot {
+          background: var(--accent);
+          border-radius: 999px;
+          box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 42%, transparent);
+          flex: 0 0 auto;
+          height: 9px;
+          width: 9px;
         }
         @media (max-width: 960px) {
           .slide {
@@ -4284,8 +4287,10 @@ def data_foundation_flow_component_html() -> str:
             align-items: flex-start;
             flex-direction: column;
           }
-          .main-grid,
-          .capability-row {
+          .main-grid {
+            grid-template-columns: 1fr;
+          }
+          .legend-row {
             grid-template-columns: 1fr;
           }
           .flow-stage {
@@ -4300,27 +4305,28 @@ def data_foundation_flow_component_html() -> str:
     <body>
       <div class="slide">
         <div class="topline">
-          <div class="kicker"><b>03/08</b>AI時代のFP&amp;Aデータ基盤リファレンス構想 / FP&amp;A Data Foundation</div>
+          <div class="kicker"><b>03/08</b>経営説明・FP&amp;A業務 / FP&amp;A Data Foundation</div>
           <div class="dots" aria-label="slide progress">
             <span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span>
             <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
           </div>
         </div>
-        <h1>FP&amp;Aデータ基盤：AIコメントが根拠へ戻れる状態を作る</h1>
+        <h1>経営説明に使えるFP&amp;Aデータ基盤を整える</h1>
         <p class="lead">
-          ERP、EPM、案件EAC、調達・工程、マスタを品質ゲートで揃え、KPI・差異要因・案件リスク・AIコメントが同じ根拠を参照する流れを可視化します。
+          ERP、EPM、案件EAC、調達・工程、マスタを同じ粒度でつなぎ、差異分析・案件リスク・コメント作成・次の打ち手まで一貫して説明できる状態を作ります。
         </p>
         <div class="main-grid">
           <section class="flow-card">
             <div class="flow-head">
               <div>
-                <b>ECharts Lines / Flow Map</b>
-                <span>業務データから説明責任のあるAIアウトプットまでの流れ</span>
+                <b>FP&amp;A data flow map</b>
+                <span>業務データから経営説明・打ち手までの接続</span>
               </div>
               <div class="mode-buttons" aria-label="flow filters">
                 <button class="mode-button active" data-mode="all" type="button">All flow</button>
-                <button class="mode-button" data-mode="gate" type="button">Quality gates</button>
-                <button class="mode-button" data-mode="output" type="button">AI outputs</button>
+                <button class="mode-button" data-mode="source" type="button">Source data</button>
+                <button class="mode-button" data-mode="gate" type="button">Quality gate</button>
+                <button class="mode-button" data-mode="output" type="button">Outputs</button>
               </div>
             </div>
             <div class="flow-stage">
@@ -4331,51 +4337,36 @@ def data_foundation_flow_component_html() -> str:
             </div>
           </section>
           <aside class="side-card">
-            <h2>この図で伝えること</h2>
+            <h2>このページで確認すること</h2>
             <p>
-              データを集めるだけでは、経営会議で使えるAI説明にはなりません。数字・案件・調達・工程の根拠が品質ゲートを通り、同じFP&amp;A基盤からAIコメントとアクションに流れることが重要です。
+              データを集めるだけでは、経営会議で説明できる状態にはなりません。数字、案件、調達、工程の情報を同じ基盤でつなぎ、差異の理由と次の対応を確認できるようにします。
             </p>
             <div class="proof-list">
-              <div class="proof-item" style="--accent:#60a5fa">
-                <b>数値が戻れる</b>
-                <span>売上、営業利益、CFの数字がERP/GLとEPMの比較軸へ戻れる。</span>
+              <div class="proof-item" style="--accent:#3b82f6">
+                <b>数字の出所を確認できる</b>
+                <span>売上、営業利益、CFをERP/GLとEPMの比較軸へ戻せる。</span>
               </div>
-              <div class="proof-item" style="--accent:#ffb000">
-                <b>差異要因が説明できる</b>
-                <span>EAC悪化、調達費、工程遅延がKPIへの影響として結びつく。</span>
+              <div class="proof-item" style="--accent:#f59e0b">
+                <b>差異の理由を説明できる</b>
+                <span>EAC悪化、調達費、工程遅延をKPIへの影響として結びつける。</span>
               </div>
-              <div class="proof-item" style="--accent:#39c5bb">
-                <b>AIが同じ根拠を見る</b>
-                <span>コメント生成、リスク抽出、打ち手候補が共通の意味層を参照する。</span>
+              <div class="proof-item" style="--accent:#10b981">
+                <b>コメントの根拠を確認できる</b>
+                <span>コメント作成時に参照したKPI、差異、案件を確認できる。</span>
               </div>
-              <div class="proof-item" style="--accent:#b794f4">
-                <b>会議後の行動につながる</b>
-                <span>責任部署、推奨アクション、次回更新までを同じ線上に置ける。</span>
+              <div class="proof-item" style="--accent:#f43f5e">
+                <b>次のアクションまで管理できる</b>
+                <span>責任部署、対応方針、次回確認まで同じ流れで扱う。</span>
               </div>
             </div>
           </aside>
         </div>
-        <div class="capability-row">
-          <div class="capability" style="--accent:#39c5bb">
-            <em>Definition</em>
-            <b>KPI定義を固定</b>
-            <span>売上、営業利益、利益率、CFの意味を会議ごとに変えない。</span>
-          </div>
-          <div class="capability" style="--accent:#60a5fa">
-            <em>Versioning</em>
-            <b>比較軸を固定</b>
-            <span>Budget、Previous Forecast、Latest Forecastを同じ粒度で比較する。</span>
-          </div>
-          <div class="capability" style="--accent:#ffb000">
-            <em>Grain</em>
-            <b>案件まで降りる</b>
-            <span>全社KPIからセグメント、事業、案件まで同じID体系で追う。</span>
-          </div>
-          <div class="capability" style="--accent:#ff647c">
-            <em>Lineage</em>
-            <b>根拠を保持</b>
-            <span>AIコメントから差異、案件、元データへ戻れる状態にする。</span>
-          </div>
+        <div class="legend-row">
+          <div class="legend-title">Color rule</div>
+          <div class="legend-chip" style="--accent:#3b82f6"><span class="legend-dot"></span>Source data</div>
+          <div class="legend-chip" style="--accent:#f59e0b"><span class="legend-dot"></span>Quality gate</div>
+          <div class="legend-chip" style="--accent:#10b981"><span class="legend-dot"></span>FP&amp;A foundation</div>
+          <div class="legend-chip" style="--accent:#f43f5e"><span class="legend-dot"></span>Outputs</div>
         </div>
       </div>
       <script>
@@ -4479,7 +4470,7 @@ def data_foundation_flow_component_html() -> str:
 
 def render_proposal_data_foundation() -> None:
     st.markdown('<div id="demo-briefing-page"></div><div id="proposal-component-page"></div>', unsafe_allow_html=True)
-    components.html(data_foundation_flow_component_html(), height=802, scrolling=False)
+    components.html(data_foundation_flow_component_html(), height=718, scrolling=False)
 
 
 def ai_app_architecture_component_html() -> str:
@@ -6357,6 +6348,16 @@ def render_dashboard(
                 favorable=favorable,
             )
 
+    def open_major_kpi_race() -> None:
+        st.session_state["force_page"] = "Major KPI Race"
+
+    st.button(
+        "主要KPIレースを開く",
+        key="open_major_kpi_race_from_dashboard",
+        on_click=open_major_kpi_race,
+        help="売上、営業利益、営業利益率、キャッシュフローのBar Raceへ移動します。",
+    )
+
     if show_guide:
         st.markdown('<div class="section-label">セグメント別ストーリー / Business Story</div>', unsafe_allow_html=True)
         render_segment_story_cards()
@@ -6447,13 +6448,62 @@ def render_dashboard(
     )
 
 
-def profitability_metric_is_gap(metric_mode: str) -> bool:
-    return metric_mode.startswith("Margin gap")
+def major_kpi_gap_mode(metric_mode: str) -> bool:
+    return metric_mode == "vs Budget gap"
 
 
-def build_profitability_scope_data(
+def major_kpi_display_config(kpi: str, metric_mode: str) -> dict[str, Any]:
+    is_gap = major_kpi_gap_mode(metric_mode)
+    if kpi == "Operating Profit Margin":
+        return {
+            "actual_col": "op_margin_pct",
+            "budget_col": "budget_op_margin_pct",
+            "gap_col": "margin_gap_pt",
+            "divisor": 1.0,
+            "axis_label": "Margin gap vs Budget (pt)" if is_gap else "Operating Profit Margin %",
+            "color_midpoint": 0.0 if is_gap else 5.0,
+            "unit": "pt" if is_gap else "%",
+        }
+
+    metric_columns = {
+        "Revenue": ("display_revenue_jpy_mn", "budget_revenue_jpy_mn", "revenue_gap_jpy_mn", "Revenue"),
+        "Operating Profit": (
+            "display_op_jpy_mn",
+            "budget_op_jpy_mn",
+            "op_gap_jpy_mn",
+            "Operating Profit",
+        ),
+        "Cash Flow": (
+            "display_cash_flow_jpy_mn",
+            "budget_cash_flow_jpy_mn",
+            "cash_flow_gap_jpy_mn",
+            "Cash Flow",
+        ),
+    }
+    actual_col, budget_col, gap_col, label = metric_columns[kpi]
+    return {
+        "actual_col": actual_col,
+        "budget_col": budget_col,
+        "gap_col": gap_col,
+        "divisor": 1_000.0,
+        "axis_label": f"{label} gap vs Budget (JPY bn)" if is_gap else f"{label} (JPY bn)",
+        "color_midpoint": 0.0,
+        "unit": "JPY bn",
+    }
+
+
+def format_major_kpi_race_value(kpi: str, value: float, metric_mode: str) -> str:
+    sign = "+" if major_kpi_gap_mode(metric_mode) and value >= 0 else ""
+    if kpi == "Operating Profit Margin":
+        suffix = "pt" if major_kpi_gap_mode(metric_mode) else "%"
+        return f"{sign}{value:.1f}{suffix}"
+    return f"{sign}{value:,.1f}bn"
+
+
+def build_major_kpi_scope_data(
     kpis: pd.DataFrame,
     entity_level: str,
+    kpi: str,
     scenario: str,
     segment_option: str | None,
     time_basis: str,
@@ -6473,7 +6523,7 @@ def build_profitability_scope_data(
 
     grouped = (
         scoped.groupby(["period", "period_start", "fiscal_month", "scenario"] + entity_cols, observed=True)[
-            ["revenue_jpy_mn", "operating_profit_jpy_mn"]
+            ["revenue_jpy_mn", "operating_profit_jpy_mn", "cash_flow_jpy_mn"]
         ]
         .sum()
         .reset_index()
@@ -6484,13 +6534,15 @@ def build_profitability_scope_data(
 
     if time_basis == "YTD":
         cumulative = grouped.groupby(["scenario"] + entity_cols, observed=True)[
-            ["revenue_jpy_mn", "operating_profit_jpy_mn"]
+            ["revenue_jpy_mn", "operating_profit_jpy_mn", "cash_flow_jpy_mn"]
         ].cumsum()
         grouped["display_revenue_jpy_mn"] = cumulative["revenue_jpy_mn"]
         grouped["display_op_jpy_mn"] = cumulative["operating_profit_jpy_mn"]
+        grouped["display_cash_flow_jpy_mn"] = cumulative["cash_flow_jpy_mn"]
     else:
         grouped["display_revenue_jpy_mn"] = grouped["revenue_jpy_mn"]
         grouped["display_op_jpy_mn"] = grouped["operating_profit_jpy_mn"]
+        grouped["display_cash_flow_jpy_mn"] = grouped["cash_flow_jpy_mn"]
 
     grouped["op_margin_pct"] = np.where(
         grouped["display_revenue_jpy_mn"].abs() > 1e-9,
@@ -6501,14 +6553,40 @@ def build_profitability_scope_data(
     merge_keys = ["period", "period_start", "fiscal_month"] + entity_cols
     current = grouped[grouped["scenario"] == scenario].copy()
     if scenario == "Budget":
-        current["budget_margin_pct"] = current["op_margin_pct"]
+        current["budget_revenue_jpy_mn"] = current["display_revenue_jpy_mn"]
+        current["budget_op_jpy_mn"] = current["display_op_jpy_mn"]
+        current["budget_cash_flow_jpy_mn"] = current["display_cash_flow_jpy_mn"]
+        current["budget_op_margin_pct"] = current["op_margin_pct"]
     else:
-        budget = grouped[grouped["scenario"] == "Budget"][merge_keys + ["op_margin_pct"]].rename(
-            columns={"op_margin_pct": "budget_margin_pct"}
+        budget = grouped[
+            grouped["scenario"] == "Budget"
+        ][
+            merge_keys
+            + [
+                "display_revenue_jpy_mn",
+                "display_op_jpy_mn",
+                "display_cash_flow_jpy_mn",
+                "op_margin_pct",
+            ]
+        ].rename(
+            columns={
+                "display_revenue_jpy_mn": "budget_revenue_jpy_mn",
+                "display_op_jpy_mn": "budget_op_jpy_mn",
+                "display_cash_flow_jpy_mn": "budget_cash_flow_jpy_mn",
+                "op_margin_pct": "budget_op_margin_pct",
+            }
         )
         current = current.merge(budget, on=merge_keys, how="left")
-    current["budget_margin_pct"] = current["budget_margin_pct"].fillna(current["op_margin_pct"])
-    current["margin_gap_pt"] = current["op_margin_pct"] - current["budget_margin_pct"]
+    current["budget_revenue_jpy_mn"] = current["budget_revenue_jpy_mn"].fillna(current["display_revenue_jpy_mn"])
+    current["budget_op_jpy_mn"] = current["budget_op_jpy_mn"].fillna(current["display_op_jpy_mn"])
+    current["budget_cash_flow_jpy_mn"] = current["budget_cash_flow_jpy_mn"].fillna(
+        current["display_cash_flow_jpy_mn"]
+    )
+    current["budget_op_margin_pct"] = current["budget_op_margin_pct"].fillna(current["op_margin_pct"])
+    current["revenue_gap_jpy_mn"] = current["display_revenue_jpy_mn"] - current["budget_revenue_jpy_mn"]
+    current["op_gap_jpy_mn"] = current["display_op_jpy_mn"] - current["budget_op_jpy_mn"]
+    current["cash_flow_gap_jpy_mn"] = current["display_cash_flow_jpy_mn"] - current["budget_cash_flow_jpy_mn"]
+    current["margin_gap_pt"] = current["op_margin_pct"] - current["budget_op_margin_pct"]
     current = current[current["display_revenue_jpy_mn"] >= min_revenue_jpy_mn]
     current = current.dropna(subset=["op_margin_pct", "margin_gap_pt"])
 
@@ -6519,27 +6597,28 @@ def build_profitability_scope_data(
         current["entity_key"] = current["segment_en"].astype(str)
         current["entity_label"] = current["segment_code"].astype(str) + " | " + current["segment_ja"].astype(str)
 
-    if profitability_metric_is_gap(metric_mode):
-        current["display_value"] = current["margin_gap_pt"]
-        current["display_text"] = current["display_value"].map(lambda value: f"{value:+.1f}pt")
-    else:
-        current["display_value"] = current["op_margin_pct"]
-        current["display_text"] = current["display_value"].map(lambda value: f"{value:.1f}%")
-
+    config = major_kpi_display_config(kpi, metric_mode)
+    selected_col = config["gap_col"] if major_kpi_gap_mode(metric_mode) else config["actual_col"]
+    current["actual_metric_display"] = current[config["actual_col"]] / float(config["divisor"])
+    current["budget_metric_display"] = current[config["budget_col"]] / float(config["divisor"])
+    current["gap_metric_display"] = current[config["gap_col"]] / float(config["divisor"])
+    current["display_value"] = current[selected_col] / float(config["divisor"])
+    current["display_text"] = current["display_value"].map(lambda value: format_major_kpi_race_value(kpi, value, metric_mode))
     current["display_revenue_jpy_bn"] = current["display_revenue_jpy_mn"] / 1_000
     current["display_op_jpy_bn"] = current["display_op_jpy_mn"] / 1_000
+    current["display_cash_flow_jpy_bn"] = current["display_cash_flow_jpy_mn"] / 1_000
     return current.sort_values(["fiscal_month", "display_value"])
 
 
-def select_profitability_race_frames(scope: pd.DataFrame, metric_mode: str, top_n: int) -> pd.DataFrame:
+def select_major_kpi_race_frames(scope: pd.DataFrame, metric_mode: str, top_n: int) -> pd.DataFrame:
     if scope.empty:
         return scope
 
     frames: list[pd.DataFrame] = []
-    show_gap = profitability_metric_is_gap(metric_mode)
+    show_gap = major_kpi_gap_mode(metric_mode)
     for _, frame in scope.groupby(["fiscal_month", "period"], observed=True, sort=True):
         if show_gap:
-            selected = frame.nsmallest(top_n, "display_value").sort_values("display_value", ascending=False)
+            selected = frame.nsmallest(top_n, "display_value").sort_values("display_value")
         else:
             selected = frame.nlargest(top_n, "display_value").sort_values("display_value", ascending=True)
         selected = selected.copy()
@@ -6549,7 +6628,7 @@ def select_profitability_race_frames(scope: pd.DataFrame, metric_mode: str, top_
     return pd.concat(frames, ignore_index=True) if frames else scope.iloc[0:0]
 
 
-def render_profitability_bar_race(race: pd.DataFrame, metric_mode: str, scenario: str, time_basis: str) -> go.Figure:
+def render_major_kpi_bar_race(race: pd.DataFrame, kpi: str, metric_mode: str, scenario: str, time_basis: str) -> go.Figure:
     if race.empty:
         return style_fig(go.Figure(), 520)
 
@@ -6557,9 +6636,9 @@ def render_profitability_bar_race(race: pd.DataFrame, metric_mode: str, scenario
     x_max = float(max(0.0, race["display_value"].max()))
     x_span = max(x_max - x_min, 2.0)
     x_range = [x_min - x_span * 0.14, x_max + x_span * 0.20]
-    show_gap = profitability_metric_is_gap(metric_mode)
-    color_midpoint = 0 if show_gap else 5
-    value_label = "Margin gap vs Budget (pt)" if show_gap else "Operating Profit Margin %"
+    show_gap = major_kpi_gap_mode(metric_mode)
+    config = major_kpi_display_config(kpi, metric_mode)
+    value_label = config["axis_label"]
     periods = race.sort_values("fiscal_month")["period"].drop_duplicates().tolist()
 
     fig = px.bar(
@@ -6571,18 +6650,19 @@ def render_profitability_bar_race(race: pd.DataFrame, metric_mode: str, scenario
         animation_group="entity_key",
         color="display_value",
         color_continuous_scale=["#ff647c", "#ffb000", "#76d275"],
-        color_continuous_midpoint=color_midpoint,
+        color_continuous_midpoint=config["color_midpoint"],
         range_x=x_range,
         text="display_text",
         category_orders={"period": periods},
         hover_name="entity_label",
         hover_data={
             "segment_en": True,
-            "op_margin_pct": ":.1f",
-            "budget_margin_pct": ":.1f",
-            "margin_gap_pt": ":+.1f",
+            "actual_metric_display": ":,.1f",
+            "budget_metric_display": ":,.1f",
+            "gap_metric_display": ":+,.1f",
             "display_revenue_jpy_bn": ":,.1f",
             "display_op_jpy_bn": ":,.1f",
+            "display_cash_flow_jpy_bn": ":,.1f",
             "display_value": False,
             "entity_key": False,
             "entity_label": False,
@@ -6591,13 +6671,14 @@ def render_profitability_bar_race(race: pd.DataFrame, metric_mode: str, scenario
             "display_value": value_label,
             "entity_label": "",
             "segment_en": "Segment",
-            "op_margin_pct": "OP margin %",
-            "budget_margin_pct": "Budget margin %",
-            "margin_gap_pt": "Gap vs Budget pt",
+            "actual_metric_display": f"{scenario} {KPI_META[kpi]['ja']}",
+            "budget_metric_display": f"Budget {KPI_META[kpi]['ja']}",
+            "gap_metric_display": "Gap vs Budget",
             "display_revenue_jpy_bn": "Revenue (JPY bn)",
             "display_op_jpy_bn": "OP (JPY bn)",
+            "display_cash_flow_jpy_bn": "Cash Flow (JPY bn)",
         },
-        title=f"利益率 Bar Race / {scenario} / {time_basis}",
+        title=f"主要KPI Bar Race / {KPI_META[kpi]['ja']} / {scenario} / {time_basis}",
     )
     fig.update_traces(textposition="auto", cliponaxis=False)
     fig.update_layout(coloraxis_colorbar={"title": value_label})
@@ -6612,56 +6693,65 @@ def render_profitability_bar_race(race: pd.DataFrame, metric_mode: str, scenario
     return style_fig(fig, 540)
 
 
-def render_profitability_race(kpis: pd.DataFrame, show_guide: bool = True) -> None:
-    render_header("Profitability Race", "Operating margin bar race / Segment and project view")
+def render_major_kpi_race(kpis: pd.DataFrame, show_guide: bool = True) -> None:
+    render_header("Major KPI Race", "Revenue / profit / margin / cash flow bar race")
     if show_guide:
         render_page_guide(
-            "利益率の見方 / Static margin chartではなく順位変化を見る",
-            "利益率は最終値だけを見ると、いつ悪化が顕在化したかが見えにくくなります。Bar Raceでは、月次または累計で利益率の順位とBudget差がどう動いたかを確認します。",
+            "主要KPIの見方 / 順位とBudget差の変化を見る",
+            "主要KPIは最終値だけを見ると、いつ悪化が顕在化したかが見えにくくなります。Bar Raceでは、月次または累計で売上・営業利益・営業利益率・キャッシュフローの順位とBudget差がどう動いたかを確認します。",
             [
-                "Segment表示では、全社ストーリーとして利益率の高い/低い事業領域を月次で確認します。",
-                "Project表示では、売上規模の下限をかけて、小規模案件のノイズを抑えながら利益率悪化案件を確認します。",
-                "Margin gap vs Budgetでは、Budget対比の利益率劣後が大きい対象を優先して表示します。",
+                "Segment表示では、全社ストーリーとしてどの事業領域がKPIを押し上げ・押し下げているかを確認します。",
+                "Project表示では、売上規模の下限をかけて、小規模案件のノイズを抑えながら悪化案件を確認します。",
+                "vs Budget gapでは、Budget対比の未達が大きい対象を優先して表示します。",
             ],
-            "経営会議では、最終利益率だけでなく、どの月からどの領域が利益率を崩したかを説明できる状態にすることが重要です。",
+            "経営会議では、売上だけでなく、利益・利益率・CFがどの月から崩れたかを説明できる状態にすることが重要です。",
         )
 
-    c1, c2, c3, c4 = st.columns([0.9, 1.0, 1.0, 1.15])
+    c1, c2, c3, c4, c5 = st.columns([0.9, 1.2, 1.0, 1.0, 1.0])
     with c1:
-        entity_level = st.radio("表示粒度", ["Segment", "Project"], horizontal=True, key="profit_entity_level")
+        entity_level = st.radio("表示粒度", ["Segment", "Project"], horizontal=True, key="kpi_race_entity_level")
     with c2:
+        selected_kpi = st.selectbox(
+            "KPI",
+            list(KPI_META.keys()),
+            index=1,
+            format_func=lambda value: f"{KPI_META[value]['ja']} / {value}",
+            key="kpi_race_kpi",
+        )
+    with c3:
         scenario = st.selectbox(
             "Scenario",
             ["Actual", "Latest Forecast", "Previous Forecast", "Prior Year Actual", "Mid-term Plan"],
-            key="profit_scenario",
+            key="kpi_race_scenario",
         )
-    with c3:
-        time_basis = st.radio("時間軸", ["YTD", "Monthly"], horizontal=True, key="profit_time_basis")
     with c4:
+        time_basis = st.radio("時間軸", ["YTD", "Monthly"], horizontal=True, key="kpi_race_time_basis")
+    with c5:
         metric_mode = st.selectbox(
             "表示指標",
-            ["Actual margin %", "Margin gap vs Budget (pt)"],
-            key="profit_metric_mode",
+            ["Value", "vs Budget gap"],
+            key="kpi_race_metric_mode",
         )
 
     f1, f2, f3 = st.columns([1.35, 0.85, 0.8])
     with f1:
-        selected_segment = st.selectbox("セグメント", segment_options(kpis), index=0, key="profit_segment")
+        selected_segment = st.selectbox("セグメント", segment_options(kpis), index=0, key="kpi_race_segment")
     with f2:
         if entity_level == "Segment":
             top_n = 4
             st.caption("Segment表示は全セグメントを表示")
         else:
-            top_n = st.slider("表示件数", min_value=4, max_value=15, value=10, key="profit_top_n")
+            top_n = st.slider("表示件数", min_value=4, max_value=15, value=10, key="kpi_race_top_n")
     with f3:
         if entity_level == "Project":
-            min_revenue_bn = st.slider("最小売上規模", min_value=0, max_value=30, value=5, step=1, key="profit_min_revenue_bn")
+            min_revenue_bn = st.slider("最小売上規模", min_value=0, max_value=30, value=5, step=1, key="kpi_race_min_revenue_bn")
         else:
             min_revenue_bn = 0
 
-    scope = build_profitability_scope_data(
+    scope = build_major_kpi_scope_data(
         kpis,
         entity_level,
+        selected_kpi,
         scenario,
         selected_segment,
         time_basis,
@@ -6669,67 +6759,89 @@ def render_profitability_race(kpis: pd.DataFrame, show_guide: bool = True) -> No
         min_revenue_bn * 1_000,
     )
     if scope.empty:
-        st.info("条件に一致する利益率データがありません。表示条件を変更してください。")
+        st.info("条件に一致するKPIデータがありません。表示条件を変更してください。")
         return
 
-    race = select_profitability_race_frames(scope, metric_mode, top_n)
+    race = select_major_kpi_race_frames(scope, metric_mode, top_n)
     final_period = scope.sort_values("fiscal_month")["period"].iloc[-1]
     final_scope = scope[scope["period"] == final_period]
     summary_segment = selected_segment if parse_segment(selected_segment) else None
     total = aggregate_kpis(kpis, scenario, "FY2026 Total", summary_segment)
     budget = aggregate_kpis(kpis, "Budget", "FY2026 Total", summary_segment)
-    margin_gap = total["op_margin_pct"] - budget["op_margin_pct"]
-    worst_row = final_scope.nsmallest(1, "margin_gap_pt").iloc[0]
-    best_row = final_scope.nlargest(1, "op_margin_pct").iloc[0]
+    base_value, current_value, variance = kpi_variance(budget, total, selected_kpi)
+    worst_row = final_scope.nsmallest(1, "gap_metric_display").iloc[0]
+    best_row = final_scope.nlargest(1, "actual_metric_display").iloc[0]
 
     cards = st.columns(4)
     with cards[0]:
-        metric_card("OP Margin", f"{total['op_margin_pct']:.1f}%", f"vs Budget {margin_gap:+.1f}pt", favorable=margin_gap >= 0)
+        metric_card(
+            f"{KPI_META[selected_kpi]['ja']} / {selected_kpi}",
+            format_kpi_value(selected_kpi, current_value),
+            f"vs Budget {format_kpi_delta(selected_kpi, variance)}",
+            favorable=variance >= 0,
+        )
     with cards[1]:
-        metric_card("Operating Profit", format_amount(total["operating_profit_jpy_mn"]), scenario, favorable=None)
+        metric_card("Scenario", scenario, time_basis, favorable=None)
     with cards[2]:
-        metric_card("Worst margin gap", f"{worst_row['margin_gap_pt']:+.1f}pt", str(worst_row["entity_label"]), favorable=False)
+        metric_card(
+            "Worst vs Budget",
+            format_major_kpi_race_value(selected_kpi, float(worst_row["gap_metric_display"]), "vs Budget gap"),
+            str(worst_row["entity_label"]),
+            favorable=False,
+        )
     with cards[3]:
-        metric_card("Best margin", f"{best_row['op_margin_pct']:.1f}%", str(best_row["entity_label"]), favorable=True)
+        metric_card(
+            "Best current value",
+            format_major_kpi_race_value(selected_kpi, float(best_row["actual_metric_display"]), "Value"),
+            str(best_row["entity_label"]),
+            favorable=True,
+        )
 
-    st.plotly_chart(render_profitability_bar_race(race, metric_mode, scenario, time_basis), width="stretch")
+    st.plotly_chart(render_major_kpi_bar_race(race, selected_kpi, metric_mode, scenario, time_basis), width="stretch")
 
-    st.markdown('<div class="section-label">Final period detail / 利益率明細</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Final period detail / 主要KPI明細</div>', unsafe_allow_html=True)
     detail = final_scope.copy()
-    if profitability_metric_is_gap(metric_mode):
-        detail = detail.sort_values("margin_gap_pt").head(top_n)
+    if major_kpi_gap_mode(metric_mode):
+        detail = detail.sort_values("gap_metric_display").head(top_n)
     else:
-        detail = detail.sort_values("op_margin_pct", ascending=False).head(top_n)
+        detail = detail.sort_values("actual_metric_display", ascending=False).head(top_n)
     st.dataframe(
         detail[
             [
                 "entity_label",
                 "segment_en",
+                "actual_metric_display",
+                "budget_metric_display",
+                "gap_metric_display",
                 "display_revenue_jpy_bn",
                 "display_op_jpy_bn",
-                "op_margin_pct",
-                "budget_margin_pct",
-                "margin_gap_pt",
+                "display_cash_flow_jpy_bn",
             ]
         ].rename(
             columns={
                 "entity_label": "対象",
                 "segment_en": "Segment",
+                "actual_metric_display": f"{scenario} {KPI_META[selected_kpi]['ja']}",
+                "budget_metric_display": f"Budget {KPI_META[selected_kpi]['ja']}",
+                "gap_metric_display": "Budget差",
                 "display_revenue_jpy_bn": "売上 (JPY bn)",
                 "display_op_jpy_bn": "営業利益 (JPY bn)",
-                "op_margin_pct": "利益率",
-                "budget_margin_pct": "Budget利益率",
-                "margin_gap_pt": "Budget差",
+                "display_cash_flow_jpy_bn": "CF (JPY bn)",
             }
         ),
         width="stretch",
         hide_index=True,
         column_config={
+            f"{scenario} {KPI_META[selected_kpi]['ja']}": st.column_config.NumberColumn(
+                f"{scenario} {KPI_META[selected_kpi]['ja']}", format="%.1f"
+            ),
+            f"Budget {KPI_META[selected_kpi]['ja']}": st.column_config.NumberColumn(
+                f"Budget {KPI_META[selected_kpi]['ja']}", format="%.1f"
+            ),
+            "Budget差": st.column_config.NumberColumn("Budget差", format="%+.1f"),
             "売上 (JPY bn)": st.column_config.NumberColumn("売上 (JPY bn)", format="%.1f"),
             "営業利益 (JPY bn)": st.column_config.NumberColumn("営業利益 (JPY bn)", format="%.1f"),
-            "利益率": st.column_config.NumberColumn("利益率", format="%.1f%%"),
-            "Budget利益率": st.column_config.NumberColumn("Budget利益率", format="%.1f%%"),
-            "Budget差": st.column_config.NumberColumn("Budget差", format="%+.1fpt"),
+            "CF (JPY bn)": st.column_config.NumberColumn("CF (JPY bn)", format="%.1f"),
         },
     )
 
@@ -8204,7 +8316,7 @@ def main(app_mode: str = "internal") -> None:
 
     client_pages = [
         ("Dashboard", "ダッシュボード", False),
-        ("Profitability Race", "利益率レース", False),
+        ("Major KPI Race", "主要KPIレース", False),
         ("Variance Analysis", "差異分析", False),
         ("Project Risk", "案件リスク", False),
         ("AI Commentary", "AIコメント", False),
@@ -8221,7 +8333,7 @@ def main(app_mode: str = "internal") -> None:
     ]
     operational_pages = [
         ("Dashboard", "全社ダッシュボード"),
-        ("Profitability Race", "利益率レース"),
+        ("Major KPI Race", "主要KPIレース"),
         ("Variance Analysis", "差異分析"),
         ("Project Risk", "案件リスク"),
         ("AI Commentary", "AIコメント"),
@@ -8257,6 +8369,18 @@ def main(app_mode: str = "internal") -> None:
         st.session_state["active_surface"] = (
             "internal" if st.session_state.get("active_page") in internal_page_keys else "presenter"
         )
+
+    forced_page = st.session_state.pop("force_page", None)
+    if forced_page in client_page_keys or forced_page in operational_page_keys:
+        st.session_state["active_page"] = forced_page
+        st.session_state["show_guide"] = False
+        if client_only:
+            st.session_state["active_surface"] = "client"
+        elif st.session_state.get("active_surface") not in {"client", "operational"}:
+            st.session_state["active_surface"] = "operational"
+        for selector_key in ("client_page_selector", "operational_page_selector"):
+            if selector_key in st.session_state:
+                del st.session_state[selector_key]
 
     if client_only:
         active_page = st.session_state.get("active_page")
@@ -8488,7 +8612,7 @@ def main(app_mode: str = "internal") -> None:
     if st.session_state.get("active_surface") == "client":
         demo_label_map = {
             "Dashboard": "ダッシュボード",
-            "Profitability Race": "利益率レース",
+            "Major KPI Race": "主要KPIレース",
             "Variance Analysis": "差異分析",
             "Project Risk": "案件リスク",
             "AI Commentary": "AIコメント",
@@ -8511,7 +8635,7 @@ def main(app_mode: str = "internal") -> None:
     surface_note = "このページは、共有・説明の目的に合わせた補助ページです。"
     if page == "Internal Demo Guide":
         surface_note = "社内・登壇者向けの台本です。公開デモでは確認用ページとして表示しています。"
-    elif page in {"Dashboard", "Profitability Race", "Variance Analysis", "Project Risk", "AI Commentary"}:
+    elif page in {"Dashboard", "Major KPI Race", "Variance Analysis", "Project Risk", "AI Commentary"}:
         surface_note = "分析画面は、サイドバーからデモ用ガイド付き表示にも切り替えられます。"
     if page == "Problem Statement":
         render_proposal_problem_statement()
@@ -8539,8 +8663,8 @@ def main(app_mode: str = "internal") -> None:
             show_guide=show_guide,
             metadata=metadata,
         )
-    elif page == "Profitability Race":
-        render_profitability_race(kpis, show_guide=show_guide)
+    elif page == "Major KPI Race":
+        render_major_kpi_race(kpis, show_guide=show_guide)
     elif page == "Variance Analysis":
         render_variance_analysis(kpis, data["fact_variance_drivers"], data["project_risk"], show_guide=show_guide)
     elif page == "Project Risk":
