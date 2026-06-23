@@ -890,7 +890,6 @@ def inject_css() -> None:
             font-weight: 800;
             white-space: nowrap;
         }
-        .stApp:has(#presentation-focus-mode) [data-testid="stSidebar"],
         .stApp:has(#presentation-focus-mode) [data-testid="stToolbar"],
         .stApp:has(#presentation-focus-mode) [data-testid="stDecoration"],
         .stApp:has(#presentation-focus-mode) footer {
@@ -898,15 +897,19 @@ def inject_css() -> None:
         }
         .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] {
             background: transparent !important;
-            pointer-events: none;
+            pointer-events: auto !important;
+            z-index: 999999;
         }
         .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] button,
-        .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] [role="button"] {
-            pointer-events: auto !important;
-        }
+        .stApp:has(#presentation-focus-mode) [data-testid="stHeader"] [role="button"],
+        .stApp:has(#presentation-focus-mode) [data-testid="stSidebarCollapsedControl"],
+        .stApp:has(#presentation-focus-mode) [data-testid="stSidebarCollapseButton"],
         .stApp:has(#presentation-focus-mode) button[data-testid="stBaseButton-headerNoPadding"] {
-            visibility: visible !important;
+            display: inline-flex !important;
             opacity: 1 !important;
+            pointer-events: auto !important;
+            visibility: visible !important;
+            z-index: 1000002 !important;
         }
         .stApp:has(#presentation-focus-mode) .block-container {
             max-width: 100vw;
@@ -1406,15 +1409,13 @@ def inject_css() -> None:
             display: none !important;
         }
         .stApp:has(#proposal-component-page) [data-testid="stToolbar"],
-        .stApp:has(#proposal-component-page) [data-testid="stDecoration"] {
+        .stApp:has(#proposal-component-page) [data-testid="stDecoration"],
+        .stApp:has(#data-foundation-component-page) [data-testid="stToolbar"],
+        .stApp:has(#data-foundation-component-page) [data-testid="stDecoration"] {
             display: none !important;
         }
-        .stApp:has(.presentation-slide) [data-testid="stHeader"] {
-            background: transparent !important;
-            pointer-events: none;
-            z-index: 999999;
-        }
-        .stApp:has(#proposal-component-page) [data-testid="stHeader"] {
+        .stApp:has(#proposal-component-page) [data-testid="stHeader"],
+        .stApp:has(#data-foundation-component-page) [data-testid="stHeader"] {
             background: transparent !important;
             pointer-events: auto !important;
             z-index: 999999;
@@ -1423,61 +1424,22 @@ def inject_css() -> None:
         .stApp:has(#proposal-component-page) [data-testid="stHeader"] [role="button"],
         .stApp:has(#proposal-component-page) [data-testid="stSidebarCollapsedControl"],
         .stApp:has(#proposal-component-page) [data-testid="stSidebarCollapseButton"],
-        .stApp:has(#proposal-component-page) button[data-testid="stBaseButton-headerNoPadding"] {
+        .stApp:has(#proposal-component-page) button[data-testid="stBaseButton-headerNoPadding"],
+        .stApp:has(#data-foundation-component-page) [data-testid="stHeader"] button,
+        .stApp:has(#data-foundation-component-page) [data-testid="stHeader"] [role="button"],
+        .stApp:has(#data-foundation-component-page) [data-testid="stSidebarCollapsedControl"],
+        .stApp:has(#data-foundation-component-page) [data-testid="stSidebarCollapseButton"],
+        .stApp:has(#data-foundation-component-page) button[data-testid="stBaseButton-headerNoPadding"] {
             display: inline-flex !important;
             opacity: 1 !important;
             pointer-events: auto !important;
             visibility: visible !important;
             z-index: 1000002 !important;
         }
-        .stApp:has(#proposal-component-page) iframe {
+        .stApp:has(#proposal-component-page) iframe,
+        .stApp:has(#data-foundation-component-page) iframe {
             position: relative;
             z-index: 1;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stHeader"] button,
-        .stApp:has(.presentation-slide) [data-testid="stHeader"] [role="button"],
-        .stApp:has(.presentation-slide) [data-testid="stSidebarCollapsedControl"] {
-            pointer-events: auto !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebarCollapseButton"] {
-            pointer-events: auto !important;
-            position: relative !important;
-            visibility: visible !important;
-            z-index: 1000000;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] {
-            max-width: 56px !important;
-            min-width: 56px !important;
-            transform: none !important;
-            width: 56px !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarContent"] {
-            background: #09131b !important;
-            border-right: 1px solid rgba(57,197,187,0.22);
-            min-width: 56px !important;
-            overflow: hidden !important;
-            width: 56px !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarContent"] > :not([data-testid="stSidebarHeader"]) {
-            display: none !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarUserContent"] {
-            display: none !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarHeader"] {
-            width: 56px !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarCollapseButton"] {
-            transform: translateX(-30px) !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
-            transform: rotate(180deg);
-        }
-        .stApp:has(.presentation-slide) button[data-testid="stBaseButton-headerNoPadding"] {
-            position: relative !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            z-index: 1000001;
         }
         .stApp:has(.presentation-slide) .block-container {
             max-width: 100vw;
@@ -2527,22 +2489,6 @@ def inject_css() -> None:
             padding: 13px 16px;
         }
         /* Projection readability pass: larger type with proportional spacing. */
-        .stApp:has(.presentation-slide) [data-testid="stSidebar"] {
-            max-width: 56px !important;
-            min-width: 56px !important;
-            width: 56px !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebarContent"] {
-            background: #09131b !important;
-            border-right: 1px solid rgba(57,197,187,0.22);
-            min-width: 56px !important;
-            overflow: hidden !important;
-            width: 56px !important;
-        }
-        .stApp:has(.presentation-slide) [data-testid="stSidebarContent"] > :not([data-testid="stSidebarHeader"]),
-        .stApp:has(.presentation-slide) [data-testid="stSidebarUserContent"] {
-            display: none !important;
-        }
         .stApp:has(.presentation-slide) .block-container,
         .stApp:has(#proposal-component-page) .block-container {
             padding-left: 1rem !important;
@@ -3827,7 +3773,7 @@ def render_presentation_slide(eyebrow: str, title: str, body_html: str, footer: 
     st.markdown(html, unsafe_allow_html=True)
 
 
-def proposal_dots_html(active: int, total: int = 8) -> str:
+def proposal_dots_html(active: int, total: int = 7) -> str:
     return "".join(
         f'<span class="proposal-dot{" active" if index == active else ""}"></span>'
         for index in range(1, total + 1)
@@ -3841,7 +3787,7 @@ def render_proposal_slide(page_no: int, label: str, title: str, lead_html: str, 
             f"""
             <div class="presentation-slide proposal-slide">
                 <div class="proposal-topline">
-                    <div class="proposal-kicker"><b>{page_no:02d}/08</b>AI時代のFP&amp;Aデータ基盤リファレンス構成 / {escape(label)}</div>
+                    <div class="proposal-kicker"><b>{page_no:02d}/07</b>AI時代のFP&amp;Aデータ基盤リファレンス構成 / {escape(label)}</div>
                     <div class="proposal-dots">{proposal_dots_html(page_no)}</div>
                 </div>
                 <h2>{escape(title)}</h2>
@@ -4306,10 +4252,10 @@ def data_foundation_flow_component_html() -> str:
     <body>
       <div class="slide">
         <div class="topline">
-          <div class="kicker"><b>03/08</b>経営説明・FP&amp;A業務 / FP&amp;A Data Foundation</div>
+          <div class="kicker"><b>03/07</b>経営説明・FP&amp;A業務 / FP&amp;A Data Foundation</div>
           <div class="dots" aria-label="slide progress">
             <span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span>
-            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
           </div>
         </div>
         <h1>経営説明に使えるFP&amp;Aデータ基盤を整える</h1>
@@ -5020,10 +4966,10 @@ def ai_app_architecture_component_html() -> str:
     <body>
       <div class="slide">
         <div class="topline">
-          <div class="kicker"><b>04/08</b>AI時代のFP&amp;Aデータ基盤リファレンス構成 / AI App Architecture</div>
+          <div class="kicker"><b>04/07</b>AI時代のFP&amp;Aデータ基盤リファレンス構成 / AI App Architecture</div>
           <div class="dots" aria-hidden="true">
             <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span>
-            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
           </div>
         </div>
         <h1>FP&amp;AプラットフォームにAIを組み込む3つの実装パターン</h1>
@@ -5399,46 +5345,9 @@ def render_proposal_approach_options() -> None:
     )
 
 
-def render_proposal_recommended_roadmap() -> None:
-    render_proposal_slide(
-        7,
-        "推奨ロードマップ",
-        "構想の具体化から始め、実証結果を本番化判断につなげる",
-        """
-        いきなり本番設計に入ると重く、PoCだけでは経営価値が曖昧になりやすい。
-        まず経営会議での利用シーンと目指す業務像を具体化し、その後に重点KPIで有効性を確認し、実証結果をもとに本番化判断へ進めます。
-        """,
-        """
-        <div class="roadmap">
-            <div class="roadmap-phase" style="--accent:#39c5bb">
-                <em>Phase 1 / 2-4 weeks</em>
-                <b>構想具体化</b>
-                <span>対象会議を一つ選び、画面イメージ、説明ストーリー、AIコメント例を作る。</span>
-                <div class="roadmap-gate">判断ポイント: 経営層・FP&amp;A・ITが目指す業務像を共有できるか</div>
-            </div>
-            <div class="roadmap-phase" style="--accent:#ffb000">
-                <em>Phase 2 / 6-8 weeks</em>
-                <b>重点KPI実証</b>
-                <span>営業利益、CF、重点案件などに絞り、実データに近い形で差異分析とコメント生成を検証する。</span>
-                <div class="roadmap-gate">判断ポイント: 業務効果、データ接続難度、説明品質が見えるか</div>
-            </div>
-            <div class="roadmap-phase" style="--accent:#ff647c">
-                <em>Phase 3 / 8-12 weeks</em>
-                <b>本番運用設計</b>
-                <span>品質ゲート、レビュー、承認、権限、監査ログ、運用体制を設計する。</span>
-                <div class="roadmap-gate">判断ポイント: 月次FP&amp;Aプロセスへ組み込めるか</div>
-            </div>
-        </div>
-        <div class="proposal-close">
-            推奨は、構想具体化型 → 重点KPI実証型 → 本番運用設計型の段階導入です。
-        </div>
-        """,
-    )
-
-
 def render_proposal_assessment() -> None:
     render_proposal_slide(
-        8,
+        7,
         "アセスメント提案",
         "次フェーズで、PoCの対象と判断材料を具体化する",
         """
@@ -8335,7 +8244,6 @@ def main(app_mode: str = "internal") -> None:
         ("AI App Architecture", "AIアプリアーキテクチャ", False),
         ("System Architecture", "システムアーキテクチャ", False),
         ("Approach Options", "進め方の選択肢", False),
-        ("Recommended Roadmap", "推奨ロードマップ", False),
         ("Assessment Proposal", "アセスメント提案", False),
     ]
     operational_pages = [
@@ -8656,8 +8564,6 @@ def main(app_mode: str = "internal") -> None:
         render_proposal_system_architecture()
     elif page == "Approach Options":
         render_proposal_approach_options()
-    elif page == "Recommended Roadmap":
-        render_proposal_recommended_roadmap()
     elif page == "Assessment Proposal":
         render_proposal_assessment()
     elif page == "Internal Demo Guide":
