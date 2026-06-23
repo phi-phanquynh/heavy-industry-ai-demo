@@ -209,6 +209,187 @@ def inject_css() -> None:
             color: #dceff5;
             line-height: 1.65;
         }
+        .action-board {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin: 8px 0 16px 0;
+        }
+        .action-lane {
+            background: linear-gradient(180deg, rgba(16,27,36,0.98), rgba(8,18,27,0.98));
+            border: 1px solid var(--line);
+            border-top: 4px solid var(--lane-color);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 360px;
+        }
+        .action-lane-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(148,163,184,0.18);
+            padding-bottom: 9px;
+        }
+        .action-lane-title {
+            color: #f8fdff;
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+        .action-lane-subtitle {
+            color: var(--muted);
+            font-size: 0.76rem;
+            margin-top: 3px;
+        }
+        .action-lane-count {
+            color: #f8fdff;
+            border: 1px solid rgba(248,253,255,0.24);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.84rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .action-card {
+            background: rgba(4,12,20,0.78);
+            border: 1px solid rgba(148,163,184,0.22);
+            border-left: 4px solid var(--card-color);
+            border-radius: 8px;
+            padding: 11px;
+            margin-bottom: 10px;
+        }
+        .action-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .action-card-title {
+            color: #f8fdff;
+            font-size: 0.93rem;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+        .action-card-segment {
+            color: var(--muted);
+            font-size: 0.72rem;
+            margin-top: 2px;
+        }
+        .action-badge {
+            border-radius: 6px;
+            padding: 3px 7px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            white-space: nowrap;
+            border: 1px solid rgba(248,253,255,0.18);
+        }
+        .action-badge.critical { background: rgba(255,100,124,0.16); color: #ffd4dc; }
+        .action-badge.high { background: rgba(255,176,0,0.16); color: #ffe7a6; }
+        .action-badge.medium { background: rgba(57,197,187,0.13); color: #d9fffb; }
+        .action-badge.low { background: rgba(159,178,195,0.13); color: #d7e7ee; }
+        .action-card-amounts {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin: 8px 0 9px 0;
+        }
+        .action-amount {
+            background: rgba(16,27,36,0.86);
+            border: 1px solid rgba(148,163,184,0.18);
+            border-radius: 7px;
+            padding: 7px 8px;
+        }
+        .action-amount span {
+            color: var(--muted);
+            display: block;
+            font-size: 0.68rem;
+            margin-bottom: 2px;
+        }
+        .action-amount strong {
+            color: #f8fdff;
+            display: block;
+            font-size: 1.02rem;
+            line-height: 1.15;
+        }
+        .action-card p {
+            color: #dceff5;
+            font-size: 0.78rem;
+            line-height: 1.48;
+            margin: 6px 0;
+        }
+        .action-card-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 9px;
+        }
+        .action-chip {
+            color: #dceff5;
+            background: rgba(148,163,184,0.12);
+            border: 1px solid rgba(148,163,184,0.18);
+            border-radius: 6px;
+            padding: 3px 6px;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+        .action-more {
+            color: var(--muted);
+            font-size: 0.78rem;
+            padding: 8px 0 0 2px;
+        }
+        .decision-panel {
+            background: linear-gradient(180deg, rgba(16,27,36,0.98), rgba(8,18,27,0.98));
+            border: 1px solid rgba(57,197,187,0.28);
+            border-left: 5px solid #39c5bb;
+            border-radius: 8px;
+            padding: 15px 16px;
+            margin: 4px 0 16px 0;
+        }
+        .decision-panel h3 {
+            color: #f8fdff;
+            margin: 0 0 7px 0;
+            font-size: 1.05rem;
+        }
+        .decision-panel .decision-summary {
+            color: #dceff5;
+            line-height: 1.55;
+            margin-bottom: 9px;
+        }
+        .decision-panel ol {
+            margin: 8px 0 0 1.2rem;
+            padding: 0;
+        }
+        .decision-panel li {
+            color: #dceff5;
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        .decision-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 10px;
+        }
+        .decision-meta span {
+            color: #d9fffb;
+            background: rgba(57,197,187,0.10);
+            border: 1px solid rgba(57,197,187,0.22);
+            border-radius: 6px;
+            padding: 4px 7px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        @media (max-width: 980px) {
+            .action-board {
+                grid-template-columns: 1fr;
+            }
+            .action-lane {
+                min-height: auto;
+            }
+        }
         .guide-panel {
             background: linear-gradient(180deg, rgba(16,27,36,0.92), rgba(9,19,27,0.92));
             border: 1px solid rgba(57,197,187,0.28);
@@ -3770,39 +3951,535 @@ def render_proposal_target_operating_model() -> None:
     )
 
 
+def data_foundation_flow_component_html() -> str:
+    flow_data = {
+        "nodes": [
+            {"id": "erp", "title": "ERP / GL actuals", "caption": "Actual revenue, cost, profit", "x": 9, "y": 10, "kind": "source", "color": "#60a5fa"},
+            {"id": "epm", "title": "EPM budget / forecast", "caption": "Budget, prior forecast, latest forecast", "x": 9, "y": 30, "kind": "source", "color": "#60a5fa"},
+            {"id": "eac", "title": "Project EAC", "caption": "Estimate at completion, margin risk", "x": 9, "y": 50, "kind": "source", "color": "#60a5fa"},
+            {"id": "procurement", "title": "Procurement / schedule", "caption": "Supplier cost, long-lead parts, delay", "x": 9, "y": 70, "kind": "source", "color": "#60a5fa"},
+            {"id": "master", "title": "Master data", "caption": "Project, segment, account, customer", "x": 9, "y": 90, "kind": "source", "color": "#60a5fa"},
+            {"id": "quality", "title": "Quality gates", "caption": "Reconcile / version / ID mapping / grain / lineage", "x": 35, "y": 50, "kind": "gate", "color": "#ffb000"},
+            {"id": "foundation", "title": "Trusted FP&A Foundation", "caption": "Common KPI, variance logic, project risk layer", "x": 61, "y": 50, "kind": "foundation", "color": "#39c5bb"},
+            {"id": "variance", "title": "KPI & variance", "caption": "Revenue, OP, margin, cash flow drivers", "x": 88, "y": 21, "kind": "output", "color": "#ff647c"},
+            {"id": "risk", "title": "Project risk", "caption": "EAC deterioration, delay, loss-risk queue", "x": 88, "y": 40, "kind": "output", "color": "#ff647c"},
+            {"id": "commentary", "title": "AI commentary", "caption": "Traceable management explanation", "x": 88, "y": 59, "kind": "output", "color": "#b794f4"},
+            {"id": "action", "title": "Executive actions", "caption": "Owner, decision, follow-up, next refresh", "x": 88, "y": 78, "kind": "output", "color": "#ff647c"},
+        ],
+        "links": [
+            {"source": "erp", "target": "quality", "name": "Actuals reconciliation", "detail": "GL totals must tie back before AI commentary is trusted.", "group": "gate", "value": 9, "color": "#60a5fa"},
+            {"source": "epm", "target": "quality", "name": "Scenario version lock", "detail": "Budget, previous forecast, and latest forecast are compared at the same grain.", "group": "gate", "value": 8, "color": "#60a5fa"},
+            {"source": "eac", "target": "quality", "name": "Project ID mapping", "detail": "EAC deterioration is tied to financial impact by project.", "group": "gate", "value": 10, "color": "#ff647c"},
+            {"source": "procurement", "target": "quality", "name": "Cost and schedule evidence", "detail": "Supplier pressure and delay evidence become explainable variance drivers.", "group": "gate", "value": 8, "color": "#ffb000"},
+            {"source": "master", "target": "quality", "name": "Reference data alignment", "detail": "Segment, account, project, and customer definitions remain consistent.", "group": "gate", "value": 7, "color": "#39c5bb"},
+            {"source": "quality", "target": "foundation", "name": "Governed FP&A mart", "detail": "Quality gates convert raw system data into an explanation-ready layer.", "group": "gate", "value": 12, "color": "#39c5bb"},
+            {"source": "foundation", "target": "variance", "name": "KPI semantic layer", "detail": "Finance and operational views use the same KPI definitions.", "group": "output", "value": 10, "color": "#39c5bb"},
+            {"source": "foundation", "target": "risk", "name": "Project risk layer", "detail": "High-risk projects are linked back to OP and cash-flow impact.", "group": "output", "value": 9, "color": "#ff647c"},
+            {"source": "foundation", "target": "commentary", "name": "Evidence-backed AI narrative", "detail": "AI comments can cite the KPI, driver, project, and source evidence.", "group": "output", "value": 11, "color": "#b794f4"},
+            {"source": "foundation", "target": "action", "name": "Management action loop", "detail": "Recommended actions, owners, and follow-up dates stay connected to facts.", "group": "output", "value": 8, "color": "#ff647c"},
+        ],
+    }
+    flow_json = json.dumps(flow_data, ensure_ascii=False).replace("</", "<\\/")
+    html = """
+    <!doctype html>
+    <html lang="ja">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+      <style>
+        :root {
+          --bg: #071016;
+          --panel: #0b1722;
+          --line: rgba(57,197,187,0.28);
+          --cyan: #39c5bb;
+          --text: #f8fdff;
+          --muted: #9fb2c3;
+        }
+        * { box-sizing: border-box; }
+        body {
+          margin: 0;
+          background: transparent;
+          color: var(--text);
+          font-family: "Inter", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+          letter-spacing: 0;
+        }
+        .slide {
+          position: relative;
+          min-height: 800px;
+          padding: 22px 24px;
+          overflow: hidden;
+          background:
+            linear-gradient(135deg, rgba(9,18,29,0.99), rgba(5,12,20,0.99) 58%, rgba(18,26,37,0.99)),
+            repeating-linear-gradient(90deg, rgba(57,197,187,0.07) 0 1px, transparent 1px 112px);
+          border: 1px solid rgba(57,197,187,0.30);
+          border-radius: 8px;
+          box-shadow: 0 22px 70px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+        .slide::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #39c5bb, #60a5fa, #ffb000, #ff647c);
+        }
+        .topline {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 18px;
+          margin-bottom: 8px;
+        }
+        .kicker {
+          color: var(--muted);
+          font-size: 0.86rem;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+        .kicker b {
+          color: var(--cyan);
+          margin-right: 8px;
+        }
+        .dots { display: flex; gap: 6px; }
+        .dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: rgba(159,178,195,0.32);
+        }
+        .dot.active {
+          width: 24px;
+          background: var(--cyan);
+          box-shadow: 0 0 18px rgba(57,197,187,0.55);
+        }
+        h1 {
+          margin: 0 0 8px 0;
+          color: var(--text);
+          font-size: clamp(2.15rem, 2.85vw, 3.2rem);
+          line-height: 1.08;
+          letter-spacing: 0;
+        }
+        .lead {
+          color: #d6e7ee;
+          max-width: 1160px;
+          margin: 0 0 10px 0;
+          font-size: 1.08rem;
+          line-height: 1.42;
+        }
+        .main-grid {
+          display: grid;
+          grid-template-columns: minmax(760px, 1fr) 330px;
+          gap: 12px;
+          align-items: stretch;
+          margin-top: 12px;
+        }
+        .flow-card,
+        .side-card,
+        .capability {
+          background: linear-gradient(180deg, rgba(14,29,42,0.92), rgba(7,18,28,0.96));
+          border: 1px solid rgba(57,197,187,0.25);
+          border-radius: 8px;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .flow-card {
+          min-height: 548px;
+          padding: 12px;
+        }
+        .flow-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          min-height: 40px;
+          padding-bottom: 8px;
+          border-bottom: 1px solid rgba(57,197,187,0.18);
+        }
+        .flow-head b {
+          display: block;
+          color: #f8fdff;
+          font-size: 1.08rem;
+        }
+        .flow-head span {
+          color: #9fb2c3;
+          font-size: 0.88rem;
+        }
+        .mode-buttons {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          gap: 6px;
+        }
+        .mode-button {
+          border: 1px solid rgba(159,178,195,0.22);
+          border-radius: 7px;
+          background: rgba(255,255,255,0.035);
+          color: #c8dce6;
+          cursor: pointer;
+          font: inherit;
+          font-size: 0.82rem;
+          font-weight: 760;
+          min-height: 30px;
+          padding: 5px 9px;
+        }
+        .mode-button.active {
+          background: rgba(57,197,187,0.14);
+          border-color: rgba(57,197,187,0.58);
+          color: #f8fdff;
+        }
+        .flow-stage {
+          position: relative;
+          height: 476px;
+          margin-top: 8px;
+          overflow: hidden;
+          border-radius: 8px;
+          background:
+            radial-gradient(circle at 35% 48%, rgba(57,197,187,0.13), transparent 34%),
+            radial-gradient(circle at 74% 50%, rgba(183,148,244,0.12), transparent 30%),
+            rgba(4,11,18,0.50);
+        }
+        #fpna-flow-chart {
+          position: absolute;
+          inset: 0;
+        }
+        .node-card {
+          position: absolute;
+          left: calc(var(--x) * 1%);
+          top: calc(var(--y) * 1%);
+          width: var(--w, 172px);
+          min-height: 70px;
+          transform: translate(-50%, -50%);
+          border: 1px solid rgba(159,178,195,0.24);
+          border-left: 4px solid var(--accent);
+          border-radius: 8px;
+          background: rgba(7,18,28,0.92);
+          box-shadow: 0 10px 28px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05);
+          padding: 9px 10px 9px 11px;
+          z-index: 4;
+        }
+        .node-card.gate {
+          --w: 204px;
+          background: linear-gradient(180deg, rgba(255,176,0,0.14), rgba(7,18,28,0.94));
+        }
+        .node-card.foundation {
+          --w: 218px;
+          min-height: 88px;
+          background: linear-gradient(180deg, rgba(57,197,187,0.18), rgba(7,18,28,0.94));
+        }
+        .node-card.output { --w: 186px; }
+        .node-card em {
+          display: block;
+          color: var(--accent);
+          font-size: 0.66rem;
+          font-style: normal;
+          font-weight: 850;
+          margin-bottom: 4px;
+          text-transform: uppercase;
+        }
+        .node-card b {
+          display: block;
+          color: #f8fdff;
+          font-size: 0.9rem;
+          line-height: 1.2;
+          margin-bottom: 4px;
+        }
+        .node-card span {
+          display: block;
+          color: #c8dce6;
+          font-size: 0.75rem;
+          line-height: 1.28;
+        }
+        .fallback-flow {
+          display: none;
+          position: absolute;
+          inset: 16px;
+          z-index: 2;
+          color: #d9fffb;
+          font-size: 1rem;
+          font-weight: 800;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+        }
+        .side-card {
+          min-height: 548px;
+          padding: 14px;
+        }
+        .side-card h2 {
+          margin: 0 0 9px 0;
+          color: #f8fdff;
+          font-size: 1.13rem;
+          line-height: 1.28;
+        }
+        .side-card p {
+          margin: 0 0 12px 0;
+          color: #c8dce6;
+          font-size: 0.93rem;
+          line-height: 1.52;
+        }
+        .proof-list {
+          display: grid;
+          gap: 8px;
+          margin-top: 12px;
+        }
+        .proof-item {
+          border: 1px solid rgba(159,178,195,0.18);
+          border-left: 4px solid var(--accent);
+          border-radius: 8px;
+          background: rgba(255,255,255,0.035);
+          padding: 9px 10px;
+        }
+        .proof-item b {
+          display: block;
+          color: #f8fdff;
+          font-size: 0.9rem;
+          margin-bottom: 4px;
+        }
+        .proof-item span {
+          display: block;
+          color: #c8dce6;
+          font-size: 0.78rem;
+          line-height: 1.35;
+        }
+        .capability-row {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 10px;
+          margin-top: 12px;
+        }
+        .capability {
+          min-height: 98px;
+          padding: 11px 12px;
+          border-top: 4px solid var(--accent);
+        }
+        .capability em {
+          display: block;
+          color: var(--accent);
+          font-size: 0.68rem;
+          font-style: normal;
+          font-weight: 850;
+          margin-bottom: 6px;
+          text-transform: uppercase;
+        }
+        .capability b {
+          display: block;
+          color: #f8fdff;
+          font-size: 0.96rem;
+          margin-bottom: 5px;
+        }
+        .capability span {
+          display: block;
+          color: #c8dce6;
+          font-size: 0.8rem;
+          line-height: 1.34;
+        }
+        @media (max-width: 960px) {
+          .slide {
+            min-height: auto;
+            padding: 18px;
+          }
+          .topline,
+          .flow-head {
+            align-items: flex-start;
+            flex-direction: column;
+          }
+          .main-grid,
+          .capability-row {
+            grid-template-columns: 1fr;
+          }
+          .flow-stage {
+            height: 720px;
+          }
+          .node-card {
+            width: min(210px, 36vw);
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="slide">
+        <div class="topline">
+          <div class="kicker"><b>03/08</b>AI時代のFP&amp;Aデータ基盤リファレンス構想 / FP&amp;A Data Foundation</div>
+          <div class="dots" aria-label="slide progress">
+            <span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <h1>FP&amp;Aデータ基盤：AIコメントが根拠へ戻れる状態を作る</h1>
+        <p class="lead">
+          ERP、EPM、案件EAC、調達・工程、マスタを品質ゲートで揃え、KPI・差異要因・案件リスク・AIコメントが同じ根拠を参照する流れを可視化します。
+        </p>
+        <div class="main-grid">
+          <section class="flow-card">
+            <div class="flow-head">
+              <div>
+                <b>ECharts Lines / Flow Map</b>
+                <span>業務データから説明責任のあるAIアウトプットまでの流れ</span>
+              </div>
+              <div class="mode-buttons" aria-label="flow filters">
+                <button class="mode-button active" data-mode="all" type="button">All flow</button>
+                <button class="mode-button" data-mode="gate" type="button">Quality gates</button>
+                <button class="mode-button" data-mode="output" type="button">AI outputs</button>
+              </div>
+            </div>
+            <div class="flow-stage">
+              <div id="fpna-flow-chart"></div>
+              <div class="fallback-flow" id="flow-fallback">
+                Source data -> Quality gates -> Trusted FP&amp;A Foundation -> AI commentary / executive actions
+              </div>
+            </div>
+          </section>
+          <aside class="side-card">
+            <h2>この図で伝えること</h2>
+            <p>
+              データを集めるだけでは、経営会議で使えるAI説明にはなりません。数字・案件・調達・工程の根拠が品質ゲートを通り、同じFP&amp;A基盤からAIコメントとアクションに流れることが重要です。
+            </p>
+            <div class="proof-list">
+              <div class="proof-item" style="--accent:#60a5fa">
+                <b>数値が戻れる</b>
+                <span>売上、営業利益、CFの数字がERP/GLとEPMの比較軸へ戻れる。</span>
+              </div>
+              <div class="proof-item" style="--accent:#ffb000">
+                <b>差異要因が説明できる</b>
+                <span>EAC悪化、調達費、工程遅延がKPIへの影響として結びつく。</span>
+              </div>
+              <div class="proof-item" style="--accent:#39c5bb">
+                <b>AIが同じ根拠を見る</b>
+                <span>コメント生成、リスク抽出、打ち手候補が共通の意味層を参照する。</span>
+              </div>
+              <div class="proof-item" style="--accent:#b794f4">
+                <b>会議後の行動につながる</b>
+                <span>責任部署、推奨アクション、次回更新までを同じ線上に置ける。</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+        <div class="capability-row">
+          <div class="capability" style="--accent:#39c5bb">
+            <em>Definition</em>
+            <b>KPI定義を固定</b>
+            <span>売上、営業利益、利益率、CFの意味を会議ごとに変えない。</span>
+          </div>
+          <div class="capability" style="--accent:#60a5fa">
+            <em>Versioning</em>
+            <b>比較軸を固定</b>
+            <span>Budget、Previous Forecast、Latest Forecastを同じ粒度で比較する。</span>
+          </div>
+          <div class="capability" style="--accent:#ffb000">
+            <em>Grain</em>
+            <b>案件まで降りる</b>
+            <span>全社KPIからセグメント、事業、案件まで同じID体系で追う。</span>
+          </div>
+          <div class="capability" style="--accent:#ff647c">
+            <em>Lineage</em>
+            <b>根拠を保持</b>
+            <span>AIコメントから差異、案件、元データへ戻れる状態にする。</span>
+          </div>
+        </div>
+      </div>
+      <script>
+        const flowData = __FLOW_DATA__;
+        const nodesById = Object.fromEntries(flowData.nodes.map((node) => [node.id, node]));
+        const stage = document.querySelector(".flow-stage");
+        const fallback = document.getElementById("flow-fallback");
+
+        for (const node of flowData.nodes) {
+          const card = document.createElement("div");
+          card.className = `node-card ${node.kind}`;
+          card.style.setProperty("--x", node.x);
+          card.style.setProperty("--y", node.y);
+          card.style.setProperty("--accent", node.color);
+          card.innerHTML = `<em>${node.kind}</em><b>${node.title}</b><span>${node.caption}</span>`;
+          stage.appendChild(card);
+        }
+
+        function buildLineData(mode) {
+          return flowData.links.map((link) => {
+            const source = nodesById[link.source];
+            const target = nodesById[link.target];
+            const active = mode === "all" || link.group === mode;
+            return {
+              name: link.name,
+              detail: link.detail,
+              group: link.group,
+              coords: [[source.x, source.y], [target.x, target.y]],
+              lineStyle: {
+                color: link.color,
+                opacity: active ? 0.86 : 0.13,
+                width: active ? Math.max(2, link.value / 2.8) : 1.2,
+                curveness: link.source === "foundation" ? 0.16 : 0.08,
+              },
+            };
+          });
+        }
+
+        function buildOption(mode) {
+          return {
+            animation: true,
+            backgroundColor: "transparent",
+            grid: { left: 0, right: 0, top: 0, bottom: 0 },
+            xAxis: { min: 0, max: 100, show: false, type: "value" },
+            yAxis: { min: 0, max: 100, show: false, inverse: true, type: "value" },
+            tooltip: {
+              trigger: "item",
+              borderColor: "rgba(57,197,187,0.42)",
+              backgroundColor: "rgba(7,16,22,0.96)",
+              textStyle: { color: "#edf6f9", fontFamily: "Inter, Noto Sans JP, Yu Gothic, Meiryo, sans-serif" },
+              formatter: (params) => {
+                const data = params.data || {};
+                return `<strong>${data.name || ""}</strong><br/>${data.detail || ""}`;
+              },
+            },
+            series: [
+              {
+                type: "lines",
+                coordinateSystem: "cartesian2d",
+                silent: false,
+                z: 2,
+                polyline: false,
+                effect: {
+                  show: true,
+                  period: mode === "all" ? 4.6 : 3.2,
+                  trailLength: 0.24,
+                  symbol: "circle",
+                  symbolSize: 5,
+                  color: "#d9fffb",
+                },
+                data: buildLineData(mode),
+              },
+            ],
+          };
+        }
+
+        if (!window.echarts) {
+          fallback.style.display = "flex";
+        } else {
+          const chart = echarts.init(document.getElementById("fpna-flow-chart"), null, { renderer: "canvas" });
+          let activeMode = "all";
+          chart.setOption(buildOption(activeMode));
+
+          document.querySelectorAll(".mode-button").forEach((button) => {
+            button.addEventListener("click", () => {
+              activeMode = button.dataset.mode;
+              document.querySelectorAll(".mode-button").forEach((item) => item.classList.toggle("active", item === button));
+              chart.setOption(buildOption(activeMode), true);
+            });
+          });
+
+          window.addEventListener("resize", () => chart.resize());
+          setTimeout(() => chart.resize(), 50);
+        }
+      </script>
+    </body>
+    </html>
+    """
+    return html.replace("__FLOW_DATA__", flow_json)
+
+
 def render_proposal_data_foundation() -> None:
-    render_proposal_slide(
-        3,
-        "FP&Aデータ基盤",
-        "説明に耐えるには、定義・バージョン・粒度・根拠を揃える必要がある",
-        """
-        データを集めるだけでは、経営会議で使える説明にはなりません。
-        コメントから差異、案件、元データへ戻れるように、説明責任を支える4つの能力を揃えます。
-        """,
-        """
-        <div class="foundation-quadrant">
-            <div class="proposal-panel accent-cyan">
-                <b>定義</b>
-                <span>KPI、勘定科目、案件、セグメントの意味を揃え、会議ごとに数字の解釈が変わらない状態にする。</span>
-            </div>
-            <div class="proposal-panel accent-blue">
-                <b>バージョン</b>
-                <span>予算、前回見込、最新見込、実績の締め時点を管理し、比較軸を固定する。</span>
-            </div>
-            <div class="proposal-panel accent-amber">
-                <b>粒度</b>
-                <span>月次、事業、案件、顧客、勘定科目を接続し、全社KPIから案件まで降りられる状態にする。</span>
-            </div>
-            <div class="proposal-panel accent-red">
-                <b>根拠</b>
-                <span>コメント、差異、案件、元データまでの追跡性を保持し、説明内容を検証できるようにする。</span>
-            </div>
-        </div>
-        <div class="foundation-core">
-            データは品質が担保されて初めて価値を持ちます。
-        </div>
-        """,
-    )
+    st.markdown('<div id="demo-briefing-page"></div><div id="proposal-component-page"></div>', unsafe_allow_html=True)
+    components.html(data_foundation_flow_component_html(), height=802, scrolling=False)
 
 
 def ai_app_architecture_component_html() -> str:
@@ -5770,6 +6447,293 @@ def render_dashboard(
     )
 
 
+def profitability_metric_is_gap(metric_mode: str) -> bool:
+    return metric_mode.startswith("Margin gap")
+
+
+def build_profitability_scope_data(
+    kpis: pd.DataFrame,
+    entity_level: str,
+    scenario: str,
+    segment_option: str | None,
+    time_basis: str,
+    metric_mode: str,
+    min_revenue_jpy_mn: float,
+) -> pd.DataFrame:
+    segment_en = parse_segment(segment_option) if segment_option else None
+    scoped = kpis.copy()
+    if segment_en:
+        scoped = scoped[scoped["segment_en"] == segment_en]
+
+    scenario_values = [scenario] if scenario == "Budget" else [scenario, "Budget"]
+    scoped = scoped[scoped["scenario"].isin(scenario_values)]
+    entity_cols = ["segment_code", "segment_en", "segment_ja"]
+    if entity_level == "Project":
+        entity_cols += ["project_id", "project_name"]
+
+    grouped = (
+        scoped.groupby(["period", "period_start", "fiscal_month", "scenario"] + entity_cols, observed=True)[
+            ["revenue_jpy_mn", "operating_profit_jpy_mn"]
+        ]
+        .sum()
+        .reset_index()
+        .sort_values(["scenario"] + entity_cols + ["fiscal_month"])
+    )
+    if grouped.empty:
+        return grouped
+
+    if time_basis == "YTD":
+        cumulative = grouped.groupby(["scenario"] + entity_cols, observed=True)[
+            ["revenue_jpy_mn", "operating_profit_jpy_mn"]
+        ].cumsum()
+        grouped["display_revenue_jpy_mn"] = cumulative["revenue_jpy_mn"]
+        grouped["display_op_jpy_mn"] = cumulative["operating_profit_jpy_mn"]
+    else:
+        grouped["display_revenue_jpy_mn"] = grouped["revenue_jpy_mn"]
+        grouped["display_op_jpy_mn"] = grouped["operating_profit_jpy_mn"]
+
+    grouped["op_margin_pct"] = np.where(
+        grouped["display_revenue_jpy_mn"].abs() > 1e-9,
+        grouped["display_op_jpy_mn"] / grouped["display_revenue_jpy_mn"] * 100,
+        np.nan,
+    )
+
+    merge_keys = ["period", "period_start", "fiscal_month"] + entity_cols
+    current = grouped[grouped["scenario"] == scenario].copy()
+    if scenario == "Budget":
+        current["budget_margin_pct"] = current["op_margin_pct"]
+    else:
+        budget = grouped[grouped["scenario"] == "Budget"][merge_keys + ["op_margin_pct"]].rename(
+            columns={"op_margin_pct": "budget_margin_pct"}
+        )
+        current = current.merge(budget, on=merge_keys, how="left")
+    current["budget_margin_pct"] = current["budget_margin_pct"].fillna(current["op_margin_pct"])
+    current["margin_gap_pt"] = current["op_margin_pct"] - current["budget_margin_pct"]
+    current = current[current["display_revenue_jpy_mn"] >= min_revenue_jpy_mn]
+    current = current.dropna(subset=["op_margin_pct", "margin_gap_pt"])
+
+    if entity_level == "Project":
+        current["entity_key"] = current["project_id"].astype(str)
+        current["entity_label"] = current["project_id"].astype(str) + " " + current["project_name"].astype(str)
+    else:
+        current["entity_key"] = current["segment_en"].astype(str)
+        current["entity_label"] = current["segment_code"].astype(str) + " | " + current["segment_ja"].astype(str)
+
+    if profitability_metric_is_gap(metric_mode):
+        current["display_value"] = current["margin_gap_pt"]
+        current["display_text"] = current["display_value"].map(lambda value: f"{value:+.1f}pt")
+    else:
+        current["display_value"] = current["op_margin_pct"]
+        current["display_text"] = current["display_value"].map(lambda value: f"{value:.1f}%")
+
+    current["display_revenue_jpy_bn"] = current["display_revenue_jpy_mn"] / 1_000
+    current["display_op_jpy_bn"] = current["display_op_jpy_mn"] / 1_000
+    return current.sort_values(["fiscal_month", "display_value"])
+
+
+def select_profitability_race_frames(scope: pd.DataFrame, metric_mode: str, top_n: int) -> pd.DataFrame:
+    if scope.empty:
+        return scope
+
+    frames: list[pd.DataFrame] = []
+    show_gap = profitability_metric_is_gap(metric_mode)
+    for _, frame in scope.groupby(["fiscal_month", "period"], observed=True, sort=True):
+        if show_gap:
+            selected = frame.nsmallest(top_n, "display_value").sort_values("display_value", ascending=False)
+        else:
+            selected = frame.nlargest(top_n, "display_value").sort_values("display_value", ascending=True)
+        selected = selected.copy()
+        selected["rank_in_frame"] = range(len(selected), 0, -1)
+        frames.append(selected)
+
+    return pd.concat(frames, ignore_index=True) if frames else scope.iloc[0:0]
+
+
+def render_profitability_bar_race(race: pd.DataFrame, metric_mode: str, scenario: str, time_basis: str) -> go.Figure:
+    if race.empty:
+        return style_fig(go.Figure(), 520)
+
+    x_min = float(min(0.0, race["display_value"].min()))
+    x_max = float(max(0.0, race["display_value"].max()))
+    x_span = max(x_max - x_min, 2.0)
+    x_range = [x_min - x_span * 0.14, x_max + x_span * 0.20]
+    show_gap = profitability_metric_is_gap(metric_mode)
+    color_midpoint = 0 if show_gap else 5
+    value_label = "Margin gap vs Budget (pt)" if show_gap else "Operating Profit Margin %"
+    periods = race.sort_values("fiscal_month")["period"].drop_duplicates().tolist()
+
+    fig = px.bar(
+        race,
+        x="display_value",
+        y="entity_label",
+        orientation="h",
+        animation_frame="period",
+        animation_group="entity_key",
+        color="display_value",
+        color_continuous_scale=["#ff647c", "#ffb000", "#76d275"],
+        color_continuous_midpoint=color_midpoint,
+        range_x=x_range,
+        text="display_text",
+        category_orders={"period": periods},
+        hover_name="entity_label",
+        hover_data={
+            "segment_en": True,
+            "op_margin_pct": ":.1f",
+            "budget_margin_pct": ":.1f",
+            "margin_gap_pt": ":+.1f",
+            "display_revenue_jpy_bn": ":,.1f",
+            "display_op_jpy_bn": ":,.1f",
+            "display_value": False,
+            "entity_key": False,
+            "entity_label": False,
+        },
+        labels={
+            "display_value": value_label,
+            "entity_label": "",
+            "segment_en": "Segment",
+            "op_margin_pct": "OP margin %",
+            "budget_margin_pct": "Budget margin %",
+            "margin_gap_pt": "Gap vs Budget pt",
+            "display_revenue_jpy_bn": "Revenue (JPY bn)",
+            "display_op_jpy_bn": "OP (JPY bn)",
+        },
+        title=f"利益率 Bar Race / {scenario} / {time_basis}",
+    )
+    fig.update_traces(textposition="auto", cliponaxis=False)
+    fig.update_layout(coloraxis_colorbar={"title": value_label})
+    if show_gap:
+        fig.add_vline(x=0, line_dash="dash", line_color="rgba(237,246,249,0.55)")
+    slider_config = []
+    for slider in fig.layout.sliders:
+        slider_dict = slider.to_plotly_json()
+        slider_dict["currentvalue"] = {"prefix": "Month: "}
+        slider_config.append(slider_dict)
+    fig.update_layout(sliders=slider_config)
+    return style_fig(fig, 540)
+
+
+def render_profitability_race(kpis: pd.DataFrame, show_guide: bool = True) -> None:
+    render_header("Profitability Race", "Operating margin bar race / Segment and project view")
+    if show_guide:
+        render_page_guide(
+            "利益率の見方 / Static margin chartではなく順位変化を見る",
+            "利益率は最終値だけを見ると、いつ悪化が顕在化したかが見えにくくなります。Bar Raceでは、月次または累計で利益率の順位とBudget差がどう動いたかを確認します。",
+            [
+                "Segment表示では、全社ストーリーとして利益率の高い/低い事業領域を月次で確認します。",
+                "Project表示では、売上規模の下限をかけて、小規模案件のノイズを抑えながら利益率悪化案件を確認します。",
+                "Margin gap vs Budgetでは、Budget対比の利益率劣後が大きい対象を優先して表示します。",
+            ],
+            "経営会議では、最終利益率だけでなく、どの月からどの領域が利益率を崩したかを説明できる状態にすることが重要です。",
+        )
+
+    c1, c2, c3, c4 = st.columns([0.9, 1.0, 1.0, 1.15])
+    with c1:
+        entity_level = st.radio("表示粒度", ["Segment", "Project"], horizontal=True, key="profit_entity_level")
+    with c2:
+        scenario = st.selectbox(
+            "Scenario",
+            ["Actual", "Latest Forecast", "Previous Forecast", "Prior Year Actual", "Mid-term Plan"],
+            key="profit_scenario",
+        )
+    with c3:
+        time_basis = st.radio("時間軸", ["YTD", "Monthly"], horizontal=True, key="profit_time_basis")
+    with c4:
+        metric_mode = st.selectbox(
+            "表示指標",
+            ["Actual margin %", "Margin gap vs Budget (pt)"],
+            key="profit_metric_mode",
+        )
+
+    f1, f2, f3 = st.columns([1.35, 0.85, 0.8])
+    with f1:
+        selected_segment = st.selectbox("セグメント", segment_options(kpis), index=0, key="profit_segment")
+    with f2:
+        if entity_level == "Segment":
+            top_n = 4
+            st.caption("Segment表示は全セグメントを表示")
+        else:
+            top_n = st.slider("表示件数", min_value=4, max_value=15, value=10, key="profit_top_n")
+    with f3:
+        if entity_level == "Project":
+            min_revenue_bn = st.slider("最小売上規模", min_value=0, max_value=30, value=5, step=1, key="profit_min_revenue_bn")
+        else:
+            min_revenue_bn = 0
+
+    scope = build_profitability_scope_data(
+        kpis,
+        entity_level,
+        scenario,
+        selected_segment,
+        time_basis,
+        metric_mode,
+        min_revenue_bn * 1_000,
+    )
+    if scope.empty:
+        st.info("条件に一致する利益率データがありません。表示条件を変更してください。")
+        return
+
+    race = select_profitability_race_frames(scope, metric_mode, top_n)
+    final_period = scope.sort_values("fiscal_month")["period"].iloc[-1]
+    final_scope = scope[scope["period"] == final_period]
+    summary_segment = selected_segment if parse_segment(selected_segment) else None
+    total = aggregate_kpis(kpis, scenario, "FY2026 Total", summary_segment)
+    budget = aggregate_kpis(kpis, "Budget", "FY2026 Total", summary_segment)
+    margin_gap = total["op_margin_pct"] - budget["op_margin_pct"]
+    worst_row = final_scope.nsmallest(1, "margin_gap_pt").iloc[0]
+    best_row = final_scope.nlargest(1, "op_margin_pct").iloc[0]
+
+    cards = st.columns(4)
+    with cards[0]:
+        metric_card("OP Margin", f"{total['op_margin_pct']:.1f}%", f"vs Budget {margin_gap:+.1f}pt", favorable=margin_gap >= 0)
+    with cards[1]:
+        metric_card("Operating Profit", format_amount(total["operating_profit_jpy_mn"]), scenario, favorable=None)
+    with cards[2]:
+        metric_card("Worst margin gap", f"{worst_row['margin_gap_pt']:+.1f}pt", str(worst_row["entity_label"]), favorable=False)
+    with cards[3]:
+        metric_card("Best margin", f"{best_row['op_margin_pct']:.1f}%", str(best_row["entity_label"]), favorable=True)
+
+    st.plotly_chart(render_profitability_bar_race(race, metric_mode, scenario, time_basis), width="stretch")
+
+    st.markdown('<div class="section-label">Final period detail / 利益率明細</div>', unsafe_allow_html=True)
+    detail = final_scope.copy()
+    if profitability_metric_is_gap(metric_mode):
+        detail = detail.sort_values("margin_gap_pt").head(top_n)
+    else:
+        detail = detail.sort_values("op_margin_pct", ascending=False).head(top_n)
+    st.dataframe(
+        detail[
+            [
+                "entity_label",
+                "segment_en",
+                "display_revenue_jpy_bn",
+                "display_op_jpy_bn",
+                "op_margin_pct",
+                "budget_margin_pct",
+                "margin_gap_pt",
+            ]
+        ].rename(
+            columns={
+                "entity_label": "対象",
+                "segment_en": "Segment",
+                "display_revenue_jpy_bn": "売上 (JPY bn)",
+                "display_op_jpy_bn": "営業利益 (JPY bn)",
+                "op_margin_pct": "利益率",
+                "budget_margin_pct": "Budget利益率",
+                "margin_gap_pt": "Budget差",
+            }
+        ),
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "売上 (JPY bn)": st.column_config.NumberColumn("売上 (JPY bn)", format="%.1f"),
+            "営業利益 (JPY bn)": st.column_config.NumberColumn("営業利益 (JPY bn)", format="%.1f"),
+            "利益率": st.column_config.NumberColumn("利益率", format="%.1f%%"),
+            "Budget利益率": st.column_config.NumberColumn("Budget利益率", format="%.1f%%"),
+            "Budget差": st.column_config.NumberColumn("Budget差", format="%+.1fpt"),
+        },
+    )
+
+
 def summarize_driver_impacts(drivers: pd.DataFrame, kpi: str, base_revenue: float) -> pd.DataFrame:
     driver_col = KPI_META[kpi]["driver_col"]
     summary = (
@@ -6110,6 +7074,23 @@ def render_variance_analysis(kpis: pd.DataFrame, drivers: pd.DataFrame, risk: pd
 ACTION_STATUS_OPTIONS = ["未着手", "確認中", "対応中", "経過観察"]
 FORECAST_REFLECTION_OPTIONS = ["必要", "判断中", "不要"]
 ACTION_REFERENCE_DATE = pd.Timestamp("2026-06-23")
+ACTION_LANES = [
+    {
+        "key": "今すぐ決める",
+        "subtitle": "Critical / 見通し修正 必要",
+        "color": "#ff647c",
+    },
+    {
+        "key": "今週詰める",
+        "subtitle": "High / 判断中 / 期限間近",
+        "color": "#ffb000",
+    },
+    {
+        "key": "監視する",
+        "subtitle": "Medium / 経過観察",
+        "color": "#39c5bb",
+    },
+]
 
 
 def project_sequence(project_id: Any) -> int:
@@ -6167,6 +7148,30 @@ def forecast_reflection(row: pd.Series, recovery_jpy_mn: float) -> str:
     return "不要"
 
 
+def action_lane(row: pd.Series) -> str:
+    due_date = pd.Timestamp(row.get("期限", ACTION_REFERENCE_DATE))
+    days_left = int((due_date.normalize() - ACTION_REFERENCE_DATE.normalize()).days)
+    if row.get("risk_level") == "Critical" or row.get("業績見通し修正") == "必要":
+        return "今すぐ決める"
+    if row.get("risk_level") == "High" or row.get("業績見通し修正") == "判断中" or days_left <= 14:
+        return "今週詰める"
+    return "監視する"
+
+
+def risk_class(risk_level: Any) -> str:
+    return str(risk_level).lower().replace(" ", "-")
+
+
+def due_label(due_date: Any) -> str:
+    due = pd.Timestamp(due_date)
+    days_left = int((due.normalize() - ACTION_REFERENCE_DATE.normalize()).days)
+    if days_left < 0:
+        return f"期限超過 {abs(days_left)}日"
+    if days_left == 0:
+        return "本日期限"
+    return f"あと{days_left}日"
+
+
 def simple_issue(row: pd.Series) -> str:
     deterioration = float(row.get("eac_deterioration_jpy_mn", 0.0))
     margin = float(row.get("forecast_margin_pct", 0.0))
@@ -6201,6 +7206,7 @@ def build_action_register(risk: pd.DataFrame) -> pd.DataFrame:
         lambda row: forecast_reflection(row, float(row["recovery_jpy_mn"])),
         axis=1,
     )
+    action["アクション区分"] = action.apply(action_lane, axis=1)
     action["優先度"] = action["risk_level"]
     action["案件"] = action["project_id"].astype(str) + " " + action["project_name"].astype(str)
     action["何が問題か"] = action.apply(simple_issue, axis=1)
@@ -6209,6 +7215,134 @@ def build_action_register(risk: pd.DataFrame) -> pd.DataFrame:
     action["コスト悪化額_jpy_bn"] = action["eac_deterioration_jpy_mn"] / 1_000
     action["戻せる見込_jpy_bn"] = action["recovery_jpy_mn"] / 1_000
     return action
+
+
+def action_card_html(row: pd.Series) -> str:
+    risk_level = str(row.get("優先度", "Low"))
+    card_color = RISK_COLORS.get(risk_level, "#39c5bb")
+    project_id = escape(str(row.get("project_id", "")))
+    project_name = escape(str(row.get("project_name", "")))
+    segment = escape(str(row.get("segment_ja", "")))
+    issue = escape(str(row.get("何が問題か", "")))
+    action = escape(str(row.get("まずやること", "")))
+    owner = escape(str(row.get("担当部署", "")))
+    status = escape(str(row.get("対応状況", "")))
+    forecast = escape(str(row.get("業績見通し修正", "")))
+    due_text = escape(due_label(row.get("期限")))
+    cost_text = escape(format_amount(float(row.get("eac_deterioration_jpy_mn", 0.0))))
+    recovery_text = escape(format_amount(float(row.get("recovery_jpy_mn", 0.0))))
+    return f"""
+    <div class="action-card" style="--card-color:{card_color}">
+        <div class="action-card-top">
+            <div>
+                <div class="action-card-title">{project_id} {project_name}</div>
+                <div class="action-card-segment">{segment}</div>
+            </div>
+            <span class="action-badge {risk_class(risk_level)}">{escape(risk_level)}</span>
+        </div>
+        <div class="action-card-amounts">
+            <div class="action-amount"><span>コスト悪化</span><strong>{cost_text}</strong></div>
+            <div class="action-amount"><span>戻せる見込</span><strong>{recovery_text}</strong></div>
+        </div>
+        <p><b>問題:</b> {issue}</p>
+        <p><b>まずやること:</b> {action}</p>
+        <div class="action-card-footer">
+            <span class="action-chip">担当: {owner}</span>
+            <span class="action-chip">期限: {due_text}</span>
+            <span class="action-chip">見通し修正: {forecast}</span>
+            <span class="action-chip">{status}</span>
+        </div>
+    </div>
+    """
+
+
+def render_action_board(action_register: pd.DataFrame) -> None:
+    st.markdown('<div class="section-label">損益回復アクションボード / Recovery Action Board</div>', unsafe_allow_html=True)
+    sorted_actions = action_register.sort_values(
+        ["risk_score", "recovery_jpy_mn", "eac_deterioration_jpy_mn"],
+        ascending=[False, False, False],
+    )
+    lane_html = []
+    for lane in ACTION_LANES:
+        lane_df = sorted_actions[sorted_actions["アクション区分"] == lane["key"]]
+        cards_html = "".join(action_card_html(row) for _, row in lane_df.head(3).iterrows())
+        if lane_df.empty:
+            cards_html = '<div class="action-more">該当案件はありません。</div>'
+        elif len(lane_df) > 3:
+            cards_html += f'<div class="action-more">他 {len(lane_df) - 3} 件は下部の詳細台帳で確認</div>'
+        lane_html.append(
+            f"""
+            <div class="action-lane" style="--lane-color:{lane['color']}">
+                <div class="action-lane-head">
+                    <div>
+                        <div class="action-lane-title">{escape(lane['key'])}</div>
+                        <div class="action-lane-subtitle">{escape(lane['subtitle'])}</div>
+                    </div>
+                    <div class="action-lane-count">{len(lane_df)}件</div>
+                </div>
+                {cards_html}
+            </div>
+            """
+        )
+    st.markdown(f'<div class="action-board">{"".join(lane_html)}</div>', unsafe_allow_html=True)
+
+
+def decision_questions(row: pd.Series) -> list[str]:
+    driver = str(row.get("primary_driver_ja", ""))
+    questions = [
+        "この案件で本当に戻せる金額はいくらか。根拠は見積、契約、工程のどれか。",
+        "期限までに完了しない場合、次回見込を何円修正する必要があるか。",
+        "担当部署の次アクション、完了条件、エスカレーション先は明確か。",
+    ]
+    if "EAC" in driver or "設計変更" in driver:
+        questions.insert(1, "変更契約で顧客から回収できる金額と交渉期限はいつか。")
+    elif "外注費" in driver or "為替" in driver:
+        questions.insert(1, "外注単価の再交渉余地と為替ヘッジで抑えられる金額はいくらか。")
+    elif "需要鈍化" in driver or "固定費" in driver:
+        questions.insert(1, "受注確度が下がった場合、固定費吸収計画をどこまで見直すか。")
+    else:
+        questions.insert(1, "この回復策は売上、利益、CFのどこに効くのか。")
+    return questions
+
+
+def render_decision_panel(action_register: pd.DataFrame) -> None:
+    st.markdown('<div class="section-label">経営会議で深掘りする案件 / Decision Drill-down</div>', unsafe_allow_html=True)
+    sorted_actions = action_register.sort_values(
+        ["risk_score", "recovery_jpy_mn", "eac_deterioration_jpy_mn"],
+        ascending=[False, False, False],
+    )
+    options = sorted_actions["project_id"].astype(str).tolist()
+    selected_id = st.selectbox(
+        "深掘りする案件",
+        options,
+        format_func=lambda project_id: (
+            f"{project_id} / "
+            f"{sorted_actions.loc[sorted_actions['project_id'].astype(str) == project_id, 'project_name'].iloc[0]}"
+        ),
+        key="risk_decision_project",
+    )
+    row = sorted_actions[sorted_actions["project_id"].astype(str) == selected_id].iloc[0]
+    question_items = "".join(f"<li>{escape(question)}</li>" for question in decision_questions(row))
+    summary = (
+        f"{escape(str(row['案件']))} は、{escape(str(row['何が問題か']))}。"
+        f"まずは「{escape(str(row['まずやること']))}」を確認します。"
+    )
+    st.markdown(
+        f"""
+        <div class="decision-panel">
+            <h3>今日確認する問い</h3>
+            <div class="decision-summary">{summary}</div>
+            <ol>{question_items}</ol>
+            <div class="decision-meta">
+                <span>担当: {escape(str(row['担当部署']))}</span>
+                <span>期限: {escape(due_label(row['期限']))}</span>
+                <span>戻せる見込: {escape(format_amount(float(row['recovery_jpy_mn'])))}</span>
+                <span>見通し修正: {escape(str(row['業績見通し修正']))}</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def risk_level_from_score(score: float) -> str:
@@ -6379,6 +7513,9 @@ def render_project_risk(risk: pd.DataFrame, kpis: pd.DataFrame | None = None, sh
         st.info("条件に一致するアクションはありません。フィルタ条件を変更してください。")
         return
 
+    render_action_board(action_register)
+    render_decision_panel(action_register)
+
     map_mode = st.radio(
         "リスクマップ表示",
         ["月次進行 / Animated Bubble", "最新スナップショット / Current Bubble"],
@@ -6396,19 +7533,22 @@ def render_project_risk(risk: pd.DataFrame, kpis: pd.DataFrame | None = None, sh
             animation_group="project_id",
             size="annual_revenue_budget_jpy_mn",
             size_max=48,
-            color="risk_level_frame",
+            color="risk_level",
             color_discrete_map=RISK_COLORS,
-            category_orders={"period": risk_animation_periods(kpis)},
+            category_orders={
+                "period": risk_animation_periods(kpis),
+                "risk_level": ["Critical", "High", "Medium", "Low"],
+            },
             hover_name="project_name",
             hover_data={
                 "project_id": True,
                 "segment_ja": True,
+                "risk_level_frame": True,
                 "risk_score_frame": ":.1f",
                 "schedule_delay_days_frame": ":.0f",
                 "eac_deterioration_jpy_mn_frame": ":,.0f",
                 "annual_revenue_budget_jpy_mn": ":,.0f",
                 "forecast_margin_pct_frame": ":.1f",
-                "risk_level_frame": False,
                 "period": False,
             },
             range_x=range_x,
@@ -6416,7 +7556,8 @@ def render_project_risk(risk: pd.DataFrame, kpis: pd.DataFrame | None = None, sh
             labels={
                 "eac_deterioration_jpy_bn": "Cumulative EAC deterioration (JPY bn)",
                 "forecast_margin_pct_frame": "Forecast Margin %",
-                "risk_level_frame": "Risk level",
+                "risk_level": "Final risk level",
+                "risk_level_frame": "Monthly risk signal",
                 "annual_revenue_budget_jpy_mn": "Annual revenue budget (JPY mn)",
             },
             title="案件リスク推移 / Plotly Animated Bubble",
@@ -6455,7 +7596,6 @@ def render_project_risk(risk: pd.DataFrame, kpis: pd.DataFrame | None = None, sh
         fig.add_hline(y=0, line_dash="dash", line_color="#ff647c", annotation_text="Loss threshold")
         st.plotly_chart(style_fig(fig, 460), width="stretch")
 
-    st.markdown('<div class="section-label">是正アクション台帳 / Action Register</div>', unsafe_allow_html=True)
     display_cols = [
         "優先度",
         "案件",
@@ -6468,16 +7608,17 @@ def render_project_risk(risk: pd.DataFrame, kpis: pd.DataFrame | None = None, sh
         "業績見通し修正",
         "対応状況",
     ]
-    st.dataframe(
-        action_register.sort_values(["risk_score", "eac_deterioration_jpy_mn"], ascending=[False, False])[display_cols],
-        width="stretch",
-        hide_index=True,
-        column_config={
-            "コスト悪化額_jpy_bn": st.column_config.NumberColumn("コスト悪化額 (JPY bn)", format="%.1f"),
-            "戻せる見込_jpy_bn": st.column_config.NumberColumn("戻せる見込 (JPY bn)", format="%.1f"),
-            "期限": st.column_config.DateColumn("期限", format="YYYY-MM-DD"),
-        },
-    )
+    with st.expander("詳細台帳を開く / Action Register Table", expanded=False):
+        st.dataframe(
+            action_register.sort_values(["risk_score", "eac_deterioration_jpy_mn"], ascending=[False, False])[display_cols],
+            width="stretch",
+            hide_index=True,
+            column_config={
+                "コスト悪化額_jpy_bn": st.column_config.NumberColumn("コスト悪化額 (JPY bn)", format="%.1f"),
+                "戻せる見込_jpy_bn": st.column_config.NumberColumn("戻せる見込 (JPY bn)", format="%.1f"),
+                "期限": st.column_config.DateColumn("期限", format="YYYY-MM-DD"),
+            },
+        )
 
 
 def render_ai_commentary(kpis: pd.DataFrame, drivers: pd.DataFrame, risk: pd.DataFrame, show_guide: bool = True) -> None:
@@ -7063,6 +8204,7 @@ def main(app_mode: str = "internal") -> None:
 
     client_pages = [
         ("Dashboard", "ダッシュボード", False),
+        ("Profitability Race", "利益率レース", False),
         ("Variance Analysis", "差異分析", False),
         ("Project Risk", "案件リスク", False),
         ("AI Commentary", "AIコメント", False),
@@ -7079,6 +8221,7 @@ def main(app_mode: str = "internal") -> None:
     ]
     operational_pages = [
         ("Dashboard", "全社ダッシュボード"),
+        ("Profitability Race", "利益率レース"),
         ("Variance Analysis", "差異分析"),
         ("Project Risk", "案件リスク"),
         ("AI Commentary", "AIコメント"),
@@ -7345,6 +8488,7 @@ def main(app_mode: str = "internal") -> None:
     if st.session_state.get("active_surface") == "client":
         demo_label_map = {
             "Dashboard": "ダッシュボード",
+            "Profitability Race": "利益率レース",
             "Variance Analysis": "差異分析",
             "Project Risk": "案件リスク",
             "AI Commentary": "AIコメント",
@@ -7367,7 +8511,7 @@ def main(app_mode: str = "internal") -> None:
     surface_note = "このページは、共有・説明の目的に合わせた補助ページです。"
     if page == "Internal Demo Guide":
         surface_note = "社内・登壇者向けの台本です。公開デモでは確認用ページとして表示しています。"
-    elif page in {"Dashboard", "Variance Analysis", "Project Risk", "AI Commentary"}:
+    elif page in {"Dashboard", "Profitability Race", "Variance Analysis", "Project Risk", "AI Commentary"}:
         surface_note = "分析画面は、サイドバーからデモ用ガイド付き表示にも切り替えられます。"
     if page == "Problem Statement":
         render_proposal_problem_statement()
@@ -7395,6 +8539,8 @@ def main(app_mode: str = "internal") -> None:
             show_guide=show_guide,
             metadata=metadata,
         )
+    elif page == "Profitability Race":
+        render_profitability_race(kpis, show_guide=show_guide)
     elif page == "Variance Analysis":
         render_variance_analysis(kpis, data["fact_variance_drivers"], data["project_risk"], show_guide=show_guide)
     elif page == "Project Risk":
