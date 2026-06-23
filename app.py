@@ -1416,7 +1416,6 @@ def inject_css() -> None:
         }
         .stApp:has(#proposal-component-page) [data-testid="stHeader"] {
             background: transparent !important;
-            pointer-events: none;
             z-index: 999999;
         }
         .stApp:has(.presentation-slide) [data-testid="stHeader"] button,
@@ -2517,11 +2516,6 @@ def inject_css() -> None:
             min-width: 56px !important;
             width: 56px !important;
         }
-        .stApp:has(#proposal-component-page) [data-testid="stSidebar"] {
-            max-width: 56px !important;
-            min-width: 56px !important;
-            width: 56px !important;
-        }
         .stApp:has(.presentation-slide) [data-testid="stSidebarContent"] {
             background: #09131b !important;
             border-right: 1px solid rgba(57,197,187,0.22);
@@ -2529,17 +2523,8 @@ def inject_css() -> None:
             overflow: hidden !important;
             width: 56px !important;
         }
-        .stApp:has(#proposal-component-page) [data-testid="stSidebarContent"] {
-            background: #09131b !important;
-            border-right: 1px solid rgba(57,197,187,0.22);
-            min-width: 56px !important;
-            overflow: hidden !important;
-            width: 56px !important;
-        }
         .stApp:has(.presentation-slide) [data-testid="stSidebarContent"] > :not([data-testid="stSidebarHeader"]),
-        .stApp:has(.presentation-slide) [data-testid="stSidebarUserContent"],
-        .stApp:has(#proposal-component-page) [data-testid="stSidebarContent"] > :not([data-testid="stSidebarHeader"]),
-        .stApp:has(#proposal-component-page) [data-testid="stSidebarUserContent"] {
+        .stApp:has(.presentation-slide) [data-testid="stSidebarUserContent"] {
             display: none !important;
         }
         .stApp:has(.presentation-slide) .block-container,
@@ -3959,8 +3944,8 @@ def data_foundation_flow_component_html() -> str:
             {"id": "eac", "title": "Project EAC", "caption": "Project cost outlook and margin risk", "x": 9, "y": 50, "kind": "source", "color": "#3b82f6"},
             {"id": "procurement", "title": "Procurement / schedule", "caption": "Supplier cost, long-lead parts, delay", "x": 9, "y": 70, "kind": "source", "color": "#3b82f6"},
             {"id": "master", "title": "Master data", "caption": "Project, segment, account, customer", "x": 9, "y": 90, "kind": "source", "color": "#3b82f6"},
-            {"id": "quality", "title": "Quality gates", "caption": "Reconcile / version / ID mapping / grain / lineage", "x": 35, "y": 50, "kind": "gate", "color": "#f59e0b"},
-            {"id": "foundation", "title": "Trusted FP&A Foundation", "caption": "Common KPI, variance logic, project risk layer", "x": 61, "y": 50, "kind": "foundation", "color": "#10b981"},
+            {"id": "quality", "title": "Quality gates", "caption": "Data quality aligned across definitions, versions, IDs, grain, lineage", "x": 35, "y": 50, "kind": "gate", "color": "#f59e0b"},
+            {"id": "foundation", "title": "Trusted FP&A Foundation", "caption": "Derive variance, risk, and insight from trusted numbers", "x": 61, "y": 50, "kind": "foundation", "color": "#10b981"},
             {"id": "variance", "title": "KPI & variance", "caption": "Revenue, OP, margin, cash flow drivers", "x": 88, "y": 21, "kind": "output", "color": "#f43f5e"},
             {"id": "risk", "title": "Project risk", "caption": "EAC deterioration, delay, loss-risk queue", "x": 88, "y": 40, "kind": "output", "color": "#f43f5e"},
             {"id": "commentary", "title": "AI commentary", "caption": "Traceable management explanation", "x": 88, "y": 59, "kind": "output", "color": "#f43f5e"},
@@ -3972,11 +3957,11 @@ def data_foundation_flow_component_html() -> str:
             {"source": "eac", "target": "quality", "name": "Project ID mapping", "detail": "EAC changes are connected to financial impact by project.", "group": "source", "value": 10, "color": "#3b82f6"},
             {"source": "procurement", "target": "quality", "name": "Cost and schedule evidence", "detail": "Supplier cost and delay evidence are linked to variance drivers.", "group": "source", "value": 8, "color": "#3b82f6"},
             {"source": "master", "target": "quality", "name": "Reference data alignment", "detail": "Segment, account, project, and customer definitions are aligned.", "group": "source", "value": 7, "color": "#3b82f6"},
-            {"source": "quality", "target": "foundation", "name": "Controlled FP&A layer", "detail": "Quality checks turn system data into a layer that FP&A can explain.", "group": "gate", "value": 12, "color": "#f59e0b"},
-            {"source": "foundation", "target": "variance", "name": "KPI semantic layer", "detail": "Finance and operational views use the same KPI definitions.", "group": "output", "value": 10, "color": "#f43f5e"},
-            {"source": "foundation", "target": "risk", "name": "Project risk layer", "detail": "High-risk projects are linked back to OP and cash-flow impact.", "group": "output", "value": 9, "color": "#f43f5e"},
-            {"source": "foundation", "target": "commentary", "name": "Evidence-backed commentary", "detail": "Comments can be checked against KPI, variance, project, and source data.", "group": "output", "value": 11, "color": "#f43f5e"},
-            {"source": "foundation", "target": "action", "name": "Management action loop", "detail": "Actions, owners, and next review dates stay connected to the facts.", "group": "output", "value": 8, "color": "#f43f5e"},
+            {"source": "quality", "target": "foundation", "name": "Data quality aligned", "detail": "Definitions, versions, IDs, grain, and lineage are aligned before analysis.", "group": "gate", "value": 12, "color": "#f59e0b"},
+            {"source": "foundation", "target": "variance", "name": "Variance insight", "detail": "Trusted numbers are converted into KPI movement and variance drivers.", "group": "output", "value": 10, "color": "#f43f5e"},
+            {"source": "foundation", "target": "risk", "name": "Project risk insight", "detail": "EAC changes, delays, and margin pressure are connected to management impact.", "group": "output", "value": 9, "color": "#f43f5e"},
+            {"source": "foundation", "target": "commentary", "name": "Commentary basis", "detail": "Comments are drafted from the derived insight and checked back to facts.", "group": "output", "value": 11, "color": "#f43f5e"},
+            {"source": "foundation", "target": "action", "name": "Action insight", "detail": "Insights are translated into owners, actions, and next review points.", "group": "output", "value": 8, "color": "#f43f5e"},
         ],
     }
     flow_json = json.dumps(flow_data, ensure_ascii=False).replace("</", "<\\/")
@@ -4339,7 +4324,7 @@ def data_foundation_flow_component_html() -> str:
           <aside class="side-card">
             <h2>このページで確認すること</h2>
             <p>
-              データを集めるだけでは、経営会議で説明できる状態にはなりません。数字、案件、調達、工程の情報を同じ基盤でつなぎ、差異の理由と次の対応を確認できるようにします。
+              データを集めるだけでは、経営会議で説明できる状態にはなりません。まずQuality gatesでデータ品質をそろえ、その上でFoundationが数値から差異・リスク・洞察を導出します。
             </p>
             <div class="proof-list">
               <div class="proof-item" style="--accent:#3b82f6">
@@ -4347,12 +4332,12 @@ def data_foundation_flow_component_html() -> str:
                 <span>売上、営業利益、CFをERP/GLとEPMの比較軸へ戻せる。</span>
               </div>
               <div class="proof-item" style="--accent:#f59e0b">
-                <b>差異の理由を説明できる</b>
-                <span>EAC悪化、調達費、工程遅延をKPIへの影響として結びつける。</span>
+                <b>データ品質がそろっている</b>
+                <span>定義、バージョン、ID、粒度、リネージをそろえて比較できる状態にする。</span>
               </div>
               <div class="proof-item" style="--accent:#10b981">
-                <b>コメントの根拠を確認できる</b>
-                <span>コメント作成時に参照したKPI、差異、案件を確認できる。</span>
+                <b>数値から洞察を導出できる</b>
+                <span>KPIの動き、差異要因、案件リスクを読み取り、説明に使える形にする。</span>
               </div>
               <div class="proof-item" style="--accent:#f43f5e">
                 <b>次のアクションまで管理できる</b>
@@ -7343,29 +7328,31 @@ def action_card_html(row: pd.Series) -> str:
     due_text = escape(due_label(row.get("期限")))
     cost_text = escape(format_amount(float(row.get("eac_deterioration_jpy_mn", 0.0))))
     recovery_text = escape(format_amount(float(row.get("recovery_jpy_mn", 0.0))))
-    return f"""
-    <div class="action-card" style="--card-color:{card_color}">
-        <div class="action-card-top">
-            <div>
-                <div class="action-card-title">{project_id} {project_name}</div>
-                <div class="action-card-segment">{segment}</div>
+    return dedent(
+        f"""
+        <div class="action-card" style="--card-color:{card_color}">
+            <div class="action-card-top">
+                <div>
+                    <div class="action-card-title">{project_id} {project_name}</div>
+                    <div class="action-card-segment">{segment}</div>
+                </div>
+                <span class="action-badge {risk_class(risk_level)}">{escape(risk_level)}</span>
             </div>
-            <span class="action-badge {risk_class(risk_level)}">{escape(risk_level)}</span>
+            <div class="action-card-amounts">
+                <div class="action-amount"><span>コスト悪化</span><strong>{cost_text}</strong></div>
+                <div class="action-amount"><span>戻せる見込</span><strong>{recovery_text}</strong></div>
+            </div>
+            <p><b>問題:</b> {issue}</p>
+            <p><b>まずやること:</b> {action}</p>
+            <div class="action-card-footer">
+                <span class="action-chip">担当: {owner}</span>
+                <span class="action-chip">期限: {due_text}</span>
+                <span class="action-chip">見通し修正: {forecast}</span>
+                <span class="action-chip">{status}</span>
+            </div>
         </div>
-        <div class="action-card-amounts">
-            <div class="action-amount"><span>コスト悪化</span><strong>{cost_text}</strong></div>
-            <div class="action-amount"><span>戻せる見込</span><strong>{recovery_text}</strong></div>
-        </div>
-        <p><b>問題:</b> {issue}</p>
-        <p><b>まずやること:</b> {action}</p>
-        <div class="action-card-footer">
-            <span class="action-chip">担当: {owner}</span>
-            <span class="action-chip">期限: {due_text}</span>
-            <span class="action-chip">見通し修正: {forecast}</span>
-            <span class="action-chip">{status}</span>
-        </div>
-    </div>
-    """
+        """
+    ).strip()
 
 
 def render_action_board(action_register: pd.DataFrame) -> None:
@@ -7383,18 +7370,20 @@ def render_action_board(action_register: pd.DataFrame) -> None:
         elif len(lane_df) > 3:
             cards_html += f'<div class="action-more">他 {len(lane_df) - 3} 件は下部の詳細台帳で確認</div>'
         lane_html.append(
-            f"""
-            <div class="action-lane" style="--lane-color:{lane['color']}">
-                <div class="action-lane-head">
-                    <div>
-                        <div class="action-lane-title">{escape(lane['key'])}</div>
-                        <div class="action-lane-subtitle">{escape(lane['subtitle'])}</div>
+            dedent(
+                f"""
+                <div class="action-lane" style="--lane-color:{lane['color']}">
+                    <div class="action-lane-head">
+                        <div>
+                            <div class="action-lane-title">{escape(lane['key'])}</div>
+                            <div class="action-lane-subtitle">{escape(lane['subtitle'])}</div>
+                        </div>
+                        <div class="action-lane-count">{len(lane_df)}件</div>
                     </div>
-                    <div class="action-lane-count">{len(lane_df)}件</div>
+                    {cards_html}
                 </div>
-                {cards_html}
-            </div>
-            """
+                """
+            ).strip()
         )
     st.markdown(f'<div class="action-board">{"".join(lane_html)}</div>', unsafe_allow_html=True)
 
@@ -7440,19 +7429,21 @@ def render_decision_panel(action_register: pd.DataFrame) -> None:
         f"まずは「{escape(str(row['まずやること']))}」を確認します。"
     )
     st.markdown(
-        f"""
-        <div class="decision-panel">
-            <h3>今日確認する問い</h3>
-            <div class="decision-summary">{summary}</div>
-            <ol>{question_items}</ol>
-            <div class="decision-meta">
-                <span>担当: {escape(str(row['担当部署']))}</span>
-                <span>期限: {escape(due_label(row['期限']))}</span>
-                <span>戻せる見込: {escape(format_amount(float(row['recovery_jpy_mn'])))}</span>
-                <span>見通し修正: {escape(str(row['業績見通し修正']))}</span>
+        dedent(
+            f"""
+            <div class="decision-panel">
+                <h3>今日確認する問い</h3>
+                <div class="decision-summary">{summary}</div>
+                <ol>{question_items}</ol>
+                <div class="decision-meta">
+                    <span>担当: {escape(str(row['担当部署']))}</span>
+                    <span>期限: {escape(due_label(row['期限']))}</span>
+                    <span>戻せる見込: {escape(format_amount(float(row['recovery_jpy_mn'])))}</span>
+                    <span>見通し修正: {escape(str(row['業績見通し修正']))}</span>
+                </div>
             </div>
-        </div>
-        """,
+            """
+        ).strip(),
         unsafe_allow_html=True,
     )
 
