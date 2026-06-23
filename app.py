@@ -6107,18 +6107,122 @@ def render_variance_analysis(kpis: pd.DataFrame, drivers: pd.DataFrame, risk: pd
     )
 
 
+ACTION_STATUS_OPTIONS = ["未着手", "確認中", "対応中", "経過観察"]
+FORECAST_REFLECTION_OPTIONS = ["必要", "判断中", "不要"]
+ACTION_REFERENCE_DATE = pd.Timestamp("2026-06-23")
+
+
+def project_sequence(project_id: Any) -> int:
+    try:
+        return int(str(project_id).split("-")[-1])
+    except (TypeError, ValueError):
+        return 0
+
+
+def action_due_date(row: pd.Series) -> pd.Timestamp:
+    risk_level = row.get("risk_level")
+    sequence = project_sequence(row.get("project_id"))
+    base_days = {
+        "Critical": 7,
+        "High": 14,
+        "Medium": 28,
+        "Low": 45,
+    }.get(str(risk_level), 30)
+    return ACTION_REFERENCE_DATE + pd.Timedelta(days=base_days + sequence % 7)
+
+
+def action_status(row: pd.Series) -> str:
+    sequence = project_sequence(row.get("project_id"))
+    risk_level = row.get("risk_level")
+    if risk_level == "Critical":
+        return ["対応中", "未着手", "確認中"][sequence % 3]
+    if risk_level == "High":
+        return ["確認中", "対応中", "未着手"][sequence % 3]
+    if risk_level == "Medium":
+        return ["確認中", "経過観察"][sequence % 2]
+    return "経過観察"
+
+
+def action_recovery_jpy_mn(row: pd.Series) -> float:
+    deterioration = max(float(row.get("eac_deterioration_jpy_mn", 0.0)), 0.0)
+    risk_level = row.get("risk_level")
+    if risk_level == "Critical":
+        ratio = 0.28
+    elif risk_level == "High":
+        ratio = 0.22
+    elif risk_level == "Medium":
+        ratio = 0.12
+    else:
+        ratio = 0.06
+    if bool(row.get("loss_risk_flag", False)):
+        ratio += 0.04
+    return deterioration * ratio
+
+
+def forecast_reflection(row: pd.Series, recovery_jpy_mn: float) -> str:
+    if row.get("risk_level") == "Critical" or bool(row.get("loss_risk_flag", False)):
+        return "必要"
+    if row.get("risk_level") == "High" or recovery_jpy_mn >= 1_000:
+        return "判断中"
+    return "不要"
+
+
+def simple_issue(row: pd.Series) -> str:
+    deterioration = float(row.get("eac_deterioration_jpy_mn", 0.0))
+    margin = float(row.get("forecast_margin_pct", 0.0))
+    if margin < 0:
+        return f"コストが{format_amount(deterioration)}悪化し、利益率が赤字水準"
+    return f"コストが{format_amount(deterioration)}悪化し、利益率が{margin:.1f}%まで低下"
+
+
+def simple_action(row: pd.Series) -> str:
+    driver = str(row.get("primary_driver_ja", ""))
+    if "EAC" in driver or "設計変更" in driver:
+        return "EACを再見積し、顧客と変更契約を交渉する"
+    if "外注費" in driver or "為替" in driver:
+        return "外注単価と為替ヘッジを確認する"
+    if "需要鈍化" in driver or "固定費" in driver:
+        return "受注確度と固定費吸収計画を見直す"
+    if "高採算" in driver or "前倒し" in driver:
+        return "前倒し計上と追加オーダーの確度を確認する"
+    action = str(row.get("recommended_action_ja", "")).split("、")[0]
+    return action or "担当部署で回復策と見込反映要否を確認する"
+
+
+def build_action_register(risk: pd.DataFrame) -> pd.DataFrame:
+    if risk.empty:
+        return pd.DataFrame()
+
+    action = risk.copy()
+    action["期限"] = action.apply(action_due_date, axis=1)
+    action["対応状況"] = action.apply(action_status, axis=1)
+    action["recovery_jpy_mn"] = action.apply(action_recovery_jpy_mn, axis=1)
+    action["業績見通し修正"] = action.apply(
+        lambda row: forecast_reflection(row, float(row["recovery_jpy_mn"])),
+        axis=1,
+    )
+    action["優先度"] = action["risk_level"]
+    action["案件"] = action["project_id"].astype(str) + " " + action["project_name"].astype(str)
+    action["何が問題か"] = action.apply(simple_issue, axis=1)
+    action["まずやること"] = action.apply(simple_action, axis=1)
+    action["担当部署"] = action["owner_department"]
+    action["コスト悪化額_jpy_bn"] = action["eac_deterioration_jpy_mn"] / 1_000
+    action["戻せる見込_jpy_bn"] = action["recovery_jpy_mn"] / 1_000
+    return action
+
+
 def render_project_risk(risk: pd.DataFrame, show_guide: bool = True) -> None:
-    render_header("Project Risk", "EAC deterioration / Loss risk / Recommended actions")
+    render_header("Project Risk", "Risk map / Action register / Forecast impact")
     if show_guide:
         render_page_guide(
-            "この画面の見方 / 損益悪化を案件単位で先読みする",
-            "重工業のFP&Aでは、全社KPIだけでなく、どの案件のEAC悪化や納期遅延が将来損益を押し下げるかを把握することが重要です。",
+            "この画面の見方 / 危ない案件をアクションに変える",
+            "重工業のFP&Aでは、危ない案件を見つけるだけでなく、誰が、いつまでに、何をして、いくら戻せる可能性があるかを経営会議で確認できる状態にすることが重要です。",
             [
-                "CriticalとHighを優先して、赤字化リスク、EAC悪化額、見込利益率を確認します。",
-                "リスクマップでは、EAC悪化額が大きく、利益率が低い案件ほど経営論点になりやすいです。",
-                "推奨アクションでは、責任部署、確認観点、次の打ち手を案件単位で整理します。",
+                "上部のカードでは、すぐ対応が必要な件数、期限が近い件数、戻せる見込金額、業績見通し修正が必要な件数を確認します。",
+                "リスクマップでは、コスト悪化額が大きく、利益率が低い案件ほど経営論点になりやすいです。",
+                "アクション台帳では、問題、まずやること、担当部署、期限、戻せる見込、業績見通し修正の要否を案件単位で整理します。",
             ],
-            "このデモでは、Marine & OffshoreにCritical案件、Aerospace & DefenseにHigh案件が出るように設計しています。",
+            "この画面のゴールは、単なるリスク一覧ではなく、経営会議後に追える是正アクション台帳を作ることです。",
         )
 
     c1, c2, c3 = st.columns([1.2, 1.0, 1.0])
@@ -6142,17 +6246,41 @@ def render_project_risk(risk: pd.DataFrame, show_guide: bool = True) -> None:
     if loss_only:
         scoped = scoped[scoped["loss_risk_flag"]]
 
+    action_register = build_action_register(scoped)
+    f1, f2 = st.columns([1.0, 1.0])
+    with f1:
+        status_filter = st.multiselect("対応状況", ACTION_STATUS_OPTIONS, default=ACTION_STATUS_OPTIONS)
+    with f2:
+        forecast_filter = st.multiselect("業績見通し修正", FORECAST_REFLECTION_OPTIONS, default=FORECAST_REFLECTION_OPTIONS)
+
+    if not action_register.empty:
+        action_register = action_register[action_register["対応状況"].isin(status_filter)]
+        action_register = action_register[action_register["業績見通し修正"].isin(forecast_filter)]
+        scoped = scoped[scoped["project_id"].isin(action_register["project_id"])]
+
     cards = st.columns(4)
+    near_due_count = 0
+    recovery_total = 0.0
+    forecast_update_count = 0
+    if not action_register.empty:
+        due_dates = pd.to_datetime(action_register["期限"])
+        near_due_count = int((due_dates <= ACTION_REFERENCE_DATE + pd.Timedelta(days=14)).sum())
+        recovery_total = float(action_register["recovery_jpy_mn"].sum())
+        forecast_update_count = int((action_register["業績見通し修正"] == "必要").sum())
     metrics = [
-        ("Critical案件", int((scoped["risk_level"] == "Critical").sum()), "件"),
-        ("High案件", int((scoped["risk_level"] == "High").sum()), "件"),
-        ("赤字化リスク", int(scoped["loss_risk_flag"].sum()), "件"),
-        ("EAC悪化額", scoped["eac_deterioration_jpy_mn"].sum(), "amount"),
+        ("すぐ対応が必要", int(scoped["risk_level"].isin(["Critical", "High"]).sum()), "件"),
+        ("期限が近い", near_due_count, "件"),
+        ("戻せる見込", recovery_total, "amount"),
+        ("見通し修正が必要", forecast_update_count, "件"),
     ]
     for col, (label, value, unit) in zip(cards, metrics):
         with col:
             display = format_amount(float(value)) if unit == "amount" else f"{int(value):,}{unit}"
-            metric_card(label, display, "Project Risk Monitor", favorable=None)
+            metric_card(label, display, "Action Register", favorable=None)
+
+    if action_register.empty:
+        st.info("条件に一致するアクションはありません。フィルタ条件を変更してください。")
+        return
 
     fig = px.scatter(
         scoped,
@@ -6177,30 +6305,27 @@ def render_project_risk(risk: pd.DataFrame, show_guide: bool = True) -> None:
     fig.add_hline(y=0, line_dash="dash", line_color="#ff647c", annotation_text="Loss threshold")
     st.plotly_chart(style_fig(fig, 460), width="stretch")
 
-    st.markdown('<div class="section-label">推奨アクション / Action List</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">是正アクション台帳 / Action Register</div>', unsafe_allow_html=True)
     display_cols = [
-        "risk_level",
-        "risk_score",
-        "segment_ja",
-        "business_unit",
-        "project_id",
-        "project_name",
-        "eac_deterioration_jpy_mn",
-        "forecast_margin_pct",
-        "schedule_delay_days",
-        "loss_risk_flag",
-        "primary_driver_ja",
-        "owner_department",
-        "recommended_action_ja",
+        "優先度",
+        "案件",
+        "何が問題か",
+        "コスト悪化額_jpy_bn",
+        "まずやること",
+        "担当部署",
+        "期限",
+        "戻せる見込_jpy_bn",
+        "業績見通し修正",
+        "対応状況",
     ]
     st.dataframe(
-        scoped.sort_values(["risk_score", "eac_deterioration_jpy_mn"], ascending=[False, False])[display_cols],
+        action_register.sort_values(["risk_score", "eac_deterioration_jpy_mn"], ascending=[False, False])[display_cols],
         width="stretch",
         hide_index=True,
         column_config={
-            "eac_deterioration_jpy_mn": st.column_config.NumberColumn("EAC悪化 (JPY mn)", format="%.0f"),
-            "forecast_margin_pct": st.column_config.NumberColumn("見込利益率", format="%.1f%%"),
-            "loss_risk_flag": st.column_config.CheckboxColumn("赤字化リスク"),
+            "コスト悪化額_jpy_bn": st.column_config.NumberColumn("コスト悪化額 (JPY bn)", format="%.1f"),
+            "戻せる見込_jpy_bn": st.column_config.NumberColumn("戻せる見込 (JPY bn)", format="%.1f"),
+            "期限": st.column_config.DateColumn("期限", format="YYYY-MM-DD"),
         },
     )
 
