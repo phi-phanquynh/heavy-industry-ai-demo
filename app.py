@@ -1416,7 +1416,23 @@ def inject_css() -> None:
         }
         .stApp:has(#proposal-component-page) [data-testid="stHeader"] {
             background: transparent !important;
+            pointer-events: auto !important;
             z-index: 999999;
+        }
+        .stApp:has(#proposal-component-page) [data-testid="stHeader"] button,
+        .stApp:has(#proposal-component-page) [data-testid="stHeader"] [role="button"],
+        .stApp:has(#proposal-component-page) [data-testid="stSidebarCollapsedControl"],
+        .stApp:has(#proposal-component-page) [data-testid="stSidebarCollapseButton"],
+        .stApp:has(#proposal-component-page) button[data-testid="stBaseButton-headerNoPadding"] {
+            display: inline-flex !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            visibility: visible !important;
+            z-index: 1000002 !important;
+        }
+        .stApp:has(#proposal-component-page) iframe {
+            position: relative;
+            z-index: 1;
         }
         .stApp:has(.presentation-slide) [data-testid="stHeader"] button,
         .stApp:has(.presentation-slide) [data-testid="stHeader"] [role="button"],
@@ -4454,7 +4470,7 @@ def data_foundation_flow_component_html() -> str:
 
 
 def render_proposal_data_foundation() -> None:
-    st.markdown('<div id="demo-briefing-page"></div><div id="proposal-component-page"></div>', unsafe_allow_html=True)
+    st.markdown('<div id="demo-briefing-page"></div><div id="data-foundation-component-page"></div>', unsafe_allow_html=True)
     components.html(data_foundation_flow_component_html(), height=718, scrolling=False)
 
 
